@@ -1,14 +1,17 @@
-import type { Test } from "./types/test";
+import { Helmet, HelmetProvider } from "react-helmet-async";
+import Logo from "./assets/icons/logo.svg";
+import { MotionLazy } from "./components/animate/motion-lazy";
+import { GLOBAL_CONFIG } from "./global-config";
 
-function App() {
-	const testVar: Test = {
-		name: "Rascal-Coder",
-	};
+function App({ children }: { children: React.ReactNode }) {
 	return (
-		<div>
-			Bug-Admin-Vite
-			<div>author:{testVar.name}</div>
-		</div>
+		<HelmetProvider>
+			<Helmet>
+				<title>{GLOBAL_CONFIG.appName}</title>
+				<link rel="icon" href={Logo} />
+			</Helmet>
+			<MotionLazy>{children}</MotionLazy>
+		</HelmetProvider>
 	);
 }
 
