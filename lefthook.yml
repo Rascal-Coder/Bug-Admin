@@ -1,8 +1,8 @@
 # SKIP CI in commit message to skip hooks
 skip_output:
-  - meta
-  - success
-  - summary
+- meta
+- success
+- summary
 
 pre-commit:
   parallel: true
@@ -18,8 +18,13 @@ pre-commit:
       glob: "*.{ts,tsx}"
       run: npx tsc --noEmit
 
+post-merge:
+  commands:
+    install:
+      run: pnpm install
+
 commit-msg:
   commands:
     commitlint:
       run: npx commitlint --edit {1}
-      skip: [merge, rebase]
+      skip: [ merge, rebase ]
