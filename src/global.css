@@ -1,3 +1,9 @@
+/* import font */
+@import "@fontsource-variable/open-sans";
+@import "@fontsource-variable/inter";
 /* import tailwind */
 @import "tailwindcss";
 @import "tw-animate-css";
+
+/* config  tailwind */
+@config "../tailwind.config.ts";
