@@ -7,12 +7,12 @@ import { getFrontendDashboardRoutes } from "./frontend";
 export const dashboardRoutes: RouteObject[] = [
 	{
 		element: (
-			<Layouts>
-				<Suspense fallback={<div>Loading...</div>}>
+			<Suspense fallback={<div>Loading...</div>}>
+				<Layouts>
 					<Outlet />
 					<ScrollRestoration />
-				</Suspense>
-			</Layouts>
+				</Layouts>
+			</Suspense>
 		),
 		children: [
 			{ index: true, element: <Navigate to={GLOBAL_CONFIG.defaultRoute} replace /> },

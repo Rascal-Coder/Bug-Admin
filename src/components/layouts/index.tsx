@@ -1,13 +1,20 @@
 import Cookies from "js-cookie";
-import type { ReactNode } from "react";
+import { type ReactNode, useMemo } from "react";
 import { SidebarProvider } from "@/ui/sidebar";
 import { cn } from "@/utils";
 import { AppSidebar } from "./app-sidebar";
 
 export default function Layouts({ children }: { children: ReactNode }) {
-	const defaultOpen = Cookies.get("sidebar_state") !== "false";
+	// const defaultOpen = Cookies.get("sidebar_state") !== "false";
+	const defaultOpen = useMemo(() => {
+		const cookieValue = Cookies.get("sidebar_state");
+		return cookieValue !== "false";
+	}, []);
 	return (
-		<SidebarProvider defaultOpen={defaultOpen}>
+		<SidebarProvider
+			defaultOpen={defaultOpen}
+			style={{ "--sidebar-width": "var(--layout-nav-width)" } as React.CSSProperties}
+		>
 			<AppSidebar />
 			<div
 				id="content"
