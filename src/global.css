@@ -130,7 +130,7 @@
   --sidebar-ring: var(--colors-palette-primary-default);
 }
 
-/* slash layout */
+/* layout */
 :root{
   --layout-nav-width: 260px;
   --layout-nav-width-mini: 88px;
