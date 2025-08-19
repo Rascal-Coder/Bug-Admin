@@ -28,7 +28,9 @@ export function NavList({ data, depth = 1 }: NavListProps) {
 					title={data.title}
 					path={data.path}
 					icon={data.icon}
-					info={data.info}
+					badge={data.badge}
+					badgeType={data.badgeType}
+					badgeVariants={data.badgeVariants}
 					caption={data.caption}
 					auth={data.auth}
 					// state
@@ -44,7 +46,7 @@ export function NavList({ data, depth = 1 }: NavListProps) {
 			</CollapsibleTrigger>
 			{hasChild && (
 				<CollapsibleContent>
-					<div className="ml-4 mt-1 flex flex-col gap-1">
+					<div className="ml-4 mt-1 flex flex-col gap-1 border-s border-border">
 						{data.children?.map((child) => (
 							<NavList key={child.title} data={child} depth={depth + 1} />
 						))}

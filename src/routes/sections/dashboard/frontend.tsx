@@ -34,6 +34,25 @@ export function getFrontendDashboardRoutes(): RouteObject[] {
 				},
 			],
 		},
+		{
+			path: "components",
+			children: [
+				{ index: true, element: <Navigate to="icon" replace /> },
+				{ path: "icon", element: Component("/pages/components/icon") },
+				{ path: "toast", element: Component("/pages/components/toast") },
+			],
+		},
+		{
+			path: "link",
+			children: [
+				{ index: true, element: <Navigate to="iframe" replace /> },
+				{ path: "iframe", element: Component("/pages/sys/others/link/iframe", { src: "https://ant.design/index-cn" }) },
+				{
+					path: "external-link",
+					element: Component("/pages/sys/others/link/external-link", { src: "https://ant.design/index-cn" }),
+				},
+			],
+		},
 	];
 	return frontendDashboardRoutes;
 }

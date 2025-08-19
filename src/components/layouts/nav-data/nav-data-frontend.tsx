@@ -1,5 +1,6 @@
 import { Icon } from "@/components/icon";
 import type { NavProps } from "@/components/nav/types";
+import { Badge } from "@/ui/badge";
 // import { Badge } from "@/ui/badge";
 
 export const frontendNavData: NavProps["data"] = [
@@ -74,6 +75,61 @@ export const frontendNavData: NavProps["data"] = [
 					{
 						title: "500",
 						path: "/error/500",
+					},
+				],
+			},
+		],
+	},
+	{
+		name: "UI",
+		items: [
+			{
+				title: "组件",
+				path: "/components",
+				icon: <Icon icon="solar:widget-5-bold-duotone" size="24" />,
+				caption: "自定义UI组件",
+				children: [
+					{
+						title: "图标",
+						path: "/components/icon",
+					},
+					{
+						title: "Toast",
+						path: "/components/toast",
+					},
+				],
+			},
+		],
+	},
+	{
+		name: "其他",
+		items: [
+			{
+				title: "项目禁用",
+				path: "/disabled",
+				icon: <Icon icon="local:ic-disabled" size="24" />,
+				disabled: true,
+			},
+			{
+				title: "项目标签",
+				path: "#label",
+				icon: <Icon icon="local:ic-label" size="24" />,
+				// badge: "New",
+				badgeType: "dot",
+				badgeVariants: "info",
+			},
+			{
+				title: "链接",
+				path: "/link",
+				icon: <Icon icon="local:ic-external" size="24" />,
+				children: [
+					{
+						title: "外链",
+						path: "/link/external-link",
+					},
+					{
+						title: "内嵌",
+						path: "/link/iframe",
 					},
 				],
 			},

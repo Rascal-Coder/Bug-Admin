@@ -1,4 +1,6 @@
 import Icon from "@/components/icon/icon";
+import DotBadge from "@/components/nav/components/dot-badge";
+import { Badge } from "@/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/ui/tooltip";
 import { cn } from "@/utils";
 import { NavItemRenderer } from "../components";
@@ -6,7 +8,7 @@ import { navItemClasses, navItemStyles } from "../styles";
 import type { NavItemProps } from "../types";
 
 export function NavItem(item: NavItemProps) {
-	const { title, icon, info, caption, open, active, disabled, depth, hasChild } = item;
+	const { title, icon, badge, badgeType, badgeVariants, caption, open, active, disabled, depth, hasChild } = item;
 
 	const content = (
 		<>
@@ -35,8 +37,9 @@ export function NavItem(item: NavItemProps) {
 				)}
 			</span>
 
-			{/* Info */}
-			{info && <span style={navItemStyles.info}>{info}</span>}
+			{/* Badge */}
+			{badge && badgeType === "normal" && <Badge variant={badgeVariants}>{badge}</Badge>}
+			{badgeType === "dot" && <DotBadge variant={badgeVariants || "default"} />}
 
 			{/* Arrow */}
 			{hasChild && (

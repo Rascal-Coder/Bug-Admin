@@ -10,11 +10,18 @@ export type NavItemStateProps = {
 	hidden?: boolean;
 };
 
+export type BadgeProps = {
+	variant: "default" | "info" | "success" | "warning" | "error";
+};
+
 export type NavItemDataProps = {
 	path: string;
 	title: string;
 	icon?: string | React.ReactNode;
-	info?: React.ReactNode;
+	// info?: React.ReactNode;
+	badge?: string;
+	badgeType?: "dot" | "normal";
+	badgeVariants?: BadgeProps["variant"];
 	caption?: string;
 	auth?: string[];
 	children?: NavItemDataProps[];

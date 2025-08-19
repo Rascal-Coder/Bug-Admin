@@ -1,22 +1,32 @@
 import Icon from "@/components/icon/icon";
+import DotBadge from "@/components/nav/components/dot-badge";
+import { Badge } from "@/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/ui/tooltip";
 import { cn } from "@/utils";
 import { NavItemRenderer } from "../components";
 import { navItemClasses, navItemStyles } from "../styles";
 import type { NavItemProps } from "../types";
 
+const iconRender = (icon: string | React.ReactNode) => {
+	return <span style={navItemStyles.icon} className="mr-2 items-center justify-center">
+		{icon ? (
+			typeof icon === "string" ? <Icon icon={icon} size={16} /> : icon
+		) : (
+			<Icon icon="mdi:menu" size={16} />
+		)}
+	</span>
+}
+
 export function NavItem(item: NavItemProps) {
-	const { title, icon, info, caption, open, active, disabled, depth, hasChild } = item;
+	const { title, icon, badge, badgeType, badgeVariants, caption, open, active, disabled, depth, hasChild } = item;
 
 	const content = (
 		<>
 			{/* Icon */}
-			<span style={navItemStyles.icon} className="mr-3 items-center justify-center">
-				{icon && typeof icon === "string" ? <Icon icon={icon} /> : icon}
-			</span>
+			{iconRender(icon)}
 
 			{/* Texts */}
-			<span style={navItemStyles.texts} className="min-h-[24px]">
+			<span style={navItemStyles.texts} >
 				{/* Title */}
 				<span style={navItemStyles.title}>{title}</span>
 
@@ -35,8 +45,9 @@ export function NavItem(item: NavItemProps) {
 				)}
 			</span>
 
-			{/* Info */}
-			{info && <span style={navItemStyles.info}>{info}</span>}
+			{/* Badge */}
+			{badge && badgeType === "normal" && <Badge variant={badgeVariants}>{badge}</Badge>}
+			{badgeType === "dot" && <DotBadge variant={badgeVariants || "default"} />}
 
 			{/* Arrow */}
 			{hasChild && (
@@ -54,7 +65,7 @@ export function NavItem(item: NavItemProps) {
 	const itemClassName = cn(
 		navItemClasses.base,
 		navItemClasses.hover,
-		"min-h-[44px]",
+		// "min-h-[44px]",
 		active && depth === 1 && navItemClasses.active,
 		active && depth !== 1 && "bg-action-hover!",
 		disabled && navItemClasses.disabled,

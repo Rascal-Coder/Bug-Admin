@@ -20,6 +20,10 @@
     /* https://tailwindcss.com/docs/upgrade-guide#default-border-color */
     border-color: rgba(var(--colors-palette-gray-500Channel) / var(--opacity-border)) ;
   }
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
 
   body {
     background-color: var(--background);
@@ -132,9 +136,18 @@
 
 /* layout */
 :root{
-  --layout-nav-width: 260px;
+  --layout-nav-width: 240px;
   --layout-nav-width-mini: 88px;
   --layout-nav-height-horizontal: 48px;
   --layout-header-height: 90px;
   --layout-multi-tabs-height: 48px;
+  --depth: 1;
+}
+
+/* components layer */
+@layer components {
+  .dot-badge {
+    @apply aspect-square rounded-md align-middle bg-center bg-no-repeat w-2 h-2 shadow-sm inline-block;
+    background-image: radial-gradient(circle at 35% 30%,oklch(1 0 0/calc(var(--depth)*.5)),#0000);
+  }
 }

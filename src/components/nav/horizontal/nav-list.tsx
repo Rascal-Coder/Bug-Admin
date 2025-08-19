@@ -28,7 +28,9 @@ export function NavList({ data, depth = 1 }: NavListProps) {
 					title={data.title}
 					path={data.path}
 					icon={data.icon}
-					info={data.info}
+					badge={data.badge}
+					badgeType={data.badgeType}
+					badgeVariants={data.badgeVariants}
 					caption={data.caption}
 					auth={data.auth}
 					// state
