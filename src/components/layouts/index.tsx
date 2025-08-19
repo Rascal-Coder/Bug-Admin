@@ -1,8 +1,12 @@
 import Cookies from "js-cookie";
 import { type ReactNode, useMemo } from "react";
-import { SidebarProvider } from "@/ui/sidebar";
+import { SidebarInset, SidebarProvider } from "@/ui/sidebar";
 import { cn } from "@/utils";
 import { AppSidebar } from "./app-sidebar";
+import { Breadcrumb } from "./weight/breadcrumb";
+import { Header } from "./weight/header";
+import { Main } from "./weight/main";
+import { ThemeSwitch } from "./weight/themeswitch";
 
 export default function Layouts({ children }: { children: ReactNode }) {
 	const defaultOpen = useMemo(() => {
@@ -15,20 +19,29 @@ export default function Layouts({ children }: { children: ReactNode }) {
 			style={{ "--sidebar-width": "var(--layout-nav-width)" } as React.CSSProperties}
 		>
 			<AppSidebar />
-			<div
-				id="content"
+			<SidebarInset
 				className={cn(
-					"ml-auto w-full max-w-full",
-					"peer-data-[state=collapsed]:w-[calc(100%-var(--sidebar-width-icon)-1rem)]",
-					"peer-data-[state=expanded]:w-[calc(100%-var(--sidebar-width))]",
-					"sm:transition-[width] sm:duration-200 sm:ease-linear",
-					"flex h-svh flex-col",
-					"group-data-[scroll-locked=1]/body:h-full",
-					"has-[main.fixed-main]:group-data-[scroll-locked=1]/body:h-svh",
+					// If layout is fixed, set the height
+					// to 100svh to prevent overflow
+					"has-[[data-layout=fixed]]:h-svh",
+
+					// If layout is fixed and sidebar is inset,
+					"peer-data-[variant=inset]:has-[[data-layout=fixed]]:h-[calc(100svh-(var(--spacing)*5))]",
+
+					// Set content container, so we can use container queries
+					"@container/content",
+
+					"peer-data-[variant=floating]:border-none",
 				)}
 			>
-				{children}
-			</div>
+				<Header fixed>
+					<Breadcrumb />
+					<ThemeSwitch />
+				</Header>
+
+				{/* fluid | fixed */}
+				<Main fixed>{children}</Main>
+			</SidebarInset>
 		</SidebarProvider>
 	);
 }

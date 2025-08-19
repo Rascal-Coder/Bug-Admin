@@ -123,7 +123,10 @@ function SidebarProvider({
 							...style,
 						} as React.CSSProperties
 					}
-					className={cn("group/sidebar-wrapper has-data-[variant=inset]:bg-background flex min-h-svh w-full", className)}
+					className={cn(
+						"group/sidebar-wrapper has-data-[variant=inset]:bg-background flex min-h-svh w-full",
+						className,
+					)}
 					{...props}
 				>
 					{children}
@@ -284,8 +287,8 @@ function SidebarInset({ className, ...props }: React.ComponentProps<"main">) {
 		<main
 			data-slot="sidebar-inset"
 			className={cn(
-				"bg-background relative flex w-full flex-1 flex-col",
-				"md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:ml-0 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow-md md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ml-2",
+				"bg-background relative flex w-full flex-1 flex-col border-border border-1",
+				"md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:ml-0 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow-lg md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ml-2",
 				className,
 			)}
 			{...props}
@@ -530,7 +533,7 @@ function SidebarMenuAction({
 				"peer-data-[size=lg]/menu-button:top-2.5",
 				"group-data-[collapsible=icon]:hidden",
 				showOnHover &&
-				"peer-data-[active=true]/menu-button:text-sidebar-accent-foreground group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 data-[state=open]:opacity-100 md:opacity-0",
+					"peer-data-[active=true]/menu-button:text-sidebar-accent-foreground group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 data-[state=open]:opacity-100 md:opacity-0",
 				className,
 			)}
 			{...props}

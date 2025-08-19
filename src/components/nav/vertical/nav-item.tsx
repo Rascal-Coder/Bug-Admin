@@ -7,26 +7,28 @@ import { NavItemRenderer } from "../components";
 import { navItemClasses, navItemStyles } from "../styles";
 import type { NavItemProps } from "../types";
 
-const iconRender = (icon: string | React.ReactNode) => {
-	return <span style={navItemStyles.icon} className="mr-2 items-center justify-center">
-		{icon ? (
-			typeof icon === "string" ? <Icon icon={icon} size={16} /> : icon
-		) : (
-			<Icon icon="mdi:menu" size={16} />
-		)}
-	</span>
-}
-
 export function NavItem(item: NavItemProps) {
 	const { title, icon, badge, badgeType, badgeVariants, caption, open, active, disabled, depth, hasChild } = item;
 
 	const content = (
 		<>
 			{/* Icon */}
-			{iconRender(icon)}
+			{
+				<span style={navItemStyles.icon} className="mr-2 items-center justify-center">
+					{icon ? (
+						typeof icon === "string" ? (
+							<Icon className={navItemClasses.icon} icon={icon} size={16} />
+						) : (
+							icon
+						)
+					) : (
+						<Icon icon="mdi:menu" size={16} className={navItemClasses.icon} />
+					)}
+				</span>
+			}
 
 			{/* Texts */}
-			<span style={navItemStyles.texts} >
+			<span style={navItemStyles.texts}>
 				{/* Title */}
 				<span style={navItemStyles.title}>{title}</span>
 
@@ -65,7 +67,6 @@ export function NavItem(item: NavItemProps) {
 	const itemClassName = cn(
 		navItemClasses.base,
 		navItemClasses.hover,
-		// "min-h-[44px]",
 		active && depth === 1 && navItemClasses.active,
 		active && depth !== 1 && "bg-action-hover!",
 		disabled && navItemClasses.disabled,
