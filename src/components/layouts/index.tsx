@@ -5,7 +5,6 @@ import { cn } from "@/utils";
 import { AppSidebar } from "./app-sidebar";
 
 export default function Layouts({ children }: { children: ReactNode }) {
-	// const defaultOpen = Cookies.get("sidebar_state") !== "false";
 	const defaultOpen = useMemo(() => {
 		const cookieValue = Cookies.get("sidebar_state");
 		return cookieValue !== "false";

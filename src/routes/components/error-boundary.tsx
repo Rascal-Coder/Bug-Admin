@@ -1,7 +1,7 @@
 import { useRouteError } from "react-router";
 
 export default function ErrorBoundary() {
-	const error: any = useRouteError();
+	const error = useRouteError();
 
-	return <div>{error}</div>;
+	return <div>{error instanceof Error ? error.message : String(error)}</div>;
 }
