@@ -1,5 +1,6 @@
 import { useEffect } from "react";
-import { HtmlDataAttribute } from "#/enum";
+import { HtmlDataAttribute, ThemeMode } from "#/enum";
+import { useSystemTheme } from "@/hooks/use-media-query";
 import { useSettings } from "@/store/settingStore";
 import type { UILibraryAdapter } from "./type";
 
@@ -10,12 +11,15 @@ interface ThemeProviderProps {
 
 export function ThemeProvider({ children, adapters = [] }: ThemeProviderProps) {
 	const { themeMode, themeColorPresets, fontFamily, fontSize } = useSettings();
+	const systemTheme = useSystemTheme();
+
+	const actualThemeMode = themeMode === ThemeMode.System ? systemTheme : themeMode;
 
 	// Update HTML class to support Tailwind dark mode
 	useEffect(() => {
 		const root = window.document.documentElement;
-		root.setAttribute(HtmlDataAttribute.ThemeMode, themeMode);
-	}, [themeMode]);
+		root.setAttribute(HtmlDataAttribute.ThemeMode, actualThemeMode);
+	}, [actualThemeMode]);
 
 	// Dynamically update theme color related CSS variables
 	useEffect(() => {
@@ -35,7 +39,7 @@ export function ThemeProvider({ children, adapters = [] }: ThemeProviderProps) {
 	// Wrap children with adapters
 	const wrappedWithAdapters = adapters.reduce(
 		(children, Adapter) => (
-			<Adapter key={Adapter.name} mode={themeMode}>
+			<Adapter key={Adapter.name} mode={actualThemeMode}>
 				{children}
 			</Adapter>
 		),

@@ -23,7 +23,7 @@ const useSettingStore = create<SettingStore>()(
 		(set) => ({
 			settings: {
 				themeColorPresets: ThemeColorPresets.Default,
-				themeMode: ThemeMode.Light,
+				themeMode: ThemeMode.System,
 				fontFamily: FontFamilyPreset.openSans,
 				fontSize: Number(typographyTokens.fontSize.sm),
 			},

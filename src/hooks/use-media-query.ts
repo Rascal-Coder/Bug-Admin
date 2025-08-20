@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { breakpointsTokens } from "@/theme/tokens/breakpoints";
+import { ThemeMode } from "@/types/enum";
 import { removePx } from "@/utils/theme";
 
 type MediaQueryConfig = {
@@ -110,6 +111,31 @@ export const useMediaQuery = (config: MediaQueryConfig | string) => {
 
 	return matches;
 };
+
+export function useSystemTheme(): ThemeMode {
+	const [isDark, setIsDark] = useState(false);
+
+	useEffect(() => {
+		const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+
+		const updateTheme = (e: MediaQueryListEvent | MediaQueryList) => {
+			console.log("updateTheme", e.matches);
+			setIsDark(e.matches);
+		};
+
+		// 设置初始值
+		updateTheme(mediaQuery);
+
+		// 监听变化
+		mediaQuery.addEventListener("change", updateTheme);
+
+		return () => {
+			mediaQuery.removeEventListener("change", updateTheme);
+		};
+	}, []);
+
+	return isDark ? ThemeMode.Dark : ThemeMode.Light;
+}
 
 type Breakpoints = typeof breakpointsTokens;
 type BreakpointsKeys = keyof Breakpoints;

@@ -34,14 +34,10 @@ export function ThemeSwitch() {
 					Dark
 					<Check size={14} className={cn("ms-auto", settings.themeMode !== ThemeMode.Dark && "hidden")} />
 				</DropdownMenuItem>
-				{/* Todo: 添加系统主题 */}
-				{/* <DropdownMenuItem onClick={() => setTheme('system')}>
-          System
-          <Check
-            size={14}
-            className={cn('ms-auto', theme !== 'system' && 'hidden')}
-          />
-        </DropdownMenuItem> */}
+				<DropdownMenuItem onClick={() => updateSettings({ themeMode: ThemeMode.System })}>
+					System
+					<Check size={14} className={cn("ms-auto", settings.themeMode !== ThemeMode.System && "hidden")} />
+				</DropdownMenuItem>
 			</DropdownMenuContent>
 		</DropdownMenu>
 	);

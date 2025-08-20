@@ -1,10 +1,9 @@
-/** biome-ignore-all lint/correctness/useExhaustiveDependencies: <explanation> */
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
+import Cookies from "js-cookie";
 import { PanelLeftIcon } from "lucide-react";
 import * as React from "react";
-
-import { useIsMobile } from "@/hooks/use-mobile";
+import { useMediaQuery } from "@/hooks";
 import { Button } from "@/ui/button";
 import { Input } from "@/ui/input";
 import { Separator } from "@/ui/separator";
@@ -54,7 +53,7 @@ function SidebarProvider({
 	open?: boolean;
 	onOpenChange?: (open: boolean) => void;
 }) {
-	const isMobile = useIsMobile();
+	const isMobile = useMediaQuery({ maxWidth: 768 });
 	const [openMobile, setOpenMobile] = React.useState(false);
 
 	// This is the internal state of the sidebar.
@@ -71,15 +70,21 @@ function SidebarProvider({
 			}
 
 			// This sets the cookie to keep the sidebar state.
-			document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`;
+			// document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`;
+			// 使用 js-cookie 设置 cookie 防止xss攻击
+			Cookies.set(SIDEBAR_COOKIE_NAME, openState.toString(), {
+				path: "/",
+				maxAge: SIDEBAR_COOKIE_MAX_AGE.toString(),
+			});
 		},
 		[setOpenProp, open],
 	);
 
 	// Helper to toggle the sidebar.
+
 	const toggleSidebar = React.useCallback(() => {
 		return isMobile ? setOpenMobile((open) => !open) : setOpen((open) => !open);
-	}, [isMobile, setOpen, setOpenMobile]);
+	}, [isMobile, setOpen]);
 
 	// Adds a keyboard shortcut to toggle the sidebar.
 	React.useEffect(() => {
@@ -108,7 +113,7 @@ function SidebarProvider({
 			setOpenMobile,
 			toggleSidebar,
 		}),
-		[state, open, setOpen, isMobile, openMobile, setOpenMobile, toggleSidebar],
+		[state, open, setOpen, isMobile, openMobile, toggleSidebar],
 	);
 
 	return (

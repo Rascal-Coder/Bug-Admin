@@ -1,11 +1,13 @@
+
 /* import font */
 @import "@fontsource-variable/open-sans";
 @import "@fontsource-variable/inter";
+
+
+
 /* import tailwind */
 @import "tailwindcss";
 @import "tw-animate-css";
-
-@custom-variant dark (&:is(.dark *));
 
 /* config  tailwind */
 @config "../tailwind.config.ts";
@@ -20,6 +22,7 @@
     /* https://tailwindcss.com/docs/upgrade-guide#default-border-color */
     border-color: rgba(var(--colors-palette-gray-500Channel) / var(--opacity-border)) ;
   }
+  /* scrollbar */
   * {
     scrollbar-width: thin;
     scrollbar-color: var(--border) transparent;

@@ -30,8 +30,10 @@ export default function Layouts({ children }: { children: ReactNode }) {
 
 					// Set content container, so we can use container queries
 					"@container/content",
-
+					// border
 					"peer-data-[variant=floating]:border-none",
+					// font color
+					"text-black dark:text-white",
 				)}
 			>
 				<Header fixed>
