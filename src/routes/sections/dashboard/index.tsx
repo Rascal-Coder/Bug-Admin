@@ -3,11 +3,12 @@ import { Navigate, Outlet, type RouteObject, ScrollRestoration } from "react-rou
 import Layouts from "@/components/layouts";
 import { GLOBAL_CONFIG } from "@/global-config";
 import { getFrontendDashboardRoutes } from "./frontend";
+import AnimatedLoading from "@/components/animate/AnimatedLoading";
 
 export const dashboardRoutes: RouteObject[] = [
 	{
 		element: (
-			<Suspense fallback={<div>Loading...</div>}>
+			<Suspense fallback={<AnimatedLoading />}>
 				<Layouts>
 					<Outlet />
 					<ScrollRestoration />
