@@ -153,4 +153,32 @@
     @apply aspect-square rounded-md align-middle bg-center bg-no-repeat w-2 h-2 shadow-sm inline-block;
     background-image: radial-gradient(circle at 35% 30%,oklch(1 0 0/calc(var(--depth)*.5)),#0000);
   }
+
+  .flex-center {
+    @apply flex items-center justify-center;
+  }
+
+  .flex-col-center {
+    @apply flex flex-col items-center justify-center;
+  }
+
+  .outline-box {
+    @apply outline-border relative cursor-pointer rounded-xl p-1 outline-1;
+  }
+
+  .outline-box::after {
+    @apply absolute left-1/2 top-1/2 z-20 h-0 w-[1px] rounded-xl opacity-0  outline-2 outline-transparent transition-all duration-300 content-[""];
+  }
+
+  .outline-box.outline-box-active {
+    @apply outline-primary  outline-2;
+  }
+
+  .outline-box.outline-box-active::after {
+    display: none;
+  }
+
+  .outline-box:not(.outline-box-active):hover::after {
+    @apply outline-primary left-0 top-0 h-full w-full p-1 opacity-100;
+  }
 }

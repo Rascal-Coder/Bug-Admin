@@ -7,6 +7,7 @@ import { ThemeSwitch } from "@/components/layouts/weight/themeswitch";
 import { SidebarInset, SidebarProvider } from "@/ui/sidebar";
 import { cn } from "@/utils";
 import { AppSidebar } from "./app-sidebar";
+import { SettingButton } from "../weight/setting-button";
 
 export default function VerticalLayout({ children }: { children: ReactNode }) {
 	const defaultOpen = useMemo(() => {
@@ -39,6 +40,7 @@ export default function VerticalLayout({ children }: { children: ReactNode }) {
 				<Header fixed>
 					<Breadcrumb />
 					<ThemeSwitch />
+					<SettingButton />
 				</Header>
 
 				{/* fluid | fixed */}
