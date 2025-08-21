@@ -1,6 +1,7 @@
 import { lazy, Suspense } from "react";
 import { Outlet, type RouteObject } from "react-router";
 import { registerLocalIcons } from "@/components/icon";
+import GlobalLoading from "@/components/loading/global-loading";
 
 const Page403 = lazy(() => import("@/pages/sys/error/Page403"));
 const Page404 = lazy(() => import("@/pages/sys/error/Page404"));
@@ -11,7 +12,7 @@ export const mainRoutes: RouteObject[] = [
 	{
 		path: "/",
 		element: (
-			<Suspense fallback={<div>Loading...</div>}>
+			<Suspense fallback={<GlobalLoading />}>
 				<Outlet />
 			</Suspense>
 		),

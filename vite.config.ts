@@ -24,6 +24,21 @@ export default defineConfig(({ mode }) => {
 			host: true,
 			port: 3001,
 		},
+		build: {
+			target: "esnext",
+			minify: "esbuild",
+			sourcemap: !isProduction,
+			cssCodeSplit: true,
+			chunkSizeWarningLimit: 1500,
+			rollupOptions: {
+				output: {
+					manualChunks: {
+						"vendor-core": ["react", "react-dom", "react-router"],
+						"vendor-utils": ["zustand", "@iconify/react"],
+					},
+				},
+			},
+		},
 		esbuild: {
 			drop: isProduction ? ["console", "debugger"] : [],
 			legalComments: "none",
