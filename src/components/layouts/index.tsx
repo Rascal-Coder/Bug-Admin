@@ -1,49 +1,6 @@
-import Cookies from "js-cookie";
-import { type ReactNode, useMemo } from "react";
-import { SidebarInset, SidebarProvider } from "@/ui/sidebar";
-import { cn } from "@/utils";
-import { AppSidebar } from "./app-sidebar";
-import { Breadcrumb } from "./weight/breadcrumb";
-import { Header } from "./weight/header";
-import { Main } from "./weight/main";
-import { ThemeSwitch } from "./weight/themeswitch";
+import type { ReactNode } from "react";
+import VerticalLayout from "./vertical-layout";
 
 export default function Layouts({ children }: { children: ReactNode }) {
-	const defaultOpen = useMemo(() => {
-		const cookieValue = Cookies.get("sidebar_state");
-		return cookieValue !== "false";
-	}, []);
-	return (
-		<SidebarProvider
-			defaultOpen={defaultOpen}
-			style={{ "--sidebar-width": "var(--layout-nav-width)" } as React.CSSProperties}
-		>
-			<AppSidebar />
-			<SidebarInset
-				className={cn(
-					// If layout is fixed, set the height
-					// to 100svh to prevent overflow
-					"has-[[data-layout=fixed]]:h-svh",
-
-					// If layout is fixed and sidebar is inset,
-					"peer-data-[variant=inset]:has-[[data-layout=fixed]]:h-[calc(100svh-(var(--spacing)*5))]",
-
-					// Set content container, so we can use container queries
-					"@container/content",
-					// border
-					"peer-data-[variant=floating]:border-none",
-					// font color
-					"text-black dark:text-white",
-				)}
-			>
-				<Header fixed>
-					<Breadcrumb />
-					<ThemeSwitch />
-				</Header>
-
-				{/* fluid | fixed */}
-				<Main fixed>{children}</Main>
-			</SidebarInset>
-		</SidebarProvider>
-	);
+	return <VerticalLayout>{children}</VerticalLayout>;
 }

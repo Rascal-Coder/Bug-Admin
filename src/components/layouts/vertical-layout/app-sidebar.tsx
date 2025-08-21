@@ -1,13 +1,13 @@
 import { AudioWaveform, Command, GalleryVerticalEnd } from "lucide-react";
+import { frontendNavData } from "@/components/layouts/nav-data/nav-data-frontend";
+import { NavUser } from "@/components/layouts/weight/nav-user";
+import { TeamSwitcher } from "@/components/layouts/weight/team-switcher";
+import { NavVertical } from "@/components/nav/vertical";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail } from "@/ui/sidebar";
-import { NavVertical } from "../nav/vertical";
-import { frontendNavData } from "./nav-data/nav-data-frontend";
-import { NavUser } from "./weight/nav-user";
-import { TeamSwitcher } from "./weight/team-switcher";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 	return (
-		<Sidebar collapsible="icon" variant="inset" {...props}>
+		<Sidebar collapsible="icon" variant="sidebar" {...props}>
 			<SidebarHeader>
 				<TeamSwitcher
 					teams={[
