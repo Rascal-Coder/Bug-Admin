@@ -1,77 +1,164 @@
-import { m } from "motion/react";
+import React from "react";
+import { cn } from "@/utils";
+import { uuid } from "@/utils/uuid";
 
-const dotStyle = {
-	width: 14,
-	height: 14,
-	borderRadius: "50%",
-	background: "#ffd600",
-	margin: "0 6px",
-	display: "inline-block",
+interface BallClimbingDotProps {
+	width?: number;
+	color?: string;
+	loading?: boolean;
+	center?: boolean;
+	className?: string;
+	text?: string;
+}
+
+const BallClimbingDot: React.FC<BallClimbingDotProps> = ({
+	width = 42,
+	loading = false,
+	center = false,
+	className,
+	text = "",
+}) => {
+	const ratio = 1.3125;
+	const boxWidth = width;
+	const boxHeight = width / ratio;
+	const smallMeasure = width / 3;
+	const dotJumpId = `dotJump-${uuid()}`;
+	const dotStepId = `dotStep-${uuid()}`;
+
+	const keyframesStyle = `
+    @keyframes ${dotJumpId} {
+      0% {
+        transform: scale(1, .7);
+      }
+      20% {
+        transform: scale(.7, 1.2);
+      }
+      40% {
+        transform: scale(1, 1);
+      }
+      50% {
+        bottom: 125%;
+      }
+      46% {
+        transform: scale(1, 1);
+      }
+      80% {
+        transform: scale(.7, 1.2);
+      }
+      90% {
+        transform: scale(.7, 1.2);
+      }
+      100% {
+        transform: scale(1, .7);
+      }
+    }
+    
+    @keyframes ${dotStepId} {
+      0% {
+        top: 0;
+        right: 0;
+        opacity: 0;
+      }
+      50% {
+        opacity: 1;
+      }
+      100% {
+        top: 100%;
+        right: 100%;
+        opacity: 0;
+      }
+    }
+  `;
+
+	if (!loading) return null;
+
+	return (
+		<>
+			<style>{keyframesStyle}</style>
+			<div className="h-full w-full flex flex-col gap-3 items-center justify-center">
+				<div className={cn("react-loading-wrap", center && "flex items-center justify-center", className)}>
+					<div
+						className="relative box-border block font-[0] text-primary"
+						style={{
+							width: `${boxWidth}px`,
+							height: `${boxHeight}px`,
+						}}
+					>
+						{/* 跳跃的球 */}
+						<div
+							className="absolute inline-block float-none border-0"
+							style={{
+								bottom: "32%",
+								left: "18%",
+								width: `${smallMeasure}px`,
+								height: `${smallMeasure}px`,
+								backgroundColor: "currentColor",
+								borderRadius: "100%",
+								transformOrigin: "center bottom",
+								animation: `${dotJumpId} 0.6s ease-in-out infinite`,
+							}}
+						/>
+
+						{/* 台阶点 - 第1个 */}
+						<div
+							className="absolute inline-block float-none"
+							style={{
+								top: "0",
+								right: "0",
+								width: `${smallMeasure}px`,
+								height: `${smallMeasure / 7}px`,
+								backgroundColor: "currentColor",
+								borderRadius: "0",
+								border: "0 solid currentColor",
+								transform: "translate(60%, 0)",
+								animation: `${dotStepId} 1.8s linear infinite`,
+								animationDelay: "0ms",
+							}}
+						/>
+
+						{/* 台阶点 - 第2个 */}
+						<div
+							className="absolute inline-block float-none"
+							style={{
+								top: "0",
+								right: "0",
+								width: `${smallMeasure}px`,
+								height: `${smallMeasure / 7}px`,
+								backgroundColor: "currentColor",
+								borderRadius: "0",
+								border: "0 solid currentColor",
+								transform: "translate(60%, 0)",
+								animation: `${dotStepId} 1.8s linear infinite`,
+								animationDelay: "-600ms",
+							}}
+						/>
+
+						{/* 台阶点 - 第3个 */}
+						<div
+							className="absolute inline-block float-none"
+							style={{
+								top: "0",
+								right: "0",
+								width: `${smallMeasure}px`,
+								height: `${smallMeasure / 7}px`,
+								backgroundColor: "currentColor",
+								borderRadius: "0",
+								border: "0 solid currentColor",
+								transform: "translate(60%, 0)",
+								animation: `${dotStepId} 1.8s linear infinite`,
+								animationDelay: "-1200ms",
+							}}
+						/>
+					</div>
+				</div>
+				{text && (
+					<div className='relative px-4 py-2 mt-6 text-3xl font-semibold tracking-wide text-primary text-center bg-accent-foreground/60 dark:bg-accent-foreground/10 border border-accent-foreground/30 dark:border-accent-foreground/15 rounded-lg shadow-[0_8px_32px_0_rgba(31,38,135,0.2)] dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.4)] backdrop-blur-lg transition-all duration-300 before:absolute before:inset-0 before:p-px before:pointer-events-none before:content-[""] before:bg-gradient-to-r before:from-primary/30 dark:before:from-primary/40 before:to-transparent before:rounded-lg before:[mask:linear-gradient(#fff_0_0)_content-box,linear-gradient(#fff_0_0)] before:[mask-composite:exclude]'>
+						{text}
+					</div>
+				)}
+			</div>
+		</>
+	);
 };
 
-const iconStyle = {
-	width: 32,
-	height: 32,
-	marginRight: 10,
-	display: "inline-block",
-};
-
-const GlobalLoading = () => (
-	<m.div
-		style={{
-			display: "flex",
-			flexDirection: "column",
-			justifyContent: "center",
-			alignItems: "center",
-			height: "100vh",
-		}}
-		initial={{ opacity: 0, scale: 0.8 }}
-		animate={{ opacity: 1, scale: 1 }}
-		transition={{ duration: 0.5 }}
-	>
-		<div style={{ display: "flex", alignItems: "center", marginBottom: 16 }}>
-			<m.span style={iconStyle} animate={{ y: [0, -12, 0] }} transition={{ repeat: Infinity, duration: 0.8, delay: 0 }}>
-				{/* 云朵 SVG 图标 */}
-				<m.svg
-					style={iconStyle}
-					viewBox="0 0 48 48"
-					animate={{ rotate: 360 }}
-					transition={{ repeat: Infinity, duration: 6, ease: "linear" }}
-					role="img"
-					aria-labelledby="spinnerTitle"
-				>
-					<title id="spinnerTitle">Loading spinner</title>
-					<circle cx="24" cy="24" r="12" fill="#ffd600" />
-					<g stroke="#ffd600" strokeWidth="3">
-						<line x1="24" y1="4" x2="24" y2="14" />
-						<line x1="24" y1="34" x2="24" y2="44" />
-						<line x1="4" y1="24" x2="14" y2="24" />
-						<line x1="34" y1="24" x2="44" y2="24" />
-						<line x1="10" y1="10" x2="17" y2="17" />
-						<line x1="38" y1="38" x2="31" y2="31" />
-						<line x1="10" y1="38" x2="17" y2="31" />
-						<line x1="38" y1="10" x2="31" y2="17" />
-					</g>
-				</m.svg>
-			</m.span>
-			<m.span
-				style={dotStyle}
-				animate={{ y: [0, -12, 0] }}
-				transition={{ repeat: Infinity, duration: 6, delay: 0.1 }}
-			/>
-			<m.span
-				style={dotStyle}
-				animate={{ y: [0, -12, 0] }}
-				transition={{ repeat: Infinity, duration: 6, delay: 0.25 }}
-			/>
-			<m.span
-				style={dotStyle}
-				animate={{ y: [0, -12, 0] }}
-				transition={{ repeat: Infinity, duration: 6, delay: 0.4 }}
-			/>
-		</div>
-		<span style={{ color: "#666", fontSize: 16 }}>Bug Admin</span>
-	</m.div>
-);
-
-export default GlobalLoading;
+export default BallClimbingDot;
