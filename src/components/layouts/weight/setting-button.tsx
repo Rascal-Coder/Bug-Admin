@@ -2,6 +2,9 @@ import clsx from "clsx";
 import type { CSSProperties } from "react";
 import { ThemeColorPresets, ThemeMode } from "#/enum";
 import { Icon } from "@/components/icon";
+import { IconSidebarFloating } from "@/components/svg-comps/icon-sidebar-floating";
+import { IconSidebarInset } from "@/components/svg-comps/icon-sidebar-inset";
+import { IconSidebarSidebar } from "@/components/svg-comps/icon-sidebar-sidebar";
 import { SwitchItem } from "@/components/switch-item";
 import { type SettingsType, useSettingActions, useSettings } from "@/store/settingStore";
 import { presetsColors } from "@/theme/tokens/color";
@@ -177,6 +180,24 @@ export function SettingButton() {
 								defaultValue={[fontSize]}
 								onValueChange={(value) => updateSettings({ fontSize: value[0] })}
 							/>
+						</div>
+						{/* layout */}
+						<div className="flex flex-col gap-2">
+							<Text variant="subTitle1">布局</Text>
+							<div className="flex flex-row gap-3">
+								<div>
+									<IconSidebarInset width={80} height={80} />
+									inset
+								</div>
+								<div>
+									<IconSidebarFloating width={80} height={80} />
+									floating
+								</div>
+								<div>
+									<IconSidebarSidebar width={80} height={80} />
+									sidebar
+								</div>
+							</div>
 						</div>
 					</div>
 				</ScrollArea>

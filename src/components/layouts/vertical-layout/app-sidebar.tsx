@@ -4,12 +4,14 @@ import { NavUser } from "@/components/layouts/weight/nav-user";
 import { TeamSwitcher } from "@/components/layouts/weight/team-switcher";
 import { NavMini } from "@/components/nav/mini";
 import { NavVertical } from "@/components/nav/vertical";
+import { useSettings } from "@/store/settingStore";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail, useSidebar } from "@/ui/sidebar";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 	const { open } = useSidebar();
+	const { sidebarMode } = useSettings();
 	return (
-		<Sidebar collapsible="icon" variant="sidebar" {...props}>
+		<Sidebar collapsible="icon" variant={sidebarMode} {...props}>
 			<SidebarHeader>
 				<TeamSwitcher
 					teams={[

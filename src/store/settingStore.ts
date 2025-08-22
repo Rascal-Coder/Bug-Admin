@@ -11,6 +11,7 @@ export type SettingsType = {
 	customPrimaryColor?: string;
 	grayMode: boolean;
 	colorWeakMode: boolean;
+	sidebarMode: "inset" | "floating" | "sidebar";
 };
 type SettingStore = {
 	settings: SettingsType;
@@ -31,6 +32,7 @@ const useSettingStore = create<SettingStore>()(
 				fontSize: Number(typographyTokens.fontSize.sm),
 				grayMode: false,
 				colorWeakMode: false,
+				sidebarMode: "inset",
 			},
 			actions: {
 				setSettings: (settings) => {
