@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import type { CSSProperties } from "react";
 import { type ThemeColorPresets, ThemeMode } from "#/enum";
 import { Icon } from "@/components/icon";
@@ -5,7 +6,6 @@ import { type SettingsType, useSettingActions, useSettings } from "@/store/setti
 import { presetsColors } from "@/theme/tokens/color";
 import { FontFamilyPreset } from "@/theme/tokens/typography";
 import { Button } from "@/ui/button";
-import { Card } from "@/ui/card";
 import { ScrollArea } from "@/ui/scroll-area";
 import { Separator } from "@/ui/separator";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/ui/sheet";
@@ -17,7 +17,7 @@ export function SettingButton() {
 		backdropFilter: "blur(20px)",
 	};
 	const settings = useSettings();
-	const { themeColorPresets, fontSize, fontFamily } = settings;
+	const { themeColorPresets, fontSize, fontFamily, themeMode } = settings;
 	const { setSettings } = useSettingActions();
 	const updateSettings = (partialSettings: Partial<SettingsType>) => {
 		setSettings({
@@ -43,28 +43,40 @@ export function SettingButton() {
 						<div className="flex flex-col gap-2">
 							<Text variant="subTitle1">模式</Text>
 							<div className="flex flex-row gap-4">
-								<Card
+								<button
+									type="button"
 									onClick={() => updateSettings({ themeMode: ThemeMode.Light })}
-									className="flex flex-1 h-20 cursor-pointer items-center justify-center outline-box"
+									className={clsx(
+										"card-box flex flex-1 h-20 cursor-pointer items-center justify-center outline-box",
+										themeMode === ThemeMode.Light && "outline-box-active",
+									)}
 								>
 									<Icon icon="line-md:sun-rising-filled-loop" size="24" />
-								</Card>
-								<Card
+								</button>
+								<button
+									type="button"
 									onClick={() => updateSettings({ themeMode: ThemeMode.Dark })}
-									className="flex flex-1 h-20 cursor-pointer items-center justify-center outline-box"
+									className={clsx(
+										"card-box flex flex-1 h-20 cursor-pointer items-center justify-center outline-box",
+										themeMode === ThemeMode.Dark && "outline-box-active",
+									)}
 								>
 									<Icon icon="line-md:sunny-filled-loop-to-moon-filled-alt-loop-transition" size="24" />
-								</Card>
-								<Card
+								</button>
+								<button
+									type="button"
 									onClick={() => updateSettings({ themeMode: ThemeMode.System })}
-									className="flex flex-1 h-20 cursor-pointer items-center justify-center outline-box"
+									className={clsx(
+										"card-box flex flex-1 h-20 cursor-pointer items-center justify-center outline-box",
+										themeMode === ThemeMode.System && "outline-box-active",
+									)}
 								>
 									<div className="flex-center gap-2">
 										<Icon icon="line-md:sun-rising-filled-loop" size="18" />
 										<Separator orientation="vertical" />
 										<Icon icon="line-md:sunny-filled-loop-to-moon-filled-alt-loop-transition" size="18" />
 									</div>
-								</Card>
+								</button>
 							</div>
 						</div>
 
@@ -103,11 +115,12 @@ export function SettingButton() {
 							<Text variant="subTitle2">字体系列</Text>
 							<div className="flex flex-row gap-3">
 								{Object.entries(FontFamilyPreset).map(([font, family]) => (
-									<Card
+									<button
+										type="button"
 										key={font}
-										className={cn(
-											"flex h-20 w-full cursor-pointer items-center justify-center text-text-disabled outline-box",
-											fontFamily === family && "text-primary font-medium",
+										className={clsx(
+											"card-box flex h-20 w-full cursor-pointer items-center justify-center text-text-disabled outline-box",
+											fontFamily === family && "text-primary font-medium outline-box-active",
 											family === FontFamilyPreset.inter && "font-inter",
 											family === FontFamilyPreset.openSans && "font-openSans",
 										)}
@@ -118,7 +131,7 @@ export function SettingButton() {
 											<span className="opacity-50 ml-0.5">a</span>
 										</div>
 										<span className="text-sm text-text-primary">{family.replace("Variable", "")}</span>
-									</Card>
+									</button>
 								))}
 							</div>
 

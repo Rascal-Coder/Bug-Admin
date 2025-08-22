@@ -1,4 +1,4 @@
-import React from "react";
+import type React from "react";
 import { cn } from "@/utils";
 import { uuid } from "@/utils/uuid";
 

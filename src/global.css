@@ -167,11 +167,11 @@
   }
 
   .outline-box::after {
-    @apply absolute left-1/2 top-1/2 z-20 h-0 w-[1px] rounded-xl opacity-0  outline-2 outline-transparent transition-all duration-300 content-[""];
+    @apply absolute left-1/2 top-1/2 z-20 h-0 w-[1px] rounded-xl opacity-0 outline-2 outline-transparent transition-all duration-300 content-[""];
   }
 
   .outline-box.outline-box-active {
-    @apply outline-primary  outline-2;
+    @apply outline-primary outline-2;
   }
 
   .outline-box.outline-box-active::after {
@@ -180,5 +180,8 @@
 
   .outline-box:not(.outline-box-active):hover::after {
     @apply outline-primary left-0 top-0 h-full w-full p-1 opacity-100;
+  }
+  .card-box {
+    @apply bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm;
   }
 }
