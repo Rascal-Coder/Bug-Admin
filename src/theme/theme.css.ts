@@ -29,9 +29,11 @@ for (const themeMode of Object.values(ThemeMode)) {
 
 // dynamic color palette
 for (const preset of Object.values(ThemeColorPresets)) {
-	globalStyle(`:root[${HtmlDataAttribute.ColorPalette}=${preset}]`, {
-		vars: assignVars(themeVars.colors.palette.primary, {
-			...addColorChannels(presetsColors[preset]),
-		}),
-	});
+	if (preset !== ThemeColorPresets.Custom) {
+		globalStyle(`:root[${HtmlDataAttribute.ColorPalette}=${preset}]`, {
+			vars: assignVars(themeVars.colors.palette.primary, {
+				...addColorChannels(presetsColors[preset]),
+			}),
+		});
+	}
 }

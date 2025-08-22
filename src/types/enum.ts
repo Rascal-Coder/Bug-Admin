@@ -11,6 +11,7 @@ export enum ThemeColorPresets {
 	Blue = "blue",
 	Orange = "orange",
 	Red = "red",
+	Custom = "custom",
 }
 
 export enum HtmlDataAttribute {

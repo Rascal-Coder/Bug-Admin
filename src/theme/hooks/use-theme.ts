@@ -1,5 +1,7 @@
 import type { ThemeMode } from "#/enum";
+import { ThemeColorPresets } from "#/enum";
 import { useSettingActions, useSettings } from "@/store/settingStore";
+import { generateColorVariants } from "@/utils/theme";
 import { themeVars } from "../theme.css";
 import { baseThemeTokens } from "../tokens/base";
 import { darkColorTokens, lightColorTokens, presetsColors } from "../tokens/color";
@@ -12,11 +14,16 @@ export function useTheme() {
 
 	let colorTokens = settings.themeMode === "light" ? lightColorTokens : darkColorTokens;
 
+	const primaryColor =
+		settings.themeColorPresets === ThemeColorPresets.Custom
+			? generateColorVariants(settings.customPrimaryColor || "#808080")
+			: presetsColors[settings.themeColorPresets];
+
 	colorTokens = {
 		...colorTokens,
 		palette: {
 			...colorTokens.palette,
-			primary: presetsColors[settings.themeColorPresets],
+			primary: primaryColor,
 		},
 	};
 

@@ -8,6 +8,7 @@ export type SettingsType = {
 	themeMode: ThemeMode;
 	fontFamily: string;
 	fontSize: number;
+	customPrimaryColor?: string;
 };
 type SettingStore = {
 	settings: SettingsType;

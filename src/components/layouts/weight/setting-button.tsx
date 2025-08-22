@@ -1,13 +1,12 @@
 import clsx from "clsx";
 import type { CSSProperties } from "react";
-import { type ThemeColorPresets, ThemeMode } from "#/enum";
+import { ThemeColorPresets, ThemeMode } from "#/enum";
 import { Icon } from "@/components/icon";
 import { type SettingsType, useSettingActions, useSettings } from "@/store/settingStore";
 import { presetsColors } from "@/theme/tokens/color";
 import { FontFamilyPreset } from "@/theme/tokens/typography";
 import { Button } from "@/ui/button";
 import { ScrollArea } from "@/ui/scroll-area";
-import { Separator } from "@/ui/separator";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/ui/sheet";
 import { Slider } from "@/ui/slider";
 import { Text } from "@/ui/typography";
@@ -17,7 +16,7 @@ export function SettingButton() {
 		backdropFilter: "blur(20px)",
 	};
 	const settings = useSettings();
-	const { themeColorPresets, fontSize, fontFamily, themeMode } = settings;
+	const { themeColorPresets, fontSize, fontFamily, themeMode, customPrimaryColor } = settings;
 	const { setSettings } = useSettingActions();
 	const updateSettings = (partialSettings: Partial<SettingsType>) => {
 		setSettings({
@@ -47,35 +46,34 @@ export function SettingButton() {
 									type="button"
 									onClick={() => updateSettings({ themeMode: ThemeMode.Light })}
 									className={clsx(
-										"card-box flex flex-1 h-20 cursor-pointer items-center justify-center outline-box",
+										"card-box flex flex-1 h-20 cursor-pointer items-center justify-center outline-box flex-col gap-1 py-1",
 										themeMode === ThemeMode.Light && "outline-box-active",
 									)}
 								>
 									<Icon icon="line-md:sun-rising-filled-loop" size="24" />
+									<span className="text-sm">浅色</span>
 								</button>
 								<button
 									type="button"
 									onClick={() => updateSettings({ themeMode: ThemeMode.Dark })}
 									className={clsx(
-										"card-box flex flex-1 h-20 cursor-pointer items-center justify-center outline-box",
+										"card-box flex flex-1 h-20 cursor-pointer items-center justify-center outline-box flex-col gap-1 py-1",
 										themeMode === ThemeMode.Dark && "outline-box-active",
 									)}
 								>
 									<Icon icon="line-md:sunny-filled-loop-to-moon-filled-alt-loop-transition" size="24" />
+									<span className="text-sm">深色</span>
 								</button>
 								<button
 									type="button"
 									onClick={() => updateSettings({ themeMode: ThemeMode.System })}
 									className={clsx(
-										"card-box flex flex-1 h-20 cursor-pointer items-center justify-center outline-box",
+										"card-box flex flex-1 h-20 cursor-pointer items-center justify-center outline-box flex-col gap-1 py-1",
 										themeMode === ThemeMode.System && "outline-box-active",
 									)}
 								>
-									<div className="flex-center gap-2">
-										<Icon icon="line-md:sun-rising-filled-loop" size="18" />
-										<Separator orientation="vertical" />
-										<Icon icon="line-md:sunny-filled-loop-to-moon-filled-alt-loop-transition" size="18" />
-									</div>
+									<Icon icon="material-symbols-light:hdr-auto" size="24" />
+									<span className="text-sm">跟随系统</span>
 								</button>
 							</div>
 						</div>
@@ -89,7 +87,7 @@ export function SettingButton() {
 										type="button"
 										key={preset}
 										className={cn(
-											"relative flex h-13 w-5 cursor-pointer items-center justify-center rounded transition-all duration-300 ease-in-out p-1 border-0",
+											"relative flex h-16 w-5 cursor-pointer items-center justify-center rounded transition-all duration-300 ease-in-out p-1 border-0",
 											themeColorPresets === preset && "w-13",
 										)}
 										style={{ backgroundColor: color.default }}
@@ -105,6 +103,27 @@ export function SettingButton() {
 										</div>
 									</button>
 								))}
+								<label
+									className={clsx(
+										"card-box ml-2 flex w-16 h-16 cursor-pointer items-center justify-center outline-box flex-col gap-1 py-1 relative",
+										themeColorPresets === ThemeColorPresets.Custom && "outline-box-active",
+									)}
+								>
+									<input
+										type="color"
+										className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+										value={customPrimaryColor || "#808080"}
+										onChange={(e) => {
+											const customColor = e.target.value;
+											updateSettings({
+												themeColorPresets: ThemeColorPresets.Custom,
+												customPrimaryColor: customColor,
+											});
+										}}
+									/>
+									<Icon icon="material-symbols:palette" size="24" />
+									<span className="text-sm">自定义</span>
+								</label>
 							</div>
 						</div>
 

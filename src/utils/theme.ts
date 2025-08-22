@@ -181,3 +181,19 @@ export const addColorChannels = <T extends Record<string, any>>(obj: T): AddChan
 
 	return result as AddChannelToLeaf<T>;
 };
+
+/**
+ * Generate color variants from a base color
+ * @param baseColor - The base color in hex format (e.g., "#FF0000")
+ * @returns Object with lighter, light, default, dark, darker variants
+ */
+export const generateColorVariants = (baseColor: string) => {
+	const colorInstance = color(baseColor);
+	return {
+		lighter: colorInstance.lighten(0.4).hex(),
+		light: colorInstance.lighten(0.2).hex(),
+		default: baseColor,
+		dark: colorInstance.darken(0.2).hex(),
+		darker: colorInstance.darken(0.4).hex(),
+	};
+};
