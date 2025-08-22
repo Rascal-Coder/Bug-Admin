@@ -2,6 +2,7 @@ import clsx from "clsx";
 import type { CSSProperties } from "react";
 import { ThemeColorPresets, ThemeMode } from "#/enum";
 import { Icon } from "@/components/icon";
+import { SwitchItem } from "@/components/switch-item";
 import { type SettingsType, useSettingActions, useSettings } from "@/store/settingStore";
 import { presetsColors } from "@/theme/tokens/color";
 import { FontFamilyPreset } from "@/theme/tokens/typography";
@@ -16,7 +17,7 @@ export function SettingButton() {
 		backdropFilter: "blur(20px)",
 	};
 	const settings = useSettings();
-	const { themeColorPresets, fontSize, fontFamily, themeMode, customPrimaryColor } = settings;
+	const { themeColorPresets, fontSize, fontFamily, themeMode, customPrimaryColor, grayMode, colorWeakMode } = settings;
 	const { setSettings } = useSettingActions();
 	const updateSettings = (partialSettings: Partial<SettingsType>) => {
 		setSettings({
@@ -40,7 +41,7 @@ export function SettingButton() {
 					<div className="flex flex-col gap-6 px-6 py-2">
 						{/* theme mode */}
 						<div className="flex flex-col gap-2">
-							<Text variant="subTitle1">模式</Text>
+							<Text variant="subTitle1">主题模式</Text>
 							<div className="flex flex-row gap-4">
 								<button
 									type="button"
@@ -76,11 +77,25 @@ export function SettingButton() {
 									<span className="text-sm">跟随系统</span>
 								</button>
 							</div>
+							<SwitchItem
+								checked={grayMode}
+								onCheckedChange={(checked) => updateSettings({ grayMode: checked })}
+								tip="开启后界面将变为灰色调，减少色彩干扰"
+							>
+								灰色模式
+							</SwitchItem>
+							<SwitchItem
+								checked={colorWeakMode}
+								onCheckedChange={(checked) => updateSettings({ colorWeakMode: checked })}
+								tip="开启后调整色彩对比度，适合色弱用户使用"
+							>
+								色弱模式
+							</SwitchItem>
 						</div>
 
 						{/* theme presets */}
 						<div className="flex flex-col gap-2">
-							<Text variant="subTitle1">预设</Text>
+							<Text variant="subTitle1">主题颜色</Text>
 							<div className="flex flex-wrap gap-1">
 								{Object.entries(presetsColors).map(([preset, color]) => (
 									<button

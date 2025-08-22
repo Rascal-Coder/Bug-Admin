@@ -9,6 +9,8 @@ export type SettingsType = {
 	fontFamily: string;
 	fontSize: number;
 	customPrimaryColor?: string;
+	grayMode: boolean;
+	colorWeakMode: boolean;
 };
 type SettingStore = {
 	settings: SettingsType;
@@ -27,6 +29,8 @@ const useSettingStore = create<SettingStore>()(
 				themeMode: ThemeMode.System,
 				fontFamily: FontFamilyPreset.openSans,
 				fontSize: Number(typographyTokens.fontSize.sm),
+				grayMode: false,
+				colorWeakMode: false,
 			},
 			actions: {
 				setSettings: (settings) => {

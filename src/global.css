@@ -185,3 +185,27 @@
     @apply bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm;
   }
 }
+
+/* Gray Mode - 灰色模式 */
+html.grayscale-mode {
+  filter: grayscale(1);
+  transition: filter 0.3s ease;
+}
+
+/* Color Weak Mode - 色弱模式 */
+html.color-weak-mode {
+  /* 增强对比度，提高亮度，调整饱和度以帮助色弱用户 */
+  filter: contrast(1.2) brightness(1.1) saturate(1.3);
+  transition: filter 0.3s ease;
+}
+
+/* Combined modes - 组合模式 */
+html.grayscale-mode.color-weak-mode {
+  filter: grayscale(1) contrast(1.2) brightness(1.1);
+  transition: filter 0.3s ease;
+}
+
+/* 保留原有的 invert-mode，可能在其他地方使用 */
+html.invert-mode {
+  @apply invert;
+}

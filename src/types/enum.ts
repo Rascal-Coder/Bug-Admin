@@ -17,4 +17,6 @@ export enum ThemeColorPresets {
 export enum HtmlDataAttribute {
 	ColorPalette = "data-color-palette",
 	ThemeMode = "data-theme-mode",
+	GrayMode = "data-gray-mode",
+	ColorWeakMode = "data-color-weak-mode",
 }

@@ -11,7 +11,8 @@ interface ThemeProviderProps {
 }
 
 export function ThemeProvider({ children, adapters = [] }: ThemeProviderProps) {
-	const { themeMode, themeColorPresets, fontFamily, fontSize, customPrimaryColor } = useSettings();
+	const { themeMode, themeColorPresets, fontFamily, fontSize, customPrimaryColor, grayMode, colorWeakMode } =
+		useSettings();
 	const systemTheme = useSystemTheme();
 
 	const actualThemeMode = themeMode === ThemeMode.System ? systemTheme : themeMode;
@@ -21,6 +22,25 @@ export function ThemeProvider({ children, adapters = [] }: ThemeProviderProps) {
 		const root = window.document.documentElement;
 		root.setAttribute(HtmlDataAttribute.ThemeMode, actualThemeMode);
 	}, [actualThemeMode]);
+
+	// Update gray mode and color weak mode
+	useEffect(() => {
+		const root = window.document.documentElement;
+
+		// Gray mode
+		if (grayMode) {
+			root.classList.add("grayscale-mode");
+		} else {
+			root.classList.remove("grayscale-mode");
+		}
+
+		// Color weak mode (using invert-mode as a placeholder, can be customized)
+		if (colorWeakMode) {
+			root.classList.add("color-weak-mode");
+		} else {
+			root.classList.remove("color-weak-mode");
+		}
+	}, [grayMode, colorWeakMode]);
 
 	// Dynamically update theme color related CSS variables
 	useEffect(() => {
