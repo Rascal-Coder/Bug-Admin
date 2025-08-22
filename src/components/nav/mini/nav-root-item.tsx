@@ -22,7 +22,7 @@ export const NavRootItem = (item: NavItemProps) => {
 
 			{/* Icon */}
 			{
-				<span style={navItemStyles.icon} className="mr-2 items-center justify-center">
+				<span style={navItemStyles.icon} className="items-center justify-center">
 					{item.icon ? (
 						typeof item.icon === "string" ? (
 							<Icon className={navItemClasses.icon} icon={item.icon} size={20} />
@@ -41,7 +41,7 @@ export const NavRootItem = (item: NavItemProps) => {
 			)}
 
 			{/* Title */}
-			<span style={navItemStyles.title} className="text-center! text-xs! mt-1">
+			<span style={navItemStyles.title} className="text-center! text-xs! mt-1 inline-block w-full">
 				{item.title}
 			</span>
 		</>
