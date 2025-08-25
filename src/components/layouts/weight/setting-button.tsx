@@ -13,6 +13,7 @@ import { Button } from "@/ui/button";
 import { ScrollArea } from "@/ui/scroll-area";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/ui/sheet";
 import { Slider } from "@/ui/slider";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/ui/tooltip";
 import { Text } from "@/ui/typography";
 import { cn } from "@/utils";
 export function SettingButton() {
@@ -193,41 +194,113 @@ export function SettingButton() {
 						{/* layout */}
 						<div className="flex flex-col gap-2">
 							<Text variant="subTitle1">布局</Text>
-							<div className="flex flex-row gap-3">
-								<button
-									type="button"
-									onClick={() => updateSettings({ sidebarMode: "inset" })}
-									className={clsx(
-										"card-box flex flex-1 h-20 cursor-pointer items-center justify-center outline-box flex-col gap-1 py-1",
-										sidebarMode === "inset" && "outline-box-active",
-									)}
-								>
-									<IconSidebarInset width={80} height={80} />
-									<span className="text-sm">内嵌</span>
-								</button>
-								<button
-									type="button"
-									onClick={() => updateSettings({ sidebarMode: "floating" })}
-									className={clsx(
-										"card-box flex flex-1 h-20 cursor-pointer items-center justify-center outline-box flex-col gap-1 py-1",
-										sidebarMode === "floating" && "outline-box-active",
-									)}
-								>
-									<IconSidebarFloating width={80} height={80} />
-									<span className="text-sm">浮动</span>
-								</button>
-								<button
-									type="button"
-									onClick={() => updateSettings({ sidebarMode: "sidebar" })}
-									className={clsx(
-										"card-box flex flex-1 h-20 cursor-pointer items-center justify-center outline-box flex-col gap-1 py-1",
-										sidebarMode === "sidebar" && "outline-box-active",
-									)}
-								>
-									<IconSidebarSidebar width={80} height={80} />
-									<span className="text-sm">侧边栏</span>
-								</button>
+							<div className="grid grid-cols-2 gap-3">
+								{/* 垂直菜单栏 */}
+								<Tooltip>
+									<TooltipTrigger asChild>
+										<div className="card-box flex h-20 cursor-pointer outline-box p-1.5">
+											<div className="flex w-full h-full gap-1.5">
+												<div className="w-1/5 h-full bg-primary/70 rounded-md"></div>
+												<div className="flex-1 flex flex-col gap-1.5">
+													<div className="h-1/3 bg-primary rounded-md"></div>
+													<div className="h-2/3 bg-accent rounded-md"></div>
+												</div>
+											</div>
+										</div>
+									</TooltipTrigger>
+									<TooltipContent side="top">
+										<p>垂直菜单栏</p>
+									</TooltipContent>
+								</Tooltip>
+
+								<Tooltip>
+									<TooltipTrigger asChild>
+										{/* 双列菜单栏 */}
+										<div className="card-box flex h-20 cursor-pointer outline-box p-1.5">
+											<div className="flex w-full h-full gap-1.5">
+												<div className="w-1/8 h-full bg-primary/70 rounded-md"></div>
+												<div className="w-1/5 h-full bg-primary/70 rounded-md"></div>
+												<div className="flex-1 flex flex-col gap-1.5">
+													<div className="h-1/3 bg-primary rounded-md"></div>
+													<div className="h-2/3 bg-accent rounded-md"></div>
+												</div>
+											</div>
+										</div>
+									</TooltipTrigger>
+									<TooltipContent side="top">
+										<p>双列菜单栏</p>
+									</TooltipContent>
+								</Tooltip>
+
+								<Tooltip>
+									<TooltipTrigger asChild>
+										{/* 顶部菜单栏 */}
+										<div className="card-box flex h-20 cursor-pointer outline-box p-1.5">
+											<div className="flex w-full h-full flex-col gap-1.5">
+												<div className="h-1/3 bg-primary rounded-md"></div>
+												<div className="h-2/3 bg-accent rounded-md"></div>
+											</div>
+										</div>
+									</TooltipTrigger>
+									<TooltipContent side="top">
+										<p>顶部菜单栏</p>
+									</TooltipContent>
+								</Tooltip>
+
+								<Tooltip>
+									<TooltipTrigger asChild>
+										{/* 混合菜单栏 */}
+										<div className="card-box flex h-20 cursor-pointer outline-box outline-box-active p-1.5">
+											<div className="flex w-full h-full flex-col gap-1.5">
+												<div className="h-1/3 bg-primary rounded-md"></div>
+												<div className="h-2/3 flex gap-1.5">
+													<div className="w-1/5 bg-primary/70 rounded-md"></div>
+													<div className="flex-1 bg-accent rounded-md"></div>
+												</div>
+											</div>
+										</div>
+									</TooltipTrigger>
+									<TooltipContent side="top">
+										<p>混合菜单栏</p>
+									</TooltipContent>
+								</Tooltip>
 							</div>
+						</div>
+						{/* 左侧菜单栏模式下的三种布局 */}
+						<div className="flex flex-row gap-3 mt-2">
+							<button
+								type="button"
+								onClick={() => updateSettings({ sidebarMode: "inset" })}
+								className={clsx(
+									"card-box flex flex-1 h-20 cursor-pointer items-center justify-center outline-box flex-col gap-1 py-1",
+									sidebarMode === "inset" && "outline-box-active",
+								)}
+							>
+								<IconSidebarInset width={80} height={80} />
+								<span className="text-sm">内嵌</span>
+							</button>
+							<button
+								type="button"
+								onClick={() => updateSettings({ sidebarMode: "floating" })}
+								className={clsx(
+									"card-box flex flex-1 h-20 cursor-pointer items-center justify-center outline-box flex-col gap-1 py-1",
+									sidebarMode === "floating" && "outline-box-active",
+								)}
+							>
+								<IconSidebarFloating width={80} height={80} />
+								<span className="text-sm">浮动</span>
+							</button>
+							<button
+								type="button"
+								onClick={() => updateSettings({ sidebarMode: "sidebar" })}
+								className={clsx(
+									"card-box flex flex-1 h-20 cursor-pointer items-center justify-center outline-box flex-col gap-1 py-1",
+									sidebarMode === "sidebar" && "outline-box-active",
+								)}
+							>
+								<IconSidebarSidebar width={80} height={80} />
+								<span className="text-sm">侧边栏</span>
+							</button>
 						</div>
 					</div>
 				</ScrollArea>
