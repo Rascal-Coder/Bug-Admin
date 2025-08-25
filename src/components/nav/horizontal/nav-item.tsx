@@ -22,7 +22,7 @@ export function NavItem(item: NavItemProps) {
 							icon
 						)
 					) : (
-						<Icon icon="mdi:menu" size={0} className={navItemClasses.icon} />
+						<Icon icon="mdi:menu" size={20} className={navItemClasses.icon} />
 					)}
 				</span>
 			}
