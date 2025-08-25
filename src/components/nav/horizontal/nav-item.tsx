@@ -13,29 +13,36 @@ export function NavItem(item: NavItemProps) {
 	const content = (
 		<>
 			{/* Icon */}
-			<span style={navItemStyles.icon} className="mr-3 items-center justify-center">
-				{icon && typeof icon === "string" ? <Icon icon={icon} /> : icon}
+			{
+				<span style={navItemStyles.icon} className="mr-2 items-center justify-center">
+					{icon ? (
+						typeof icon === "string" ? (
+							<Icon className={navItemClasses.icon} icon={icon} size={20} />
+						) : (
+							icon
+						)
+					) : (
+						<Icon icon="mdi:menu" size={0} className={navItemClasses.icon} />
+					)}
+				</span>
+			}
+
+			{/* Title */}
+			<span style={navItemStyles.title} className="block! flex-auto! mr-1">
+				{title}
 			</span>
 
-			{/* Texts */}
-			<span style={navItemStyles.texts} className="min-h-[24px]">
-				{/* Title */}
-				<span style={navItemStyles.title}>{title}</span>
-
-				{/* Caption */}
-				{caption && (
-					<TooltipProvider>
-						<Tooltip>
-							<TooltipTrigger asChild>
-								<span style={navItemStyles.caption}>{caption}</span>
-							</TooltipTrigger>
-							<TooltipContent side="top" align="start">
-								{caption}
-							</TooltipContent>
-						</Tooltip>
-					</TooltipProvider>
-				)}
-			</span>
+			{/* Caption */}
+			{caption && (
+				<TooltipProvider>
+					<Tooltip>
+						<TooltipTrigger>
+							<Icon icon="solar:info-circle-linear" size={16} className="ml-1.5" style={navItemStyles.caption} />
+						</TooltipTrigger>
+						<TooltipContent side="bottom">{caption}</TooltipContent>
+					</Tooltip>
+				</TooltipProvider>
+			)}
 
 			{/* Badge */}
 			{badge && badgeType === "normal" && <Badge variant={badgeVariants}>{badge}</Badge>}
@@ -57,7 +64,6 @@ export function NavItem(item: NavItemProps) {
 	const itemClassName = cn(
 		navItemClasses.base,
 		navItemClasses.hover,
-		"min-h-[44px]",
 		active && depth === 1 && navItemClasses.active,
 		active && depth !== 1 && "bg-action-hover!",
 		disabled && navItemClasses.disabled,

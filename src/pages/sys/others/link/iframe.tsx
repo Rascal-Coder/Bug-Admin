@@ -185,7 +185,7 @@ export default function Iframe({
 					<div className="absolute inset-0 z-10 flex items-center justify-center bg-background/80 backdrop-blur-sm">
 						<div className="text-center">
 							<LineLoading />
-							<p className="mt-4 text-sm text-muted-foreground">正在加载内容...</p>
+							{/* <p className="mt-4 text-sm text-muted-foreground">正在加载内容...</p> */}
 						</div>
 					</div>
 				)}

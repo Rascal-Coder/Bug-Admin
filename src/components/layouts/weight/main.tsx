@@ -1,26 +1,37 @@
+import { Suspense } from "react";
+import { Outlet, ScrollRestoration } from "react-router";
+import GlobalLoading from "@/components/loading/global-loading";
+import { useSettings } from "@/store/settingStore";
 import { cn } from "@/utils";
 
-type MainProps = React.HTMLAttributes<HTMLElement> & {
-	fixed?: boolean;
-	fluid?: boolean;
-	ref?: React.Ref<HTMLElement>;
-};
+// type MainProps = React.HTMLAttributes<HTMLElement> & {
+// 	fixed?: boolean;
+// 	fluid?: boolean;
+// 	ref?: React.Ref<HTMLElement>;
+// };
 
-export function Main({ fixed, className, fluid, ...props }: MainProps) {
+export function Main() {
+	const { themeStretch } = useSettings();
 	return (
 		<main
-			data-layout={fixed ? "fixed" : "auto"}
+			data-layout="bug-admin-layout"
 			className={cn(
-				"px-4 py-6",
-
-				// If layout is fixed, make the main container flex and grow
-				fixed && "flex grow flex-col overflow-hidden",
-
-				// If layout is not fluid, set the max-width
-				!fluid && "@7xl/content:mx-auto @7xl/content:w-full @7xl/content:max-w-7xl",
-				className,
+				"flex-auto w-full flex flex-col",
+				"transition-[max-width] duration-300 ease-in-out",
+				"px-4 sm:px-6 py-4 sm:py-6 md:px-8 mx-auto",
+				{
+					"max-w-full": themeStretch,
+					"xl:max-w-screen-xl": !themeStretch,
+				},
 			)}
-			{...props}
-		/>
+			style={{
+				willChange: "max-width",
+			}}
+		>
+			<Suspense fallback={<GlobalLoading loading center width={80} />}>
+				<Outlet />
+				<ScrollRestoration />
+			</Suspense>
+		</main>
 	);
 }

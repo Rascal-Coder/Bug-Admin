@@ -1,9 +1,12 @@
+// import type { Side } from "@radix-ui/react-tooltip";
+
 import { type ReactNode, useState } from "react";
 import { Icon } from "@/components/icon";
 import { Switch } from "@/ui/switch";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/ui/tooltip";
 import { cn } from "@/utils";
 
+const SIDE_OPTIONS = ["top", "right", "bottom", "left"] as const;
 interface SwitchItemProps {
 	disabled?: boolean;
 	tip?: string;
@@ -13,6 +16,7 @@ interface SwitchItemProps {
 	shortcut?: ReactNode;
 	tipContent?: ReactNode;
 	className?: string;
+	side?: (typeof SIDE_OPTIONS)[number];
 }
 
 export function SwitchItem({
@@ -24,6 +28,7 @@ export function SwitchItem({
 	shortcut,
 	tipContent,
 	className,
+	side = "bottom",
 }: SwitchItemProps) {
 	const [internalChecked, setInternalChecked] = useState(false);
 
@@ -65,7 +70,7 @@ export function SwitchItem({
 							<TooltipTrigger asChild>
 								<Icon icon="lucide:circle-help" className="ml-1 size-3 cursor-help" />
 							</TooltipTrigger>
-							<TooltipContent side="bottom">
+							<TooltipContent side={side}>
 								{tipContent ||
 									tip.split("\n").map((line, index) => <p key={`tip-line-${index}-${line.slice(0, 10)}`}>{line}</p>)}
 							</TooltipContent>

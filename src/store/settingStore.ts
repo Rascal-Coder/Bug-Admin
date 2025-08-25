@@ -12,6 +12,8 @@ export type SettingsType = {
 	grayMode: boolean;
 	colorWeakMode: boolean;
 	sidebarMode: "inset" | "floating" | "sidebar";
+	layoutMode: "vertical" | "horizontal" | "mixed" | "double";
+	themeStretch: boolean;
 };
 type SettingStore = {
 	settings: SettingsType;
@@ -33,6 +35,8 @@ const useSettingStore = create<SettingStore>()(
 				grayMode: false,
 				colorWeakMode: false,
 				sidebarMode: "inset",
+				layoutMode: "vertical",
+				themeStretch: false,
 			},
 			actions: {
 				setSettings: (settings) => {

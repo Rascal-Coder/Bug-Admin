@@ -1,58 +1,52 @@
-import { useState } from "react";
 import { useLocation } from "react-router";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/ui/collapsible";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/ui/hover-card";
 import type { NavListProps } from "../types";
 import { NavItem } from "./nav-item";
 
-export function NavList({ data, depth = 1 }: NavListProps) {
+export function NavList({ data, depth = 0 }: NavListProps) {
+	const hasChild = data.children && data.children.length > 0;
 	const location = useLocation();
 	const isActive = location.pathname.includes(data.path);
-	const [open, setOpen] = useState(isActive);
-	const hasChild = data.children && data.children.length > 0;
-
-	const handleClick = () => {
-		if (hasChild) {
-			setOpen(!open);
-		}
-	};
 
 	if (data.hidden) {
 		return null;
 	}
 
-	return (
-		<Collapsible open={open} onOpenChange={setOpen} data-nav-type="list">
-			<CollapsibleTrigger className="w-full">
-				<NavItem
-					// data
-					title={data.title}
-					path={data.path}
-					icon={data.icon}
-					badge={data.badge}
-					badgeType={data.badgeType}
-					badgeVariants={data.badgeVariants}
-					caption={data.caption}
-					auth={data.auth}
-					// state
-					open={open}
-					active={isActive}
-					disabled={data.disabled}
-					// options
-					hasChild={hasChild}
-					depth={depth}
-					// event
-					onClick={handleClick}
-				/>
-			</CollapsibleTrigger>
-			{hasChild && (
-				<CollapsibleContent>
-					<div className="ml-4 mt-1 flex flex-col gap-1">
-						{data.children?.map((child) => (
-							<NavList key={child.title} data={child} depth={depth + 1} />
-						))}
-					</div>
-				</CollapsibleContent>
-			)}
-		</Collapsible>
-	);
+	const renderNavItem = () => {
+		return (
+			<NavItem
+				key={data.title}
+				// data
+				path={data.path}
+				title={data.title}
+				caption={data.caption}
+				badge={data.badge}
+				badgeType={data.badgeType}
+				badgeVariants={data.badgeVariants}
+				icon={data.icon}
+				auth={data.auth}
+				// state
+				disabled={data.disabled}
+				active={isActive}
+				// options
+				hasChild={hasChild}
+				depth={depth}
+			/>
+		);
+	};
+
+	const renderRootItemWithHoverCard = () => {
+		return (
+			<HoverCard openDelay={100}>
+				<HoverCardTrigger>{renderNavItem()}</HoverCardTrigger>
+				<HoverCardContent side={depth === 1 ? "bottom" : "right"} sideOffset={10} className="p-1">
+					{data.children?.map((child) => (
+						<NavList key={child.title} data={child} depth={depth + 1} />
+					))}
+				</HoverCardContent>
+			</HoverCard>
+		);
+	};
+
+	return <li className="list-none">{hasChild ? renderRootItemWithHoverCard() : renderNavItem()}</li>;
 }
