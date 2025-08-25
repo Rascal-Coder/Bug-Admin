@@ -20,7 +20,16 @@ export function SettingButton() {
 		backdropFilter: "blur(20px)",
 	};
 	const settings = useSettings();
-	const { themeColorPresets, fontSize, fontFamily, themeMode, customPrimaryColor, grayMode, colorWeakMode } = settings;
+	const {
+		themeColorPresets,
+		fontSize,
+		fontFamily,
+		themeMode,
+		customPrimaryColor,
+		grayMode,
+		colorWeakMode,
+		sidebarMode,
+	} = settings;
 	const { setSettings } = useSettingActions();
 	const updateSettings = (partialSettings: Partial<SettingsType>) => {
 		setSettings({
@@ -185,18 +194,39 @@ export function SettingButton() {
 						<div className="flex flex-col gap-2">
 							<Text variant="subTitle1">布局</Text>
 							<div className="flex flex-row gap-3">
-								<div>
+								<button
+									type="button"
+									onClick={() => updateSettings({ sidebarMode: "inset" })}
+									className={clsx(
+										"card-box flex flex-1 h-20 cursor-pointer items-center justify-center outline-box flex-col gap-1 py-1",
+										sidebarMode === "inset" && "outline-box-active",
+									)}
+								>
 									<IconSidebarInset width={80} height={80} />
-									inset
-								</div>
-								<div>
+									<span className="text-sm">内嵌</span>
+								</button>
+								<button
+									type="button"
+									onClick={() => updateSettings({ sidebarMode: "floating" })}
+									className={clsx(
+										"card-box flex flex-1 h-20 cursor-pointer items-center justify-center outline-box flex-col gap-1 py-1",
+										sidebarMode === "floating" && "outline-box-active",
+									)}
+								>
 									<IconSidebarFloating width={80} height={80} />
-									floating
-								</div>
-								<div>
+									<span className="text-sm">浮动</span>
+								</button>
+								<button
+									type="button"
+									onClick={() => updateSettings({ sidebarMode: "sidebar" })}
+									className={clsx(
+										"card-box flex flex-1 h-20 cursor-pointer items-center justify-center outline-box flex-col gap-1 py-1",
+										sidebarMode === "sidebar" && "outline-box-active",
+									)}
+								>
 									<IconSidebarSidebar width={80} height={80} />
-									sidebar
-								</div>
+									<span className="text-sm">侧边栏</span>
+								</button>
 							</div>
 						</div>
 					</div>
