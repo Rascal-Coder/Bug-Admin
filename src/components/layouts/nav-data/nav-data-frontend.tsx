@@ -121,12 +121,12 @@ export const frontendNavData: NavProps["data"] = [
 				icon: "local:ic-external",
 				children: [
 					{
-						title: "外链",
-						path: "/link/external-link",
-					},
-					{
 						title: "内嵌",
 						path: "/link/iframe",
+					},
+					{
+						title: "外链",
+						path: "/link/external-link",
 					},
 				],
 			},

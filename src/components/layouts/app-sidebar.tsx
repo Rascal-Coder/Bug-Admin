@@ -1,16 +1,14 @@
 import { AudioWaveform, Command, GalleryVerticalEnd } from "lucide-react";
-import { frontendNavData } from "@/components/layouts/nav-data/nav-data-frontend";
+
 import { NavUser } from "@/components/layouts/weight/nav-user";
 import { TeamSwitcher } from "@/components/layouts/weight/team-switcher";
-import { NavMini } from "@/components/nav/mini";
-import { NavVertical } from "@/components/nav/vertical";
-import { useMediaQuery } from "@/hooks";
 import { useSettings } from "@/store/settingStore";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail, useSidebar } from "@/ui/sidebar";
+import type { NavProps } from "../nav/types";
+import Siderbar from "./siderbar";
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar({ data, ...props }: React.ComponentProps<typeof Sidebar> & { data: NavProps["data"] }) {
 	const { open } = useSidebar();
-	const isMobile = useMediaQuery("(max-width: 768px)");
 	const { sidebarMode } = useSettings();
 	return (
 		<Sidebar collapsible="icon" variant={sidebarMode} {...props}>
@@ -36,7 +34,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 				/>
 			</SidebarHeader>
 			<SidebarContent>
-				{isMobile || open ? <NavVertical data={frontendNavData} /> : <NavMini data={frontendNavData} />}
+				<Siderbar open={open} data={data} />
 			</SidebarContent>
 			<SidebarFooter>
 				<NavUser
