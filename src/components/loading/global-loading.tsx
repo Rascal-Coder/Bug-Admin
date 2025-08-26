@@ -111,7 +111,10 @@ const BallClimbingDot: React.FC<BallClimbingDotProps> = ({
 								borderRadius: "0",
 								border: "0 solid currentColor",
 								transform: "translate(60%, 0)",
-								animation: `${dotStepId} 1.8s linear infinite`,
+								animationName: dotStepId,
+								animationDuration: "1.8s",
+								animationTimingFunction: "linear",
+								animationIterationCount: "infinite",
 								animationDelay: "0ms",
 							}}
 						/>
@@ -128,7 +131,10 @@ const BallClimbingDot: React.FC<BallClimbingDotProps> = ({
 								borderRadius: "0",
 								border: "0 solid currentColor",
 								transform: "translate(60%, 0)",
-								animation: `${dotStepId} 1.8s linear infinite`,
+								animationName: dotStepId,
+								animationDuration: "1.8s",
+								animationTimingFunction: "linear",
+								animationIterationCount: "infinite",
 								animationDelay: "-600ms",
 							}}
 						/>
@@ -145,7 +151,10 @@ const BallClimbingDot: React.FC<BallClimbingDotProps> = ({
 								borderRadius: "0",
 								border: "0 solid currentColor",
 								transform: "translate(60%, 0)",
-								animation: `${dotStepId} 1.8s linear infinite`,
+								animationName: dotStepId,
+								animationDuration: "1.8s",
+								animationTimingFunction: "linear",
+								animationIterationCount: "infinite",
 								animationDelay: "-1200ms",
 							}}
 						/>

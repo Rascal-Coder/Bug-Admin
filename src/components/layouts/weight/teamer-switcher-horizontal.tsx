@@ -1,5 +1,6 @@
 import { ChevronsUpDown, Plus } from "lucide-react";
 import * as React from "react";
+import { useMediaQuery } from "@/hooks";
 import { Button } from "@/ui/button";
 import {
 	DropdownMenu,
@@ -21,7 +22,7 @@ type TeamerSwitcherHorizontalProps = {
 
 export function TeamSwitcherHorizontal({ teams, className }: TeamerSwitcherHorizontalProps) {
 	const [activeTeam, setActiveTeam] = React.useState(teams[0]);
-
+	const isMobile = useMediaQuery({ maxWidth: 768 });
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
@@ -32,11 +33,15 @@ export function TeamSwitcherHorizontal({ teams, className }: TeamerSwitcherHoriz
 					<div className="bg-primary text-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
 						<activeTeam.logo className="size-4" />
 					</div>
-					<div className="flex flex-col items-start">
-						<span className="font-semibold text-sm leading-tight">{activeTeam.name}</span>
-						<span className="text-xs text-muted-foreground leading-tight">{activeTeam.plan}</span>
-					</div>
-					<ChevronsUpDown className="ms-auto size-4" />
+					{!isMobile && (
+						<>
+							<div className="flex flex-col items-start">
+								<span className="font-semibold text-sm leading-tight">{activeTeam.name}</span>
+								<span className="text-xs text-muted-foreground leading-tight">{activeTeam.plan}</span>
+							</div>
+							<ChevronsUpDown className="ms-auto size-4" />
+						</>
+					)}
 				</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent className="w-56 rounded-lg" align="start" sideOffset={4}>

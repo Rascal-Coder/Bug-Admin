@@ -1,5 +1,3 @@
-// import type { Side } from "@radix-ui/react-tooltip";
-
 import { type ReactNode, useState } from "react";
 import { Icon } from "@/components/icon";
 import { Switch } from "@/ui/switch";

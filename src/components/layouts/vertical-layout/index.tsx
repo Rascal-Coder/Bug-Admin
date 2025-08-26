@@ -1,14 +1,17 @@
 import Cookies from "js-cookie";
-import { Bell } from "lucide-react";
 import { useMemo } from "react";
 import { Breadcrumb } from "@/components/layouts/weight/breadcrumb";
 import { Header } from "@/components/layouts/weight/header";
 import { Main } from "@/components/layouts/weight/main";
 import { ThemeSwitch } from "@/components/layouts/weight/themeswitch";
-import { Button } from "@/ui/button";
+import LocalePicker from "@/components/locale-picker";
 import { Separator } from "@/ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/ui/sidebar";
 import { cn } from "@/utils";
+import AccountDropdown from "../weight/account-dropdown";
+import FullscreenButton from "../weight/fullscreen-button";
+import NoticeButton from "../weight/notice";
+import SearchBar from "../weight/search-bar";
 import { SettingButton } from "../weight/setting-button";
 import { AppSidebar } from "./app-sidebar";
 
@@ -45,14 +48,13 @@ export default function VerticalLayout() {
 						</div>
 
 						<div className="flex items-center h-full gap-2 sm:gap-3">
-							<SettingButton />
+							<SearchBar />
+							<SettingButton></SettingButton>
 							<ThemeSwitch />
-							<div>多语言</div>
-							<div>全屏</div>
-							<Button variant="ghost" size="icon">
-								<Bell />
-							</Button>
-							<div>头像</div>
+							<LocalePicker />
+							<FullscreenButton />
+							<NoticeButton />
+							<AccountDropdown />
 						</div>
 					</div>
 				</Header>
