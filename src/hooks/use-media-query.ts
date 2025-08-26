@@ -119,7 +119,6 @@ export function useSystemTheme(): ThemeMode {
 		const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
 		const updateTheme = (e: MediaQueryListEvent | MediaQueryList) => {
-			console.log("updateTheme", e.matches);
 			setIsDark(e.matches);
 		};
 

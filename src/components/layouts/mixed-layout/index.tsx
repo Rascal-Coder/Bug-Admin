@@ -8,6 +8,7 @@ import LocalePicker from "@/components/locale-picker";
 import { NavHorizontal } from "@/components/nav/horizontal";
 import type { NavItemDataProps } from "@/components/nav/types";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import { ScrollArea, ScrollBar } from "@/ui/scroll-area";
 import { Separator } from "@/ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/ui/sidebar";
 import { cn } from "@/utils";
@@ -80,25 +81,24 @@ export default function MixedLayout() {
 				)}
 			>
 				<Header fixed>
-					<div className="flex items-center justify-between w-full">
-						<div className="flex items-center h-full gap-3 sm:gap-4">
-							<SidebarTrigger variant="outline" className="max-md:scale-125" />
-							{!isMobile && (
-								<>
-									{matchedChildren.length > 0 && <Separator orientation="vertical" className="h-6!" />}
-									<NavHorizontal data={horizontalMenuData} />
-								</>
-							)}
-						</div>
+					<SidebarTrigger variant="outline" className="min-w-[28px] min-h-[28px]" />
+					{!isMobile && (
+						<>
+							{matchedChildren.length > 0 && <Separator orientation="vertical" className="h-6! ml-2!" />}
+							<ScrollArea className="whitespace-nowrap px-2 bg-background">
+								<NavHorizontal data={horizontalMenuData} />
+								<ScrollBar orientation="horizontal" />
+							</ScrollArea>
+						</>
+					)}
 
-						<div className="flex items-center h-full gap-2 sm:gap-3">
-							<SearchBar />
-							<ThemeSwitch />
-							<LocalePicker />
-							<FullscreenButton />
-							<NoticeButton />
-							<AccountDropdown />
-						</div>
+					<div data-slot="right" className="flex flex-1 justify-end items-center gap-2 sm:gap-3">
+						<SearchBar />
+						<ThemeSwitch />
+						<LocalePicker />
+						<FullscreenButton />
+						<NoticeButton />
+						<AccountDropdown />
 					</div>
 				</Header>
 				<Main />
