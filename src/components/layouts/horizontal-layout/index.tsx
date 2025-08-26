@@ -15,7 +15,6 @@ import { Header } from "../weight/header";
 import { Main } from "../weight/main";
 import NoticeButton from "../weight/notice";
 import SearchBar from "../weight/search-bar";
-import { SettingButton } from "../weight/setting-button";
 import { TeamSwitcherHorizontal } from "../weight/teamer-switcher-horizontal";
 import { ThemeSwitch } from "../weight/themeswitch";
 
@@ -69,7 +68,6 @@ export default function HorizontalLayout() {
 				</MobileSidebar>
 				<div data-slot="right" className="flex flex-1 justify-end items-center gap-2 sm:gap-3">
 					<SearchBar />
-					<SettingButton></SettingButton>
 					<ThemeSwitch />
 					<LocalePicker />
 					<FullscreenButton />

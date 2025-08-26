@@ -2,7 +2,6 @@ import type { ReactNode } from "react";
 import { useSettings } from "@/store/settingStore";
 import HorizontalLayout from "./horizontal-layout";
 import VerticalLayout from "./vertical-layout";
-import { SettingButton } from "./weight/setting-button";
 
 export default function Layouts({ children }: { children: ReactNode }) {
 	const { layoutMode } = useSettings();
@@ -13,14 +12,12 @@ export default function Layouts({ children }: { children: ReactNode }) {
 			{layoutMode === "mixed" && (
 				<div className="flex-1 flex flex-col text-primary">
 					混合布局
-					<SettingButton />
 					{children}
 				</div>
 			)}
 			{layoutMode === "double" && (
 				<div className="flex-1 flex flex-col text-primary">
 					双列布局
-					<SettingButton />
 					{children}
 				</div>
 			)}

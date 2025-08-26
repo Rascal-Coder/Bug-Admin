@@ -12,7 +12,6 @@ import AccountDropdown from "../weight/account-dropdown";
 import FullscreenButton from "../weight/fullscreen-button";
 import NoticeButton from "../weight/notice";
 import SearchBar from "../weight/search-bar";
-import { SettingButton } from "../weight/setting-button";
 import { AppSidebar } from "./app-sidebar";
 
 export default function VerticalLayout() {
@@ -49,7 +48,6 @@ export default function VerticalLayout() {
 
 						<div className="flex items-center h-full gap-2 sm:gap-3">
 							<SearchBar />
-							<SettingButton></SettingButton>
 							<ThemeSwitch />
 							<LocalePicker />
 							<FullscreenButton />
