@@ -15,7 +15,7 @@ import { ThemeSwitch } from "../weight/themeswitch";
 /**
  * 垂直布局组件
  */
-export default function VerticalLayout() {
+export default function DoubleLayout() {
 	/**
 	 * 头部左侧区域组件
 	 */

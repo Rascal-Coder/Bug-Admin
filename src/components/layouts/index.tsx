@@ -1,22 +1,16 @@
-import type { ReactNode } from "react";
 import { useSettings } from "@/store/settingStore";
+import DoubleLayout from "./double-layout";
 import HorizontalLayout from "./horizontal-layout";
 import MixedLayout from "./mixed-layout";
 import VerticalLayout from "./vertical-layout";
 
-export default function Layouts({ children }: { children: ReactNode }) {
+export default function Layouts() {
 	const { layoutMode } = useSettings();
-	return (
-		<>
-			{layoutMode === "vertical" && <VerticalLayout></VerticalLayout>}
-			{layoutMode === "horizontal" && <HorizontalLayout />}
-			{layoutMode === "mixed" && <MixedLayout />}
-			{layoutMode === "double" && (
-				<div className="flex-1 flex flex-col text-primary">
-					双列布局
-					{children}
-				</div>
-			)}
-		</>
-	);
+	const layoutMap = {
+		vertical: <VerticalLayout />,
+		horizontal: <HorizontalLayout />,
+		mixed: <MixedLayout />,
+		double: <DoubleLayout />,
+	};
+	return <>{layoutMap[layoutMode]}</>;
 }
