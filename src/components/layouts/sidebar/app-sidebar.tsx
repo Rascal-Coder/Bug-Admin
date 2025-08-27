@@ -1,10 +1,10 @@
-import { Command } from "lucide-react";
 import type { NavProps } from "@/components/nav/types";
 import { useRouter } from "@/routes/hooks";
 import { useSettings } from "@/store/settingStore";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail, useSidebar } from "@/ui/sidebar";
 import { NavUser } from "../weight/nav-user";
 import Siderbar from "./siderbar";
+import { Icon } from "@/components/icon";
 
 export function AppSidebar({ data }: React.ComponentProps<typeof Sidebar> & { data: NavProps["data"] }) {
 	const { open } = useSidebar();
@@ -18,9 +18,7 @@ export function AppSidebar({ data }: React.ComponentProps<typeof Sidebar> & { da
 						router.push("/");
 					}}
 				>
-					<div className="bg-primary text-primary-foreground flex aspect-square size-8 items-center rounded-lg justify-center ">
-						<Command className="size-4" />
-					</div>
+					<Icon icon="local-logo" size={40} />
 					<span className="font-semibold text-xl leading-tight">Bug Admin</span>
 				</div>
 			</SidebarHeader>

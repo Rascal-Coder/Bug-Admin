@@ -26,5 +26,8 @@
 	},
 	"[jsonc]": {
 		"editor.defaultFormatter": "biomejs.biome"
+	},
+	"workbench.editorAssociations": {
+		"*.svg": "default"
 	}
 }

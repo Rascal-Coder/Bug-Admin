@@ -1,4 +1,3 @@
-import { Command } from "lucide-react";
 import { useState } from "react";
 import { Icon } from "@/components/icon";
 import type { NavProps } from "@/components/nav/types";
@@ -29,9 +28,7 @@ export function MainMenu({ data, selectedGroup, onGroupSelect, onGroupClick, cla
 	return (
 		<nav className={cn("flex flex-col gap-1 ", className)}>
 			<div className="flex items-center gap-2 text-sm justify-center">
-				<div className="bg-primary text-primary-foreground flex hover:bg-primary/80  aspect-square size-10 items-center justify-center rounded-lg">
-					<Command className="size-4" />
-				</div>
+				<Icon icon="local-logo" size={50} />
 			</div>
 			{data.map((group, index) => (
 				<Button
@@ -44,7 +41,7 @@ export function MainMenu({ data, selectedGroup, onGroupSelect, onGroupClick, cla
 					)}
 					onClick={() => handleGroupClick(group.name || "")}
 				>
-					<Icon icon="local-folder" className="size-6!"></Icon>
+					<Icon icon="mdi:menu" className="size-6!" />
 					<span className="text-xs font-medium leading-tight">{group.name}</span>
 				</Button>
 			))}

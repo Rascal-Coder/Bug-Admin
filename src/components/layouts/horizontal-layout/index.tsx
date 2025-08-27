@@ -1,4 +1,4 @@
-import { Command, PanelLeftIcon } from "lucide-react";
+import { PanelLeftIcon } from "lucide-react";
 import { useState } from "react";
 import LocalePicker from "@/components/locale-picker";
 import { NavHorizontal } from "@/components/nav/horizontal";
@@ -17,6 +17,7 @@ import { Main } from "../weight/main";
 import NoticeButton from "../weight/notice";
 import SearchBar from "../weight/search-bar";
 import { ThemeSwitch } from "../weight/themeswitch";
+import { Icon } from "@/components/icon";
 
 export default function HorizontalLayout() {
 	const isMobile = useMediaQuery({ maxWidth: 768 });
@@ -26,14 +27,12 @@ export default function HorizontalLayout() {
 		<main className={cn("text-black dark:text-white min-h-screen")}>
 			<Header fixed>
 				<div
-					className="min-w-[150px] flex items-center gap-2 text-sm p-3 cursor-pointer rounded-md hover:bg-accent hover:text-accent-foreground"
+					className="min-w-[160px] flex items-center gap-2 text-sm p-3 cursor-pointer rounded-md hover:bg-accent hover:text-accent-foreground"
 					onClick={() => {
 						router.push("/");
 					}}
 				>
-					<div className="bg-primary text-primary-foreground flex aspect-square size-8 items-center rounded-lg justify-center ">
-						<Command className="size-4" />
-					</div>
+					<Icon icon="local-logo" size={40} />
 					<span className="font-semibold text-xl leading-tight">Bug Admin</span>
 				</div>
 				{isMobile ? (
