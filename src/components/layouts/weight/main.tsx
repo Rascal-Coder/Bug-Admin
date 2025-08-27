@@ -4,14 +4,8 @@ import GlobalLoading from "@/components/loading/global-loading";
 import { useSettings } from "@/store/settingStore";
 import { cn } from "@/utils";
 
-// type MainProps = React.HTMLAttributes<HTMLElement> & {
-// 	fixed?: boolean;
-// 	fluid?: boolean;
-// 	ref?: React.Ref<HTMLElement>;
-// };
-
 export function Main() {
-	const { themeStretch } = useSettings();
+	const { themeStretch, layoutMode } = useSettings();
 	return (
 		<main
 			data-layout="bug-admin-layout"
@@ -22,6 +16,7 @@ export function Main() {
 				{
 					"max-w-full": themeStretch,
 					"xl:max-w-screen-xl": !themeStretch,
+					"h-[calc(100svh-var(--spacing-16))]": layoutMode === "horizontal",
 				},
 			)}
 			style={{

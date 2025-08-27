@@ -14,6 +14,7 @@ export type SettingsType = {
 	sidebarMode: "inset" | "floating" | "sidebar";
 	layoutMode: "vertical" | "horizontal" | "mixed" | "double";
 	themeStretch: boolean;
+	collapsibleType: "icon" | "offcanvas";
 };
 type SettingStore = {
 	settings: SettingsType;
@@ -37,6 +38,7 @@ const useSettingStore = create<SettingStore>()(
 				sidebarMode: "inset",
 				layoutMode: "vertical",
 				themeStretch: false,
+				collapsibleType: "icon",
 			},
 			actions: {
 				setSettings: (settings) => {

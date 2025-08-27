@@ -2,8 +2,8 @@ import Cookies from "js-cookie";
 import { useMemo } from "react";
 import { SidebarInset, SidebarProvider } from "@/ui/sidebar";
 import { cn } from "@/utils";
-import { Header } from "./weight/header";
-import { Main } from "./weight/main";
+import { Header } from "../weight/header";
+import { Main } from "../weight/main";
 
 interface SidebarWrapperProps {
 	sidebarSlot: React.ReactNode;
@@ -30,7 +30,6 @@ export default function SidebarWrapper({
 			style={{ "--sidebar-width": "var(--layout-nav-width)", ...style } as React.CSSProperties}
 		>
 			{sidebarSlot}
-			{/* <AppSidebar data={frontendNavData} /> */}
 			<SidebarInset
 				className={cn(
 					// If layout is fixed and sidebar is inset,
