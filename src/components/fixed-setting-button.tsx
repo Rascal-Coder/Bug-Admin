@@ -1,7 +1,9 @@
 import clsx from "clsx";
 import type { CSSProperties } from "react";
+import { useMemo } from "react";
 import { ThemeColorPresets, ThemeMode } from "#/enum";
 import { Icon } from "@/components/icon";
+import { SelectItem, type SelectOption } from "@/components/select-item";
 import { IconSidebarFloating } from "@/components/svg-comps/icon-sidebar-floating";
 import { IconSidebarInset } from "@/components/svg-comps/icon-sidebar-inset";
 import { IconSidebarSidebar } from "@/components/svg-comps/icon-sidebar-sidebar";
@@ -14,6 +16,12 @@ import { Slider } from "@/ui/slider";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/ui/tooltip";
 import { Text } from "@/ui/typography";
 import { cn } from "@/utils";
+
+// Constants
+const COLLAPSIBLE_TYPE_OPTIONS: SelectOption[] = [
+	{ value: "icon", label: "icon" },
+	{ value: "offcanvas", label: "offcanvas" },
+];
 
 export function FixedSettingButton() {
 	const sheetContentBgStyle: CSSProperties = {
@@ -31,6 +39,7 @@ export function FixedSettingButton() {
 		sidebarMode,
 		layoutMode,
 		themeStretch,
+		collapsibleType,
 	} = settings;
 	const { setSettings } = useSettingActions();
 	const updateSettings = (partialSettings: Partial<SettingsType>) => {
@@ -39,6 +48,12 @@ export function FixedSettingButton() {
 			...partialSettings,
 		});
 	};
+
+	// Computed values
+	const shouldShowCollapsibleTypeSelect = useMemo(
+		() => layoutMode !== "horizontal" && layoutMode !== "double",
+		[layoutMode],
+	);
 
 	return (
 		<div className="fixed bottom-30 right-[-3px] z-50">
@@ -207,6 +222,18 @@ export function FixedSettingButton() {
 							>
 								拉伸
 							</SwitchItem>
+							{shouldShowCollapsibleTypeSelect && (
+								<SelectItem
+									items={COLLAPSIBLE_TYPE_OPTIONS}
+									value={collapsibleType}
+									onValueChange={(value) =>
+										updateSettings({ collapsibleType: value as SettingsType["collapsibleType"] })
+									}
+									tipContent="选择侧边栏折叠时的显示方式"
+								>
+									折叠动画
+								</SelectItem>
+							)}
 							<div className="grid grid-cols-2 gap-3">
 								{/* 垂直菜单栏 */}
 								<Tooltip>
