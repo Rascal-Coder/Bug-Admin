@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import LocalePicker from "@/components/locale-picker";
+import { useMediaQuery } from "@/hooks/use-media-query";
 import { Separator } from "@/ui/separator";
 import { SidebarTrigger } from "@/ui/sidebar";
 import { frontendNavData } from "../nav-data/nav-data-frontend";
@@ -16,6 +17,7 @@ import { ThemeSwitch } from "../weight/themeswitch";
  * 垂直布局组件
  */
 export default function VerticalLayout() {
+	const isMobile = useMediaQuery("(max-width: 768px)");
 	/**
 	 * 头部左侧区域组件
 	 */
@@ -24,10 +26,10 @@ export default function VerticalLayout() {
 			<>
 				<SidebarTrigger variant="outline" className="max-md:scale-125" />
 				<Separator orientation="vertical" className="h-6 mx-2" />
-				<Breadcrumb />
+				{!isMobile && <Breadcrumb />}
 			</>
 		),
-		[],
+		[isMobile],
 	);
 
 	/**

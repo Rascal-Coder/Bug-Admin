@@ -17,6 +17,8 @@ export const baseThemeTokens = {
 		20: "80px",
 		24: "96px",
 		32: "128px",
+		64: "256px",
+		84: "336px",
 	},
 	borderRadius: {
 		none: "0px",

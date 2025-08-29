@@ -1,5 +1,7 @@
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import LocalePicker from "@/components/locale-picker";
+import { useMediaQuery } from "@/hooks/use-media-query";
+import { type SettingsType, useSettingActions, useSettings } from "@/store/settingStore";
 import { Separator } from "@/ui/separator";
 import { SidebarTrigger } from "@/ui/sidebar";
 import { frontendNavData } from "../nav-data/nav-data-frontend";
@@ -13,19 +15,57 @@ import SearchBar from "../weight/search-bar";
 import { ThemeSwitch } from "../weight/themeswitch";
 import { FloatingSubMenu } from "./floating-sub-menu";
 import { MainMenu } from "./main-menu";
-
 /**
  * 双列布局组件
  */
 export default function DoubleLayout() {
-	const [selectedGroup, setSelectedGroup] = useState(frontendNavData[0]?.name || "");
+	// 将导航数据提取到组件外部或使用memo来稳定引用
+	const navData = useMemo(() => frontendNavData, []);
+	const [selectedGroup, setSelectedGroup] = useState(navData[0]?.name || "");
 	const [isSubMenuVisible, setIsSubMenuVisible] = useState(false);
-	const sidebarRef = useRef<HTMLDivElement>(null);
+	const isMobile = useMediaQuery("(max-width: 768px)");
+	const { sidebarMode } = useSettings();
+	const mainMenuWidth = useMemo(() => {
+		return sidebarMode !== "sidebar" ? "var(--spacing-24)" : "calc(var(--spacing-24) - var(--spacing-4))";
+	}, [sidebarMode]);
+	const subMenuWidth = "var(--spacing-64)";
+	const sidebarWidth = useMemo(() => {
+		return isSubMenuVisible ? `calc(${mainMenuWidth} + ${subMenuWidth})` : mainMenuWidth;
+	}, [isSubMenuVisible, mainMenuWidth]);
 
-	const handleGroupClick = useCallback((groupName: string) => {
+	const { setSettings } = useSettingActions();
+	const settings = useSettings();
+	const { transition } = settings;
+	const updateSettings = useCallback(
+		(partialSettings: Partial<SettingsType>) => {
+			setSettings({
+				...settings,
+				...partialSettings,
+			});
+		},
+		[setSettings, settings],
+	);
+	const handleGroupSelect = useCallback((groupName: string) => {
 		setSelectedGroup(groupName);
-		setIsSubMenuVisible(true);
 	}, []);
+
+	const handleGroupClick = useCallback(
+		(groupName: string) => {
+			setSelectedGroup(groupName);
+			setIsSubMenuVisible(true);
+			updateSettings({
+				transition: false,
+			});
+		},
+		[updateSettings],
+	);
+
+	const handleSubMenuClose = useCallback(() => {
+		setIsSubMenuVisible(false);
+		updateSettings({
+			transition: false,
+		});
+	}, [updateSettings]);
 	/**
 	 * 头部左侧区域组件
 	 */
@@ -34,10 +74,10 @@ export default function DoubleLayout() {
 			<>
 				<SidebarTrigger variant="outline" className="max-md:scale-125" />
 				<Separator orientation="vertical" className="h-6 mx-2" />
-				<Breadcrumb />
+				{!isMobile && <Breadcrumb />}
 			</>
 		),
-		[],
+		[isMobile],
 	);
 
 	/**
@@ -57,32 +97,50 @@ export default function DoubleLayout() {
 		[],
 	);
 
+	const mainMenuSlot = useMemo(
+		() => (
+			<div
+				style={{
+					flex: 1,
+				}}
+				className="py-2 px-1"
+			>
+				<MainMenu
+					data={navData}
+					selectedGroup={selectedGroup}
+					onGroupSelect={handleGroupSelect}
+					onGroupClick={handleGroupClick}
+					className="h-full"
+				/>
+			</div>
+		),
+		[navData, selectedGroup, handleGroupSelect, handleGroupClick],
+	);
+
+	const floatingSubMenuSlot = useMemo(
+		() => (
+			<FloatingSubMenu
+				data={navData}
+				selectedGroup={selectedGroup}
+				isVisible={isSubMenuVisible}
+				onClose={handleSubMenuClose}
+			/>
+		),
+		[navData, selectedGroup, isSubMenuVisible, handleSubMenuClose],
+	);
+
 	const sidebarSlot = useMemo(
 		() => (
-			<AppSidebarContainer>
-				<div className="relative flex h-full  overflow-y-auto">
+			<AppSidebarContainer transition={transition}>
+				<div className="relative flex h-full overflow-y-auto">
 					{/* 左侧主菜单 */}
-					<div ref={sidebarRef} className="w-full py-2 px-1">
-						<MainMenu
-							data={frontendNavData}
-							selectedGroup={selectedGroup}
-							onGroupSelect={setSelectedGroup}
-							onGroupClick={handleGroupClick}
-							className="h-full"
-						/>
-					</div>
+					{mainMenuSlot}
 					{/* 悬浮子菜单 */}
-					<FloatingSubMenu
-						data={frontendNavData}
-						selectedGroup={selectedGroup}
-						isVisible={isSubMenuVisible}
-						onVisibilityChange={setIsSubMenuVisible}
-						triggerRef={sidebarRef}
-					/>
+					{floatingSubMenuSlot}
 				</div>
 			</AppSidebarContainer>
 		),
-		[selectedGroup, isSubMenuVisible, handleGroupClick],
+		[mainMenuSlot, floatingSubMenuSlot, transition],
 	);
 
 	return (
@@ -92,7 +150,7 @@ export default function DoubleLayout() {
 			headerRightSlot={headerRightSlot}
 			style={
 				{
-					"--sidebar-width": "80px",
+					"--sidebar-width": sidebarWidth,
 				} as React.CSSProperties
 			}
 		/>

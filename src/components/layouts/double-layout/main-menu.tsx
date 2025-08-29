@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { memo } from "react";
 import { Icon } from "@/components/icon";
 import type { NavProps } from "@/components/nav/types";
 import { Button } from "@/ui/button";
@@ -12,23 +12,24 @@ interface MainMenuProps {
 	className?: string;
 }
 
-export function MainMenu({ data, selectedGroup, onGroupSelect, onGroupClick, className }: MainMenuProps) {
-	const [activeGroup, setActiveGroup] = useState(selectedGroup || data[0]?.name || "");
-
-	const handleGroupSelect = (groupName: string) => {
-		setActiveGroup(groupName);
-		onGroupSelect?.(groupName);
-	};
+export const MainMenu = memo(function MainMenu({
+	data,
+	selectedGroup,
+	onGroupSelect,
+	onGroupClick,
+	className,
+}: MainMenuProps) {
+	const activeGroup = selectedGroup || data[0]?.name || "";
 
 	const handleGroupClick = (groupName: string) => {
-		handleGroupSelect(groupName);
+		onGroupSelect?.(groupName);
 		onGroupClick?.(groupName);
 	};
 
 	return (
 		<nav className={cn("flex flex-col gap-1 ", className)}>
 			<div className="flex items-center gap-2 text-sm justify-center">
-				<Icon icon="local-logo" size={50} />
+				<Icon icon="local-logo" size={40} />
 			</div>
 			{data.map((group, index) => (
 				<Button
@@ -47,4 +48,4 @@ export function MainMenu({ data, selectedGroup, onGroupSelect, onGroupClick, cla
 			))}
 		</nav>
 	);
-}
+});

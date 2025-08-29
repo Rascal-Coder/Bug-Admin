@@ -6,6 +6,7 @@ import { PanelLeftIcon } from "lucide-react";
 import { Slot } from "radix-ui";
 import * as React from "react";
 import { useMediaQuery } from "@/hooks";
+import { type SettingsType, useSettingActions, useSettings } from "@/store/settingStore";
 import { Button } from "@/ui/button";
 import { Input } from "@/ui/input";
 import { Separator } from "@/ui/separator";
@@ -149,11 +150,13 @@ function Sidebar({
 	collapsible = "offcanvas",
 	className,
 	children,
+	transition = true,
 	...props
 }: React.ComponentProps<"div"> & {
 	side?: "left" | "right";
 	variant?: "sidebar" | "floating" | "inset";
 	collapsible?: "offcanvas" | "icon" | "none";
+	transition?: boolean;
 }) {
 	const { isMobile, state, openMobile, setOpenMobile } = useSidebar();
 
@@ -187,10 +190,12 @@ function Sidebar({
 			data-slot="sidebar"
 		>
 			{/* This is what handles the sidebar gap on desktop */}
+			{/* */}
 			<div
 				data-slot="sidebar-gap"
 				className={cn(
-					"relative w-(--sidebar-width) bg-transparent transition-[width] duration-200 ease-linear",
+					"relative w-(--sidebar-width) bg-transparent",
+					transition ? "transition-[width] duration-200 ease-linear" : "",
 					"group-data-[collapsible=offcanvas]:w-0",
 					"group-data-[side=right]:rotate-180",
 					variant === "floating" || variant === "inset"
@@ -198,10 +203,12 @@ function Sidebar({
 						: "group-data-[collapsible=icon]:w-(--sidebar-width-icon)",
 				)}
 			/>
+			{/*  */}
 			<div
 				data-slot="sidebar-container"
 				className={cn(
-					"fixed inset-y-0 z-10 hidden h-svh w-(--sidebar-width) transition-[left,right,width] duration-200 ease-linear md:flex",
+					"fixed inset-y-0 z-10 hidden h-svh w-(--sidebar-width)  ease-linear md:flex",
+					transition ? "transition-[left,right,width] duration-200" : "",
 					side === "left"
 						? "left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]"
 						: "right-0 group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]",
@@ -261,6 +268,14 @@ export function MobileSidebar({
 
 function SidebarTrigger({ className, onClick, ...props }: React.ComponentProps<typeof Button>) {
 	const { toggleSidebar } = useSidebar();
+	const { setSettings } = useSettingActions();
+	const settings = useSettings();
+	const updateSettings = (partialSettings: Partial<SettingsType>) => {
+		setSettings({
+			...settings,
+			...partialSettings,
+		});
+	};
 
 	return (
 		<Button
@@ -272,6 +287,9 @@ function SidebarTrigger({ className, onClick, ...props }: React.ComponentProps<t
 			onClick={(event) => {
 				onClick?.(event);
 				toggleSidebar();
+				updateSettings({
+					transition: true,
+				});
 			}}
 			{...props}
 		>

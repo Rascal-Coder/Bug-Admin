@@ -15,6 +15,7 @@ export type SettingsType = {
 	layoutMode: "vertical" | "horizontal" | "mixed" | "double";
 	themeStretch: boolean;
 	collapsibleType: "icon" | "offcanvas";
+	transition: boolean;
 };
 type SettingStore = {
 	settings: SettingsType;
@@ -39,6 +40,7 @@ const useSettingStore = create<SettingStore>()(
 				layoutMode: "vertical",
 				themeStretch: false,
 				collapsibleType: "icon",
+				transition: true,
 			},
 			actions: {
 				setSettings: (settings) => {

@@ -114,6 +114,8 @@ export const themeTokens = {
 		20: null,
 		24: null,
 		32: null,
+		64: null,
+		84: null,
 	},
 	borderRadius: {
 		none: null,

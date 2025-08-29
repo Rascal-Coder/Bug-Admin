@@ -1,10 +1,11 @@
+import { useMemo } from "react";
+import { Icon } from "@/components/icon";
 import type { NavProps } from "@/components/nav/types";
 import { useRouter } from "@/routes/hooks";
 import { useSettings } from "@/store/settingStore";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail, useSidebar } from "@/ui/sidebar";
 import { NavUser } from "../weight/nav-user";
 import Siderbar from "./siderbar";
-import { Icon } from "@/components/icon";
 
 export function AppSidebar({ data }: React.ComponentProps<typeof Sidebar> & { data: NavProps["data"] }) {
 	const { open } = useSidebar();
@@ -38,10 +39,22 @@ export function AppSidebar({ data }: React.ComponentProps<typeof Sidebar> & { da
 		</AppSidebarContainer>
 	);
 }
-export function AppSidebarContainer({ children }: { children: React.ReactNode }) {
-	const { sidebarMode, collapsibleType } = useSettings();
+export function AppSidebarContainer({
+	children,
+	transition = true,
+}: {
+	children: React.ReactNode;
+	transition?: boolean;
+}) {
+	const { sidebarMode, collapsibleType, layoutMode } = useSettings();
+	const collapsible = useMemo(() => {
+		if (layoutMode === "double") {
+			return "offcanvas";
+		}
+		return collapsibleType;
+	}, [collapsibleType, layoutMode]);
 	return (
-		<Sidebar collapsible={collapsibleType} variant={sidebarMode}>
+		<Sidebar collapsible={collapsible} variant={sidebarMode} transition={transition}>
 			{children}
 		</Sidebar>
 	);
