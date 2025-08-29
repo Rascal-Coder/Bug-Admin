@@ -5,7 +5,7 @@ import { type SettingsType, useSettingActions, useSettings } from "@/store/setti
 import { Separator } from "@/ui/separator";
 import { SidebarTrigger } from "@/ui/sidebar";
 import { frontendNavData } from "../nav-data/nav-data-frontend";
-import { AppSidebarContainer } from "../sidebar/app-sidebar";
+import { AppSidebar, AppSidebarContainer } from "../sidebar/app-sidebar";
 import SidebarWrapper from "../sidebar/sidebar-wrapper";
 import AccountDropdown from "../weight/account-dropdown";
 import { Breadcrumb } from "../weight/breadcrumb";
@@ -73,8 +73,13 @@ export default function DoubleLayout() {
 		() => (
 			<>
 				<SidebarTrigger variant="outline" className="max-md:scale-125" />
-				<Separator orientation="vertical" className="h-6 mx-2" />
-				{!isMobile && <Breadcrumb />}
+
+				{!isMobile && (
+					<>
+						<Separator orientation="vertical" className="h-6 mx-2" />
+						<Breadcrumb />
+					</>
+				)}
 			</>
 		),
 		[isMobile],
@@ -128,20 +133,24 @@ export default function DoubleLayout() {
 		),
 		[navData, selectedGroup, isSubMenuVisible, handleSubMenuClose],
 	);
-
-	const sidebarSlot = useMemo(
-		() => (
-			<AppSidebarContainer transition={transition}>
-				<div className="relative flex h-full overflow-y-auto">
-					{/* 左侧主菜单 */}
-					{mainMenuSlot}
-					{/* 悬浮子菜单 */}
-					{floatingSubMenuSlot}
-				</div>
-			</AppSidebarContainer>
-		),
-		[mainMenuSlot, floatingSubMenuSlot, transition],
-	);
+	const sidebarSlot = useMemo(() => {
+		return (
+			<>
+				{!isMobile ? (
+					<AppSidebarContainer transition={transition}>
+						<div className="relative flex h-full overflow-y-auto">
+							{/* 左侧主菜单 */}
+							{mainMenuSlot}
+							{/* 悬浮子菜单 */}
+							{floatingSubMenuSlot}
+						</div>
+					</AppSidebarContainer>
+				) : (
+					<AppSidebar data={navData} />
+				)}
+			</>
+		);
+	}, [mainMenuSlot, floatingSubMenuSlot, transition, isMobile, navData]);
 
 	return (
 		<SidebarWrapper

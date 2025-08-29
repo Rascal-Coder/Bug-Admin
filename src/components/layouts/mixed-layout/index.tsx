@@ -63,7 +63,8 @@ export default function MixedLayout() {
 	const headerLeftSlot = useMemo(
 		() => (
 			<>
-				<SidebarTrigger variant="outline" className="min-w-[28px] min-h-[28px]" />
+				{/* <SidebarTrigger variant="outline" className="min-w-[28px] min-h-[28px]" /> */}
+				<SidebarTrigger variant="outline" className="max-md:scale-125" />
 				{!isMobile && horizontalMenuData.length > 0 && (
 					<>
 						<Separator orientation="vertical" className="h-6! ml-2!" />
