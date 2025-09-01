@@ -1,41 +1,42 @@
-import type { NavItemDataProps } from "@/components/nav/types";
-import { frontendNavData } from "@/components/layouts/nav-data/nav-data-frontend";
-import {
-	Breadcrumb as BreadcrumbUI,
-	BreadcrumbEllipsis,
-	BreadcrumbItem,
-	BreadcrumbLink,
-	BreadcrumbList,
-	BreadcrumbPage,
-	BreadcrumbSeparator,
-} from "@/ui/breadcrumb";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/ui/dropdown-menu";
 import { ChevronDown } from "lucide-react";
 import * as React from "react";
 import { useCallback, useMemo } from "react";
 import { Link, useMatches } from "react-router";
+import Icon from "@/components/icon/icon";
+import { frontendNavData } from "@/components/layouts/nav-data/nav-data-frontend";
+import type { NavItemDataProps } from "@/components/nav/types";
+import {
+	BreadcrumbEllipsis,
+	BreadcrumbItem,
+	BreadcrumbList,
+	BreadcrumbPage,
+	BreadcrumbSeparator,
+	Breadcrumb as BreadcrumbUI,
+} from "@/ui/breadcrumb";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/ui/dropdown-menu";
 
 interface BreadCrumbProps {
 	maxItems?: number;
 }
 
-type NavItem = Pick<NavItemDataProps, "path" | "title"> & {
+type NavItem = Pick<NavItemDataProps, "path" | "title" | "icon"> & {
 	children?: NavItem[];
 };
 
 interface BreadcrumbItemData {
 	key: string;
 	label: string;
+	icon?: string | React.ReactNode;
 	items: Array<{
 		key: string;
 		label: string;
+		icon?: string | React.ReactNode;
 	}>;
 }
 
 export function Breadcrumb({ maxItems = 3 }: BreadCrumbProps) {
 	const matches = useMatches();
 	const navData = frontendNavData;
-
 	const findPathInNavData = useCallback((path: string, items: NavItem[]): NavItem[] => {
 		for (const item of items) {
 			if (item.path === path) {
@@ -54,44 +55,55 @@ export function Breadcrumb({ maxItems = 3 }: BreadCrumbProps) {
 	const breadCrumbs = useMemo(() => {
 		const paths = matches.filter((item) => item.pathname !== "/").map((item) => item.pathname);
 
-		return paths
-			.map((path) => {
-				const navItems = navData.flatMap((section) => section.items);
-				const pathItems = findPathInNavData(path, navItems);
+		const results: BreadcrumbItemData[] = [];
 
-				if (pathItems.length === 0) return null;
+		for (const path of paths) {
+			const navItems = navData.flatMap((section) => section.items);
+			const pathItems = findPathInNavData(path, navItems);
 
-				const currentItem = pathItems[pathItems.length - 1];
-				const children =
-					currentItem.children?.map((child) => ({
-						key: child.path,
-						label: child.title,
-					})) ?? [];
+			if (pathItems.length === 0) continue;
 
-				return {
-					key: currentItem.path,
-					label: currentItem.title,
-					items: children,
-				};
-			})
-			.filter((item): item is BreadcrumbItemData => item !== null);
+			const currentItem = pathItems[pathItems.length - 1];
+			const children =
+				currentItem.children?.map((child) => ({
+					key: child.path,
+					label: child.title,
+					icon: child.icon,
+				})) ?? [];
+
+			results.push({
+				key: currentItem.path,
+				label: currentItem.title,
+				icon: currentItem.icon,
+				items: children,
+			});
+		}
+
+		return results;
 	}, [matches, findPathInNavData, navData]);
 
+	const renderIcon = (icon?: string | React.ReactNode) => {
+		return icon ? typeof icon === "string" ? <Icon icon={icon} size={16} /> : icon : <Icon icon="mdi:menu" size={16} />;
+	};
 	const renderBreadcrumbItem = (item: BreadcrumbItemData, isLast: boolean) => {
 		const hasItems = item.items && item.items.length > 0;
 
 		if (hasItems) {
 			return (
-				<BreadcrumbItem>
+				<BreadcrumbItem className="cursor-pointer hover:bg-accent rounded-lg hover:text-accent-foreground p-2">
 					<DropdownMenu>
-						<DropdownMenuTrigger className="flex items-center gap-1">
+						<DropdownMenuTrigger className="cursor-pointer flex items-center gap-1">
+							{renderIcon(item.icon)}
 							{item.label}
 							<ChevronDown className="h-4 w-4" />
 						</DropdownMenuTrigger>
 						<DropdownMenuContent align="start">
 							{item.items.map((subItem) => (
 								<DropdownMenuItem key={subItem.key} asChild>
-									<Link to={subItem.key}>{subItem.label}</Link>
+									<Link to={subItem.key} className="flex items-center gap-2">
+										{renderIcon(subItem.icon)}
+										{subItem.label}
+									</Link>
 								</DropdownMenuItem>
 							))}
 						</DropdownMenuContent>
@@ -99,15 +111,13 @@ export function Breadcrumb({ maxItems = 3 }: BreadCrumbProps) {
 				</BreadcrumbItem>
 			);
 		}
-
 		return (
-			<BreadcrumbItem>
-				{isLast ? (
-					<BreadcrumbPage>{item.label}</BreadcrumbPage>
-				) : (
-					<BreadcrumbLink asChild>
-						<Link to={item.key}>{item.label}</Link>
-					</BreadcrumbLink>
+			<BreadcrumbItem className="rounded-lg p-2">
+				{isLast && (
+					<BreadcrumbPage className="flex items-center gap-2">
+						{renderIcon(item.icon)}
+						{item.label}
+					</BreadcrumbPage>
 				)}
 			</BreadcrumbItem>
 		);
@@ -135,12 +145,17 @@ export function Breadcrumb({ maxItems = 3 }: BreadCrumbProps) {
 				<BreadcrumbItem>
 					<DropdownMenu>
 						<DropdownMenuTrigger className="flex items-center gap-1">
-							<BreadcrumbEllipsis />
+							<div className="flex items-center gap-1 cursor-pointer hover:bg-accent rounded-lg hover:text-accent-foreground">
+								<BreadcrumbEllipsis />
+							</div>
 						</DropdownMenuTrigger>
 						<DropdownMenuContent align="start">
 							{hiddenItems.map((item) => (
 								<DropdownMenuItem key={item.key} asChild>
-									<Link to={item.key}>{item.label}</Link>
+									<Link to={item.key} className="flex items-center gap-2">
+										{renderIcon(item.icon)}
+										{item.label}
+									</Link>
 								</DropdownMenuItem>
 							))}
 						</DropdownMenuContent>
