@@ -1,7 +1,7 @@
 import { Book, Github, HelpCircle, LogOut } from "lucide-react";
 import { NavLink } from "react-router";
 import avatar from "@/assets/images/user/avatar.jpg";
-
+import { Avatar, AvatarFallback, AvatarImage } from "@/ui/avatar";
 import { Button } from "@/ui/button";
 import {
 	DropdownMenu,
@@ -19,7 +19,10 @@ export default function AccountDropdown() {
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
 				<Button variant="ghost" size="icon" className="rounded-full">
-					<img className="h-6 w-6 rounded-full" src={avatar} alt="" />
+					<Avatar className="h-8 w-8 rounded-full">
+						<AvatarImage src={avatar} alt="" />
+						<AvatarFallback className="rounded-lg">SN</AvatarFallback>
+					</Avatar>
 				</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent className="w-56">
@@ -31,9 +34,9 @@ export default function AccountDropdown() {
 					</div>
 				</div>
 				<DropdownMenuSeparator />
-				<DropdownMenuItem>
-					<Book className="mr-2 h-4 w-4" />
+				<DropdownMenuItem asChild>
 					<NavLink to="https://github.com/Rascal-Coder/Bug-Admin" target="_blank">
+						<Book className="mr-2 h-4 w-4" />
 						文档
 					</NavLink>
 				</DropdownMenuItem>

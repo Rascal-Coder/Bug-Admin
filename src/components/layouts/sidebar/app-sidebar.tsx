@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import avatar from "@/assets/images/user/avatar.jpg";
 import { Icon } from "@/components/icon";
 import type { NavProps } from "@/components/nav/types";
 import { useRouter } from "@/routes/hooks";
@@ -9,14 +10,14 @@ import { NavUser } from "../weight/nav-user";
 import Siderbar from "./siderbar";
 
 export function AppSidebar({ data }: React.ComponentProps<typeof Sidebar> & { data: NavProps["data"] }) {
-	const { open } = useSidebar();
+	const { open, isMobile } = useSidebar();
 	const router = useRouter();
 	return (
 		<AppSidebarContainer>
 			<SidebarHeader>
 				<div
 					className={cn(
-						" flex items-center gap-2 text-sm p-3 cursor-pointer rounded-md hover:bg-accent hover:text-accent-foreground",
+						" flex items-center gap-2 text-sm p-3 cursor-pointer rounded-md  hover:bg-accent hover:text-accent-foreground",
 					)}
 					onClick={() => {
 						router.push("/");
@@ -29,7 +30,7 @@ export function AppSidebar({ data }: React.ComponentProps<typeof Sidebar> & { da
 						className={cn(
 							"font-semibold text-xl leading-tight transition-all duration-300 ease-in-out whitespace-nowrap",
 							{
-								"opacity-0": !open,
+								"opacity-0": !isMobile && !open,
 							},
 						)}
 					>
@@ -45,7 +46,7 @@ export function AppSidebar({ data }: React.ComponentProps<typeof Sidebar> & { da
 					user={{
 						name: "Rascal-Coder",
 						email: "menoqiqio@gmail.com",
-						avatar: "/avatars/shadcn.jpg",
+						avatar: avatar,
 					}}
 				/>
 			</SidebarFooter>
