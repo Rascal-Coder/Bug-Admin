@@ -56,7 +56,7 @@ export default function HorizontalLayout() {
 							<Icon icon="local-logo" size={40} />
 							<span className="font-semibold text-xl leading-tight">Bug Admin</span>
 						</div>
-						<ScrollArea className="whitespace-nowrap px-2 bg-background">
+						<ScrollArea className="whitespace-nowrap px-2">
 							<NavHorizontal data={frontendNavData} />
 							<ScrollBar orientation="horizontal" />
 						</ScrollArea>

@@ -68,7 +68,7 @@ export default function MixedLayout() {
 				{!isMobile && horizontalMenuData.length > 0 && (
 					<>
 						<Separator orientation="vertical" className="h-6! ml-2!" />
-						<ScrollArea className="whitespace-nowrap px-2 bg-background">
+						<ScrollArea className="whitespace-nowrap px-2">
 							<NavHorizontal data={horizontalMenuData} />
 							<ScrollBar orientation="horizontal" />
 						</ScrollArea>

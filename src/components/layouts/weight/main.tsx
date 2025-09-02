@@ -5,6 +5,7 @@ import { useSettings } from "@/store/settingStore";
 import { cn } from "@/utils";
 export function Main() {
 	const { themeStretch, layoutMode } = useSettings();
+
 	return (
 		<main
 			data-layout="bug-admin-layout"

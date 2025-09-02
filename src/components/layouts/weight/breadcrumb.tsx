@@ -174,7 +174,7 @@ export function Breadcrumb({ maxItems = 3 }: BreadCrumbProps) {
 	};
 
 	return (
-		<ScrollArea className="whitespace-nowrap px-2 bg-background">
+		<ScrollArea className="whitespace-nowrap px-2">
 			<BreadcrumbUI>
 				<BreadcrumbList className="flex-nowrap!">{renderBreadcrumbs()}</BreadcrumbList>
 			</BreadcrumbUI>
