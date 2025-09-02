@@ -66,7 +66,11 @@ export function FixedSettingButton() {
 						<Icon icon="ic:outline-settings" className="transition-all duration-200 animate-slow-spin" size={28} />
 					</button>
 				</SheetTrigger>
-				<SheetContent style={sheetContentBgStyle} className="gap-0" onOpenAutoFocus={(e) => e.preventDefault()}>
+				<SheetContent
+					style={sheetContentBgStyle}
+					className="gap-0 w-[350px]"
+					onOpenAutoFocus={(e) => e.preventDefault()}
+				>
 					<SheetHeader className="flex flex-row items-center justify-between px-6 py-4 shrink-0">
 						<SheetTitle>设置</SheetTitle>
 						<SheetDescription />
@@ -74,8 +78,8 @@ export function FixedSettingButton() {
 					<div className="flex flex-col gap-6 px-6 py-2 overflow-y-auto">
 						{/* theme mode */}
 						<div className="flex flex-col gap-2">
-							<Text variant="subTitle1">主题模式</Text>
-							<div className="flex flex-row gap-4">
+							<Text variant="subTitle1">颜色主题风格</Text>
+							<div className="flex gap-4">
 								<button
 									type="button"
 									onClick={() => updateSettings({ themeMode: ThemeMode.Light })}
@@ -107,28 +111,10 @@ export function FixedSettingButton() {
 									)}
 								>
 									<Icon icon="material-symbols-light:hdr-auto" size="24" />
-									<span className="text-sm">跟随系统</span>
+									<span className="text-sm">系统</span>
 								</button>
 							</div>
-							<SwitchItem
-								checked={grayMode}
-								onCheckedChange={(checked) => updateSettings({ grayMode: checked })}
-								tip="开启后界面将变为灰色调，减少色彩干扰"
-							>
-								灰色模式
-							</SwitchItem>
-							<SwitchItem
-								checked={colorWeakMode}
-								onCheckedChange={(checked) => updateSettings({ colorWeakMode: checked })}
-								tip="开启后调整色彩对比度，适合色弱用户使用"
-							>
-								色弱模式
-							</SwitchItem>
-						</div>
-
-						{/* theme presets */}
-						<div className="flex flex-col gap-2">
-							<Text variant="subTitle1">主题颜色</Text>
+							{/* theme presets */}
 							<div className="flex flex-wrap gap-1">
 								{Object.entries(presetsColors).map(([preset, color]) => (
 									<button
@@ -173,6 +159,20 @@ export function FixedSettingButton() {
 									<span className="text-sm">自定义</span>
 								</label>
 							</div>
+							<SwitchItem
+								checked={grayMode}
+								onCheckedChange={(checked) => updateSettings({ grayMode: checked })}
+								tip="开启后界面将变为灰色调，减少色彩干扰"
+							>
+								灰色模式
+							</SwitchItem>
+							<SwitchItem
+								checked={colorWeakMode}
+								onCheckedChange={(checked) => updateSettings({ colorWeakMode: checked })}
+								tip="开启后调整色彩对比度，适合色弱用户使用"
+							>
+								色弱模式
+							</SwitchItem>
 						</div>
 
 						{/* font */}
@@ -180,7 +180,7 @@ export function FixedSettingButton() {
 							<Text variant="subTitle1">字体</Text>
 
 							<Text variant="subTitle2">字体系列</Text>
-							<div className="flex flex-row gap-3">
+							<div className="flex  gap-3">
 								{Object.entries(FontFamilyPreset).map(([font, family]) => (
 									<button
 										type="button"
@@ -346,43 +346,45 @@ export function FixedSettingButton() {
 								</Tooltip>
 							</div>
 						</div>
-						{layoutMode !== "horizontal" && (
-							<div className="flex flex-row gap-3 mt-2">
-								<button
-									type="button"
-									onClick={() => updateSettings({ sidebarMode: "inset" })}
-									className={clsx(
-										"card-box flex flex-1 h-20 cursor-pointer items-center justify-center outline-box flex-col gap-1 py-1",
-										sidebarMode === "inset" && "outline-box-active",
-									)}
-								>
-									<IconSidebarInset width={80} height={80} />
-									<span className="text-sm">内嵌</span>
-								</button>
-								<button
-									type="button"
-									onClick={() => updateSettings({ sidebarMode: "floating" })}
-									className={clsx(
-										"card-box flex flex-1 h-20 cursor-pointer items-center justify-center outline-box flex-col gap-1 py-1",
-										sidebarMode === "floating" && "outline-box-active",
-									)}
-								>
-									<IconSidebarFloating width={80} height={80} />
-									<span className="text-sm">浮动</span>
-								</button>
-								<button
-									type="button"
-									onClick={() => updateSettings({ sidebarMode: "sidebar" })}
-									className={clsx(
-										"card-box flex flex-1 h-20 cursor-pointer items-center justify-center outline-box flex-col gap-1 py-1",
-										sidebarMode === "sidebar" && "outline-box-active",
-									)}
-								>
-									<IconSidebarSidebar width={80} height={80} />
-									<span className="text-sm">侧边栏</span>
-								</button>
-							</div>
-						)}
+						<div className="flex flex-col gap-2">
+							{layoutMode !== "horizontal" && (
+								<div className="flex gap-1">
+									<button
+										type="button"
+										onClick={() => updateSettings({ sidebarMode: "inset" })}
+										className={clsx(
+											"card-box flex flex-1 h-20 cursor-pointer items-center justify-center outline-box flex-col gap-1 py-1",
+											sidebarMode === "inset" && "outline-box-active",
+										)}
+									>
+										<IconSidebarInset width={80} height={80} />
+										<span className="text-sm">内嵌</span>
+									</button>
+									<button
+										type="button"
+										onClick={() => updateSettings({ sidebarMode: "floating" })}
+										className={clsx(
+											"card-box flex flex-1 h-20 cursor-pointer items-center justify-center outline-box flex-col gap-1 py-1",
+											sidebarMode === "floating" && "outline-box-active",
+										)}
+									>
+										<IconSidebarFloating width={80} height={80} />
+										<span className="text-sm">浮动</span>
+									</button>
+									<button
+										type="button"
+										onClick={() => updateSettings({ sidebarMode: "sidebar" })}
+										className={clsx(
+											"card-box flex flex-1 h-20 cursor-pointer items-center justify-center outline-box flex-col gap-1 py-1",
+											sidebarMode === "sidebar" && "outline-box-active",
+										)}
+									>
+										<IconSidebarSidebar width={80} height={80} />
+										<span className="text-sm">侧边栏</span>
+									</button>
+								</div>
+							)}
+						</div>
 					</div>
 				</SheetContent>
 			</Sheet>
