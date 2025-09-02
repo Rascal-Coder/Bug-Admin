@@ -1,11 +1,13 @@
+import { merge } from "lodash";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { ThemeColorPresets, ThemeMode } from "#/enum";
+import { preferences } from "@/preferences";
 import { FontFamilyPreset, typographyTokens } from "@/theme/tokens/typography";
 
 export type SettingsType = {
-	themeColorPresets: ThemeColorPresets;
-	themeMode: ThemeMode;
+	themeColorPresets: string;
+	themeMode: string;
 	fontFamily: string;
 	fontSize: number;
 	customPrimaryColor?: string;
@@ -26,22 +28,28 @@ type SettingStore = {
 	};
 };
 
+// 默认配置
+export const defaultSettings: SettingsType = {
+	themeColorPresets: ThemeColorPresets.Default,
+	themeMode: ThemeMode.System,
+	fontFamily: FontFamilyPreset.openSans,
+	fontSize: Number(typographyTokens.fontSize.sm),
+	grayMode: false,
+	colorWeakMode: false,
+	sidebarMode: "inset",
+	layoutMode: "vertical",
+	themeStretch: false,
+	collapsibleType: "icon",
+	transition: true,
+};
+
+// 合并默认配置和用户偏好配置
+export const initialSettings: SettingsType = merge({}, defaultSettings, preferences);
+
 const useSettingStore = create<SettingStore>()(
 	persist(
 		(set) => ({
-			settings: {
-				themeColorPresets: ThemeColorPresets.Default,
-				themeMode: ThemeMode.System,
-				fontFamily: FontFamilyPreset.openSans,
-				fontSize: Number(typographyTokens.fontSize.sm),
-				grayMode: false,
-				colorWeakMode: false,
-				sidebarMode: "inset",
-				layoutMode: "vertical",
-				themeStretch: false,
-				collapsibleType: "icon",
-				transition: true,
-			},
+			settings: initialSettings,
 			actions: {
 				setSettings: (settings) => {
 					set({ settings });

@@ -1,4 +1,5 @@
 import { Helmet, HelmetProvider } from "react-helmet-async";
+import { Toaster } from "sonner";
 import Logo from "./assets/icons/logo.svg";
 import { MotionLazy } from "./components/animate/motion-lazy";
 import { FixedSettingButton } from "./components/fixed-setting-button";
@@ -18,6 +19,7 @@ function App({ children }: { children: React.ReactNode }) {
 				<RouteLoadingProgress />
 				<MotionLazy>{children}</MotionLazy>
 				<FixedSettingButton />
+				<Toaster position="top-center" richColors />
 			</ThemeProvider>
 		</HelmetProvider>
 	);

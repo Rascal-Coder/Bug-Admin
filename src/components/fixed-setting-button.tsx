@@ -1,6 +1,9 @@
 import clsx from "clsx";
+import { isEqual } from "lodash";
+import { XIcon } from "lucide-react";
 import type { CSSProperties } from "react";
 import { useMemo } from "react";
+import { toast } from "sonner";
 import { ThemeColorPresets, ThemeMode } from "#/enum";
 import { Icon } from "@/components/icon";
 import { SelectItem, type SelectOption } from "@/components/select-item";
@@ -8,10 +11,20 @@ import { IconSidebarFloating } from "@/components/svg-comps/icon-sidebar-floatin
 import { IconSidebarInset } from "@/components/svg-comps/icon-sidebar-inset";
 import { IconSidebarSidebar } from "@/components/svg-comps/icon-sidebar-sidebar";
 import { SwitchItem } from "@/components/switch-item";
-import { type SettingsType, useSettingActions, useSettings } from "@/store/settingStore";
+import { initialSettings, type SettingsType, useSettingActions, useSettings } from "@/store/settingStore";
 import { presetsColors } from "@/theme/tokens/color";
 import { FontFamilyPreset } from "@/theme/tokens/typography";
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/ui/sheet";
+import { Button } from "@/ui/button";
+import {
+	Sheet,
+	SheetClose,
+	SheetContent,
+	SheetDescription,
+	SheetFooter,
+	SheetHeader,
+	SheetTitle,
+	SheetTrigger,
+} from "@/ui/sheet";
 import { Slider } from "@/ui/slider";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/ui/tooltip";
 import { Text } from "@/ui/typography";
@@ -41,7 +54,7 @@ export function FixedSettingButton() {
 		themeStretch,
 		collapsibleType,
 	} = settings;
-	const { setSettings } = useSettingActions();
+	const { setSettings, clearSettings } = useSettingActions();
 	const updateSettings = (partialSettings: Partial<SettingsType>) => {
 		setSettings({
 			...settings,
@@ -49,11 +62,47 @@ export function FixedSettingButton() {
 		});
 	};
 
+	// 重置所有设置
+	const handleResetSettings = () => {
+		clearSettings();
+		setSettings(initialSettings);
+	};
+
 	// Computed values
 	const shouldShowCollapsibleTypeSelect = useMemo(
 		() => layoutMode !== "horizontal" && layoutMode !== "double",
 		[layoutMode],
 	);
+
+	// 计算发生改变的配置
+	const changedSettings = useMemo(() => {
+		const changes: Partial<SettingsType> = {};
+
+		// 遍历当前设置，找出与默认设置不同的值
+		Object.keys(settings).forEach((key) => {
+			const settingKey = key as keyof SettingsType;
+			if (!isEqual(settings[settingKey], initialSettings[settingKey])) {
+				(changes as unknown as Record<keyof SettingsType, unknown>)[settingKey] = settings[settingKey];
+			}
+		});
+
+		return changes;
+	}, [settings]);
+
+	// 判断是否有配置改变
+	const hasChanges = useMemo(() => {
+		return Object.keys(changedSettings).length > 0;
+	}, [changedSettings]);
+
+	// 复制配置到剪贴板
+	const handleCopyConfig = async () => {
+		const configString = ` ${JSON.stringify(changedSettings, null, 2)}`;
+
+		await navigator.clipboard.writeText(configString);
+		toast.success("复制成功", {
+			description: "复制成功，请在 \`src/preferences.ts\` 内进行覆盖",
+		});
+	};
 
 	return (
 		<div className="fixed bottom-30 right-[-3px] z-50">
@@ -70,10 +119,37 @@ export function FixedSettingButton() {
 					style={sheetContentBgStyle}
 					className="gap-0 w-[350px]"
 					onOpenAutoFocus={(e) => e.preventDefault()}
+					showClose={false}
 				>
-					<SheetHeader className="flex flex-row items-center justify-between px-6 py-4 shrink-0">
+					<SheetHeader className="flex flex-row items-center justify-between px-3 py-4 shrink-0">
 						<SheetTitle>设置</SheetTitle>
-						<SheetDescription />
+						<div className="flex items-center">
+							<Tooltip>
+								<TooltipTrigger asChild>
+									<div className="relative">
+										<Button
+											variant="ghost"
+											size="sm"
+											onClick={handleResetSettings}
+											disabled={!hasChanges}
+											className="h-8 w-8 p-0 hover:bg-accent"
+										>
+											<Icon icon="material-symbols:restart-alt" size={18} />
+										</Button>
+										{hasChanges && <div className="absolute top-1 right-1 w-2 h-2 bg-primary rounded-full"></div>}
+									</div>
+								</TooltipTrigger>
+								<TooltipContent side="bottom">
+									<p>数据有变化，点击可进行重置</p>
+								</TooltipContent>
+							</Tooltip>
+							<SheetClose asChild>
+								<Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-accent">
+									<XIcon className="size-4" />
+								</Button>
+							</SheetClose>
+							<SheetDescription />
+						</div>
 					</SheetHeader>
 					<div className="flex flex-col gap-6 px-6 py-2 overflow-y-auto">
 						{/* theme mode */}
@@ -386,6 +462,12 @@ export function FixedSettingButton() {
 							)}
 						</div>
 					</div>
+					<SheetFooter>
+						<Button onClick={handleCopyConfig} disabled={!hasChanges}>
+							<Icon icon="material-symbols:content-copy" />
+							复制配置
+						</Button>
+					</SheetFooter>
 				</SheetContent>
 			</Sheet>
 		</div>

@@ -17,7 +17,7 @@ export function useTheme() {
 	const primaryColor =
 		settings.themeColorPresets === ThemeColorPresets.Custom
 			? generateColorVariants(settings.customPrimaryColor || "#808080")
-			: presetsColors[settings.themeColorPresets];
+			: presetsColors[settings.themeColorPresets as keyof typeof presetsColors];
 
 	colorTokens = {
 		...colorTokens,

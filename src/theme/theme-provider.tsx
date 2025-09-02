@@ -15,7 +15,7 @@ export function ThemeProvider({ children, adapters = [] }: ThemeProviderProps) {
 		useSettings();
 	const systemTheme = useSystemTheme();
 
-	const actualThemeMode = themeMode === ThemeMode.System ? systemTheme : themeMode;
+	const actualThemeMode = (themeMode === ThemeMode.System ? systemTheme : themeMode) as ThemeMode;
 
 	// Update HTML class to support Tailwind dark mode
 	useEffect(() => {
