@@ -3,7 +3,6 @@ import { Outlet, ScrollRestoration } from "react-router";
 import GlobalLoading from "@/components/loading/global-loading";
 import { useSettings } from "@/store/settingStore";
 import { cn } from "@/utils";
-
 export function Main() {
 	const { themeStretch, layoutMode } = useSettings();
 	return (
