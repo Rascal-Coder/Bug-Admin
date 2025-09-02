@@ -14,6 +14,7 @@ import {
 	Breadcrumb as BreadcrumbUI,
 } from "@/ui/breadcrumb";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/ui/dropdown-menu";
+import { ScrollArea, ScrollBar } from "@/ui/scroll-area";
 
 interface BreadCrumbProps {
 	maxItems?: number;
@@ -173,8 +174,11 @@ export function Breadcrumb({ maxItems = 3 }: BreadCrumbProps) {
 	};
 
 	return (
-		<BreadcrumbUI>
-			<BreadcrumbList>{renderBreadcrumbs()}</BreadcrumbList>
-		</BreadcrumbUI>
+		<ScrollArea className="whitespace-nowrap px-2 bg-background">
+			<BreadcrumbUI>
+				<BreadcrumbList className="flex-nowrap!">{renderBreadcrumbs()}</BreadcrumbList>
+			</BreadcrumbUI>
+			<ScrollBar orientation="horizontal" />
+		</ScrollArea>
 	);
 }
