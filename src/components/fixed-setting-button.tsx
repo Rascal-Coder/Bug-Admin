@@ -61,7 +61,7 @@ export function FixedSettingButton() {
 				<SheetTrigger asChild>
 					<button
 						type="button"
-						className="w-14 h-14 bg-primary text-white rounded-bl-lg rounded-tl-lg shadow-lg hover:bg-primary/90  flex items-center justify-center"
+						className="w-14 h-14 cursor-pointer bg-primary text-white rounded-bl-lg rounded-tl-lg shadow-lg hover:bg-primary/90  flex items-center justify-center"
 					>
 						<Icon icon="ic:outline-settings" className="transition-all duration-200 animate-slow-spin" size={28} />
 					</button>
@@ -249,7 +249,11 @@ export function FixedSettingButton() {
 												<div className="w-1/5 h-full bg-primary/70 rounded-md"></div>
 												<div className="flex-1 flex flex-col gap-1.5">
 													<div className="h-1/3 bg-primary rounded-md"></div>
-													<div className="h-2/3 bg-accent rounded-md"></div>
+													<div className="h-2/3 flex flex-1 border border-primary rounded-md border-dashed justify-center">
+														<div
+															className={`${themeStretch ? "w-full" : "w-3/5"} transition-all duration-300 ease-in-out h-full bg-accent rounded-md`}
+														></div>
+													</div>
 												</div>
 											</div>
 										</div>
@@ -274,7 +278,11 @@ export function FixedSettingButton() {
 												<div className="w-1/5 h-full bg-primary/70 rounded-md"></div>
 												<div className="flex-1 flex flex-col gap-1.5">
 													<div className="h-1/3 bg-primary rounded-md"></div>
-													<div className="h-2/3 bg-accent rounded-md"></div>
+													<div className="h-2/3 flex flex-1 border border-primary rounded-md border-dashed justify-center">
+														<div
+															className={`${themeStretch ? "w-full" : "w-3/5"} transition-all duration-300 ease-in-out h-full bg-accent rounded-md`}
+														></div>
+													</div>
 												</div>
 											</div>
 										</div>
@@ -296,7 +304,11 @@ export function FixedSettingButton() {
 										>
 											<div className="flex w-full h-full flex-col gap-1.5">
 												<div className="h-1/3 bg-primary rounded-md"></div>
-												<div className="h-2/3 bg-accent rounded-md"></div>
+												<div className="h-2/3 flex flex-1 border border-primary rounded-md border-dashed justify-center">
+													<div
+														className={`${themeStretch ? "w-full" : "w-3/5"} transition-all duration-300 ease-in-out h-full bg-accent rounded-md`}
+													></div>
+												</div>
 											</div>
 										</div>
 									</TooltipTrigger>
@@ -319,7 +331,11 @@ export function FixedSettingButton() {
 												<div className="h-1/3 bg-primary rounded-md"></div>
 												<div className="h-2/3 flex gap-1.5">
 													<div className="w-1/5 bg-primary/70 rounded-md"></div>
-													<div className="flex-1 bg-accent rounded-md"></div>
+													<div className="w-4/5 flex justify-center flex-1 border border-primary rounded-md border-dashed">
+														<div
+															className={`${themeStretch ? "w-full" : "w-3/5"}  transition-all duration-300 ease-in-out h-full bg-accent rounded-md`}
+														></div>
+													</div>
 												</div>
 											</div>
 										</div>
