@@ -25,8 +25,9 @@ export function Header({ className, fixed, children, wrapCls, ...props }: Header
 
 	return (
 		<header
+			data-slot="bug-admin-header"
 			className={cn(
-				"z-50 h-28 border-b border-dashed flex flex-col justify-between",
+				"z-50 h-30 border-b border-dashed flex flex-col justify-between",
 				fixed && "header-fixed peer/header sticky top-0 w-[inherit]",
 				offset > 10 && fixed ? "shadow" : "shadow-none",
 				className,

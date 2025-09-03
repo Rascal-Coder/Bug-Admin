@@ -16,7 +16,7 @@ export function Main() {
 				{
 					"max-w-full": themeStretch,
 					"xl:max-w-screen-xl": !themeStretch,
-					"h-[calc(100svh-var(--spacing-16))]": layoutMode === "horizontal",
+					"h-[calc(100svh-var(--spacing-30))]": layoutMode === "horizontal",
 				},
 			)}
 			style={{
