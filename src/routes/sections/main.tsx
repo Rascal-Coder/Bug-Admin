@@ -8,6 +8,7 @@ const Page404 = lazy(() => import("@/pages/sys/error/Page404"));
 const Page500 = lazy(() => import("@/pages/sys/error/Page500"));
 
 await registerLocalIcons();
+
 export const mainRoutes: RouteObject[] = [
 	{
 		path: "/",

@@ -35,6 +35,15 @@ export function getFrontendDashboardRoutes(): RouteObject[] {
 			],
 		},
 		{
+			path: "error",
+			children: [
+				{ index: true, element: <Navigate to="403" replace /> },
+				{ path: "403", element: Component("/pages/sys/error/Page403") },
+				{ path: "404", element: Component("/pages/sys/error/Page404") },
+				{ path: "500", element: Component("/pages/sys/error/Page500") },
+			],
+		},
+		{
 			path: "components",
 			children: [
 				{ index: true, element: <Navigate to="icon" replace /> },
@@ -46,10 +55,13 @@ export function getFrontendDashboardRoutes(): RouteObject[] {
 			path: "link",
 			children: [
 				{ index: true, element: <Navigate to="iframe" replace /> },
-				{ path: "iframe", element: Component("/pages/sys/others/link/iframe", { src: "https://ant.design/index-cn" }) },
+				{
+					path: "iframe",
+					element: Component("/pages/dashboard/others/link/iframe", { src: "https://ant.design/index-cn" }),
+				},
 				{
 					path: "external-link",
-					element: Component("/pages/sys/others/link/external-link", { src: "https://ant.design/index-cn" }),
+					element: Component("/pages/dashboard/others/link/external-link", { src: "https://ant.design/index-cn" }),
 				},
 			],
 		},
