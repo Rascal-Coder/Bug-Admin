@@ -2,13 +2,8 @@ import { useState } from "react";
 import { Icon } from "@/components/icon";
 import { Button } from "@/ui/button";
 import { ScrollArea, ScrollBar } from "@/ui/scroll-area";
-import {
-	ContextMenu,
-	ContextMenuContent,
-	ContextMenuItem,
-	ContextMenuSeparator,
-	ContextMenuTrigger,
-} from "@/ui/context-menu";
+import SortableContainer from "./components/sortable-container";
+import SortableTab from "./components/sortable-tab";
 
 export default function Tabs() {
 	const [tabs, setTabs] = useState([
@@ -86,83 +81,60 @@ export default function Tabs() {
 	const handleCloseRightTabs = (tabValue: string) => {
 		console.log("close right tabs", tabValue);
 	};
+
+	// 处理标签重新排序
+	const handleSortEnd = (oldIndex: number, newIndex: number) => {
+		const newTabs = [...tabs];
+		const [movedTab] = newTabs.splice(oldIndex, 1);
+		newTabs.splice(newIndex, 0, movedTab);
+		setTabs(newTabs);
+	};
+
+	// 为 dnd-kit 准备数据，需要 key 属性
+	const tabsWithKeys = tabs.map((tab) => ({
+		...tab,
+		key: tab.value,
+	}));
+
+	// 渲染拖拽覆盖层的组件
+	const renderOverlay = (activeId: string | number) => {
+		const activeTab = tabs.find((tab) => tab.value === activeId);
+		if (!activeTab) return null;
+
+		return (
+			<div className="cursor-pointer border border-border gap-1 h-full flex items-center px-2 py-1 rounded-md bg-primary/hover text-primary opacity-90 shadow-lg">
+				<Icon icon="mdi:menu" size={20} />
+				{activeTab.label}
+				{!activeTab.pinned ? (
+					<Icon icon="mdi:close" size={14} className="hover:bg-white dark:hover:bg-accent rounded-md" />
+				) : (
+					<Icon icon="mdi:pin" size={14} className="hover:bg-white dark:hover:bg-accent rounded-md" />
+				)}
+			</div>
+		);
+	};
 	return (
 		<div className="flex-1 px-3 flex items-center justify-between">
 			<ScrollArea className="whitespace-nowrap px-2">
-				<div className="flex items-center gap-2">
-					{tabs.map((tab) => (
-						<ContextMenu key={tab.value}>
-							<ContextMenuTrigger>
-								<div className="cursor-pointer border border-border gap-1 h-full flex items-center px-2 py-1 rounded-md bg-primary/hover text-primary">
-									{/* 渲染icon */}
-									<Icon icon="mdi:menu" size={20} />
-									{tab.label}
-									{!tab.pinned ? (
-										<Icon
-											icon="mdi:close"
-											size={14}
-											className="hover:bg-white dark:hover:bg-accent rounded-md"
-											onClick={(e) => {
-												e.stopPropagation();
-												handleCloseTab(tab.value);
-											}}
-										/>
-									) : (
-										<Icon
-											icon="mdi:pin"
-											size={14}
-											className={`hover:bg-white dark:hover:bg-accent rounded-md`}
-											onClick={(e) => {
-												e.stopPropagation();
-												handleTogglePin(tab.value);
-											}}
-										/>
-									)}
-								</div>
-							</ContextMenuTrigger>
-							<ContextMenuContent className="w-48">
-								<ContextMenuItem onClick={() => handleCloseTab(tab.value)}>
-									<Icon icon="mdi:close" size={16} />
-									关闭
-								</ContextMenuItem>
-								<ContextMenuItem onClick={() => handleTogglePin(tab.value)}>
-									<Icon icon={tab.pinned ? "mdi:pin-off" : "mdi:pin"} size={16} />
-									{tab.pinned ? "取消固定" : "固定"}
-								</ContextMenuItem>
-								<ContextMenuItem onClick={() => handleSetFullscreen()}>
-									<Icon icon="mdi:fullscreen" size={16} />
-									最大化
-								</ContextMenuItem>
-								<ContextMenuItem onClick={() => handleRefreshTab(tab.value)}>
-									<Icon icon="mdi:refresh" size={16} />
-									重新加载
-								</ContextMenuItem>
-								<ContextMenuItem onClick={() => handleOpenInNewWindow(tab.value)}>
-									<Icon icon="mdi:open-in-new" size={16} />
-									在新窗口打开
-								</ContextMenuItem>
-								<ContextMenuSeparator />
-								<ContextMenuItem onClick={() => handleCloseLeftTabs(tab.value)}>
-									<Icon icon="mdi:arrow-left" size={16} />
-									关闭左侧标签页
-								</ContextMenuItem>
-								<ContextMenuItem onClick={() => handleCloseRightTabs(tab.value)}>
-									<Icon icon="mdi:arrow-right" size={16} />
-									关闭右侧标签页
-								</ContextMenuItem>
-								<ContextMenuSeparator />
-								<ContextMenuItem onClick={() => handleCloseOthers(tab.value)}>
-									<Icon icon="mdi:close-circle-multiple" size={16} />
-									关闭其它标签页
-								</ContextMenuItem>
-								<ContextMenuItem onClick={() => handleCloseAll()}>
-									<Icon icon="mdi:close-circle-multiple-outline" size={16} />
-									关闭全部标签页
-								</ContextMenuItem>
-							</ContextMenuContent>
-						</ContextMenu>
-					))}
-				</div>
+				<SortableContainer items={tabsWithKeys} onSortEnd={handleSortEnd} renderOverlay={renderOverlay}>
+					<div className="flex items-center gap-2">
+						{tabs.map((tab) => (
+							<SortableTab
+								key={tab.value}
+								tab={tab}
+								onCloseTab={handleCloseTab}
+								onTogglePin={handleTogglePin}
+								onCloseOthers={handleCloseOthers}
+								onCloseAll={handleCloseAll}
+								onRefreshTab={handleRefreshTab}
+								onSetFullscreen={handleSetFullscreen}
+								onOpenInNewWindow={handleOpenInNewWindow}
+								onCloseLeftTabs={handleCloseLeftTabs}
+								onCloseRightTabs={handleCloseRightTabs}
+							/>
+						))}
+					</div>
+				</SortableContainer>
 				<ScrollBar orientation="horizontal" />
 			</ScrollArea>
 			<div className="flex items-center gap-1 ml-1">
