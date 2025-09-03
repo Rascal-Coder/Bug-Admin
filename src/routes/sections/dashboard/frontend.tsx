@@ -10,23 +10,23 @@ export function getFrontendDashboardRoutes(): RouteObject[] {
 			path: "menu_level",
 			children: [
 				{ index: true, element: <Navigate to="1a" replace /> },
-				{ path: "1a", element: Component("/pages/dashboard/menu-level/menu-level-1a") },
+				{ path: "1a", element: Component("/pages/menu-level/menu-level-1a") },
 				{
 					path: "1b",
 					children: [
 						{ index: true, element: <Navigate to="2a" replace /> },
-						{ path: "2a", element: Component("/pages/dashboard/menu-level/menu-level-1b/menu-level-2a") },
+						{ path: "2a", element: Component("/pages/menu-level/menu-level-1b/menu-level-2a") },
 						{
 							path: "2b",
 							children: [
 								{ index: true, element: <Navigate to="3a" replace /> },
 								{
 									path: "3a",
-									element: Component("/pages/dashboard/menu-level/menu-level-1b/menu-level-2b/menu-level-3a"),
+									element: Component("/pages/menu-level/menu-level-1b/menu-level-2b/menu-level-3a"),
 								},
 								{
 									path: "3b",
-									element: Component("/pages/dashboard/menu-level/menu-level-1b/menu-level-2b/menu-level-3b"),
+									element: Component("/pages/menu-level/menu-level-1b/menu-level-2b/menu-level-3b"),
 								},
 							],
 						},
@@ -57,11 +57,11 @@ export function getFrontendDashboardRoutes(): RouteObject[] {
 				{ index: true, element: <Navigate to="iframe" replace /> },
 				{
 					path: "iframe",
-					element: Component("/pages/dashboard/others/link/iframe", { src: "https://ant.design/index-cn" }),
+					element: Component("/pages/others/link/iframe", { src: "https://ant.design/index-cn" }),
 				},
 				{
 					path: "external-link",
-					element: Component("/pages/dashboard/others/link/external-link", { src: "https://ant.design/index-cn" }),
+					element: Component("/pages/others/link/external-link", { src: "https://ant.design/index-cn" }),
 				},
 			],
 		},

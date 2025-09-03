@@ -8,6 +8,7 @@ import {
 	ContextMenuSeparator,
 	ContextMenuTrigger,
 } from "@/ui/context-menu";
+import { cn } from "@/utils";
 
 interface Tab {
 	label: string;
@@ -54,7 +55,9 @@ export default function SortableTab({
 			<ContextMenu>
 				<ContextMenuTrigger>
 					<div
-						className="cursor-pointer border border-border gap-1 h-full flex items-center px-2 py-1 rounded-md bg-primary/hover text-primary select-none"
+						className={cn(
+							"cursor-pointer border border-border gap-1 h-full flex items-center px-2 py-1 rounded-md text-primary select-none",
+						)}
 						{...listeners}
 					>
 						{/* 渲染icon */}
@@ -85,42 +88,62 @@ export default function SortableTab({
 				</ContextMenuTrigger>
 				<ContextMenuContent className="w-48">
 					<ContextMenuItem onClick={() => onCloseTab(tab.value)}>
-						<Icon icon="mdi:close" size={16} />
-						关闭
+						<div className="flex items-center gap-1">
+							<Icon icon="mdi:close" size={16} />
+							关闭
+						</div>
 					</ContextMenuItem>
 					<ContextMenuItem onClick={() => onTogglePin(tab.value)}>
-						<Icon icon={tab.pinned ? "mdi:pin-off" : "mdi:pin"} size={16} />
-						{tab.pinned ? "取消固定" : "固定"}
+						<div className="flex items-center gap-1">
+							<Icon icon={tab.pinned ? "mdi:pin-off" : "mdi:pin"} size={16} />
+							{tab.pinned ? "取消固定" : "固定"}
+						</div>
 					</ContextMenuItem>
 					<ContextMenuItem onClick={() => onSetFullscreen()}>
-						<Icon icon="mdi:fullscreen" size={16} />
-						最大化
+						<div className="flex items-center gap-1">
+							<Icon icon="mdi:fullscreen" size={16} />
+							最大化
+						</div>
 					</ContextMenuItem>
 					<ContextMenuItem onClick={() => onRefreshTab(tab.value)}>
-						<Icon icon="mdi:refresh" size={16} />
-						重新加载
+						<div className="flex items-center gap-1">
+							<Icon icon="mdi:refresh" size={16} />
+							重新加载
+						</div>
 					</ContextMenuItem>
 					<ContextMenuItem onClick={() => onOpenInNewWindow(tab.value)}>
-						<Icon icon="mdi:open-in-new" size={16} />
-						在新窗口打开
+						<div className="flex items-center gap-1">
+							<Icon icon="mdi:open-in-new" size={16} />
+							在新窗口打开
+						</div>
 					</ContextMenuItem>
 					<ContextMenuSeparator />
 					<ContextMenuItem onClick={() => onCloseLeftTabs(tab.value)}>
-						<Icon icon="mdi:arrow-left" size={16} />
-						关闭左侧标签页
+						<div className="flex items-center gap-1">
+							<Icon icon="mdi:arrow-left" size={16} />
+							关闭左侧标签页
+						</div>
 					</ContextMenuItem>
+
 					<ContextMenuItem onClick={() => onCloseRightTabs(tab.value)}>
-						<Icon icon="mdi:arrow-right" size={16} />
-						关闭右侧标签页
+						<div className="flex items-center gap-1">
+							<Icon icon="mdi:arrow-right" size={16} />
+							关闭右侧标签页
+						</div>
 					</ContextMenuItem>
+
 					<ContextMenuSeparator />
 					<ContextMenuItem onClick={() => onCloseOthers(tab.value)}>
-						<Icon icon="mdi:close-circle-multiple" size={16} />
-						关闭其它标签页
+						<div className="flex items-center gap-1">
+							<Icon icon="mdi:close-circle-multiple" size={16} />
+							关闭其它标签页
+						</div>
 					</ContextMenuItem>
 					<ContextMenuItem onClick={() => onCloseAll()}>
-						<Icon icon="mdi:close-circle-multiple-outline" size={16} />
-						关闭全部标签页
+						<div className="flex items-center gap-1">
+							<Icon icon="mdi:close-circle-multiple-outline" size={16} />
+							关闭全部标签页
+						</div>
 					</ContextMenuItem>
 				</ContextMenuContent>
 			</ContextMenu>

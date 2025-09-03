@@ -108,7 +108,14 @@ export default function Iframe({
 			<div className="flex-shrink-0 bg-background border-b border-border p-2 flex items-center justify-between gap-2">
 				<div className="flex items-center gap-2 flex-1 min-w-0">
 					<span className="text-sm font-medium text-foreground truncate">{title}</span>
-					<span className="text-xs text-muted-foreground truncate">{src}</span>
+					<a
+						href={src}
+						className="text-xs text-muted-foreground truncate underline!"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						{src}
+					</a>
 				</div>
 
 				<div className="flex items-center gap-1">
