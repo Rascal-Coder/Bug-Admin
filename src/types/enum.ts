@@ -42,3 +42,9 @@ export enum ResultStatus {
 	ERROR = -1,
 	TIMEOUT = 401,
 }
+
+export enum StorageEnum {
+	UserInfo = "userInfo",
+	UserToken = "userToken",
+	Settings = "settings",
+}

@@ -1,12 +1,6 @@
 import type { NavItemDataProps } from "@/components/nav/types";
-import type { BasicStatus, PermissionType } from "./enum";
-
-export interface CommonOptions {
-	status?: BasicStatus;
-	desc?: string;
-	createdAt?: string;
-	updatedAt?: string;
-}
+import type { CommonOptions } from "./entity";
+import type { PermissionType } from "./enum";
 
 export interface BackendMenu extends CommonOptions, MenuMetaInfo {
 	id: string; // uuid
