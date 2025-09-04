@@ -101,6 +101,7 @@ export function FixedSettingButton() {
 		await navigator.clipboard.writeText(configString);
 		toast.success("复制成功", {
 			description: "复制成功，请在 \`src/preferences.ts\` 内进行覆盖",
+			position: "top-center",
 		});
 	};
 

@@ -1,0 +1,142 @@
+import { Toaster } from "sonner";
+import styled from "styled-components";
+import { Icon } from "@/components/icon";
+import { useSettings } from "@/store/settingStore";
+import { themeVars } from "@/theme/theme.css";
+import { rgbAlpha } from "@/utils/theme";
+
+/**
+ * https://sonner.emilkowal.ski/getting-started
+ */
+export default function Toast() {
+	const { themeMode } = useSettings();
+
+	return (
+		<ToasterStyleWrapper>
+			<Toaster
+				position="top-right"
+				theme={themeMode as "light" | "dark" | "system"}
+				toastOptions={{
+					duration: 3000,
+					style: {
+						backgroundColor: themeVars.colors.background.paper,
+					},
+					classNames: {
+						toast: "rounded-lg border-0",
+						description: "text-xs text-current/45",
+						content: "flex-1 ml-6",
+						icon: "flex items-center justify-center rounded-lg",
+						success: "bg-success/10",
+						error: "bg-error/10",
+						warning: "bg-warning/10",
+						info: "bg-info/10",
+					},
+				}}
+				icons={{
+					success: (
+						<div className="p-2 bg-success/10 rounded-lg">
+							<Icon icon="carbon:checkmark-filled" size={24} color={themeVars.colors.palette.success.default} />
+						</div>
+					),
+					error: (
+						<div className="p-2 bg-error/10 rounded-lg">
+							<Icon icon="carbon:warning-hex-filled" size={24} color={themeVars.colors.palette.error.default} />
+						</div>
+					),
+					warning: (
+						<div className="p-2 bg-warning/10 rounded-lg">
+							<Icon icon="carbon:warning-alt-filled" size={24} color={themeVars.colors.palette.warning.default} />
+						</div>
+					),
+					info: (
+						<div className="p-2 bg-info/10 rounded-lg">
+							<Icon icon="carbon:information-filled" size={24} color={themeVars.colors.palette.info.default} />
+						</div>
+					),
+					loading: (
+						<div className="p-2 bg-gray-400/10 text-gray-400 rounded-lg">
+							<Icon icon="svg-spinners:6-dots-scale-middle" size={24} speed={3} />
+						</div>
+					),
+				}}
+				expand
+			/>
+		</ToasterStyleWrapper>
+	);
+}
+
+const ToasterStyleWrapper = styled.div`
+  [data-sonner-toast] {
+    font-weight: 600;
+    font-size: 14px;
+
+    [data-cancel] {
+      color: ${themeVars.colors.text.primary};
+      background-color: transparent;
+      &:hover {
+        background-color: ${rgbAlpha(themeVars.colors.text.primaryChannel, 0.08)};
+      }
+    }
+
+    /* Default */
+    [data-action] {
+      color: ${themeVars.colors.palette.primary.default};
+      background-color: transparent;
+      &:hover {
+        background-color: ${rgbAlpha(themeVars.colors.palette.primary.defaultChannel, 0.08)};
+      }
+    }
+
+    /* Info */
+    &[data-type="info"] [data-action] {
+      color: ${themeVars.colors.palette.info.default};
+      background-color: transparent;
+      &:hover {
+        background-color: ${rgbAlpha(themeVars.colors.palette.info.defaultChannel, 0.08)};
+      }
+    }
+
+    /* Error */
+    &[data-type="error"] [data-action] {
+      color: ${themeVars.colors.palette.error.default};
+      background-color: transparent;
+      &:hover {
+        background-color: ${rgbAlpha(themeVars.colors.palette.error.defaultChannel, 0.08)};
+      }
+    }
+
+    /* Success */
+    &[data-type="success"] [data-action] {
+      color: ${themeVars.colors.palette.success.default};
+      background-color: transparent;
+      &:hover {
+        background-color: ${rgbAlpha(themeVars.colors.palette.success.defaultChannel, 0.08)};
+      }
+    }
+
+    /* Warning */
+    &[data-type="warning"] [data-action] {
+      color: ${themeVars.colors.palette.warning.default};
+      background-color: transparent;
+      &:hover {
+        background-color: ${rgbAlpha(themeVars.colors.palette.warning.defaultChannel, 0.08)};
+      }
+    }
+
+    /* Loading */
+    &[data-type="loading"] [data-icon] .sonner-loader[data-visible="true"] {
+      margin-left: 12px;
+    }
+
+    /* Close Button */
+    [data-close-button] {
+      top: 0;
+      right: 0;
+      left: auto;
+      border-width: 1px;
+      border-style: dashed;
+      background-color: ${themeVars.colors.background.paper};
+      border: 1px solid ${rgbAlpha(themeVars.colors.palette.gray[200], 0.2)};
+    }
+  }
+`;
