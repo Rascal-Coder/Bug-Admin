@@ -8,7 +8,7 @@ export interface CommonOptions {
 	updatedAt?: string;
 }
 
-export interface Menu extends CommonOptions, MenuMetaInfo {
+export interface BackendMenu extends CommonOptions, MenuMetaInfo {
 	id: string; // uuid
 	parentId: string;
 	name: string;
@@ -27,6 +27,10 @@ export type MenuMetaInfo = Partial<
 	component?: string;
 };
 
-export type MenuTree = Menu & {
-	children?: MenuTree[];
+export type BackendMenuTree = BackendMenu & {
+	children?: BackendMenuTree[];
+};
+
+export type FrontendMenuTree = Omit<BackendMenu, "code" | "parentId" | "id"> & {
+	children?: FrontendMenuTree[];
 };

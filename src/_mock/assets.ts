@@ -1,9 +1,9 @@
-import type { Menu } from "#/entity";
 import { PermissionType } from "#/enum";
+import type { BackendMenu } from "@/types/menu";
 
 const { GROUP, MENU, CATALOGUE } = PermissionType;
 
-export const DB_MENU: Menu[] = [
+export const DB_MENU: BackendMenu[] = [
 	// group
 	{ id: "group_dashboard", name: "仪表盘", code: "dashboard", parentId: "", type: GROUP },
 	{ id: "group_pages", name: "页面", code: "pages", parentId: "", type: GROUP },
