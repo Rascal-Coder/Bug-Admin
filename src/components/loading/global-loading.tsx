@@ -1,6 +1,5 @@
 import type React from "react";
-import { cn } from "@/utils";
-import { uuid } from "@/utils/uuid";
+import styled, { css, keyframes } from "styled-components";
 
 interface BallClimbingDotProps {
 	width?: number;
@@ -10,6 +9,164 @@ interface BallClimbingDotProps {
 	className?: string;
 	text?: string;
 }
+
+// 跳跃动画
+const jumpAnimation = keyframes`
+  0% {
+    transform: scale(1, .7);
+  }
+  20% {
+    transform: scale(.7, 1.2);
+  }
+  40% {
+    transform: scale(1, 1);
+  }
+  50% {
+    bottom: 125%;
+  }
+  46% {
+    transform: scale(1, 1);
+  }
+  80% {
+    transform: scale(.7, 1.2);
+  }
+  90% {
+    transform: scale(.7, 1.2);
+  }
+  100% {
+    transform: scale(1, .7);
+  }
+`;
+
+// 台阶动画
+const stepAnimation = keyframes`
+  0% {
+    top: 0;
+    right: 0;
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    top: 100%;
+    right: 100%;
+    opacity: 0;
+  }
+`;
+
+// 主容器
+const LoadingContainer = styled.div`
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: center;
+`;
+
+// 加载包装器
+const LoadingWrapper = styled.div<{ $center?: boolean }>`
+  ${({ $center }) =>
+		$center &&
+		css`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  `}
+`;
+
+// 动画容器
+const AnimationBox = styled.div<{ $width: number; $height: number }>`
+  position: relative;
+  box-sizing: border-box;
+  display: block;
+  font-size: 0;
+  color: hsl(var(--primary));
+  width: ${({ $width }) => $width}px;
+  height: ${({ $height }) => $height}px;
+`;
+
+// 跳跃的球
+const JumpingBall = styled.div<{
+	$size: number;
+	$jumpAnimation: ReturnType<typeof keyframes>;
+}>`
+  position: absolute;
+  display: inline-block;
+  float: none;
+  border: 0;
+  bottom: 32%;
+  left: 18%;
+  width: ${({ $size }) => $size}px;
+  height: ${({ $size }) => $size}px;
+  background-color: currentColor;
+  border-radius: 100%;
+  transform-origin: center bottom;
+  animation: ${({ $jumpAnimation }) => $jumpAnimation} 0.6s ease-in-out infinite;
+`;
+
+// 台阶点
+const StepDot = styled.div<{
+	$width: number;
+	$height: number;
+	$stepAnimation: ReturnType<typeof keyframes>;
+	$delay: string;
+}>`
+  position: absolute;
+  display: inline-block;
+  float: none;
+  top: 0;
+  right: 0;
+  width: ${({ $width }) => $width}px;
+  height: ${({ $height }) => $height}px;
+  background-color: currentColor;
+  border-radius: 0;
+  border: 0 solid currentColor;
+  transform: translate(60%, 0);
+  animation: ${({ $stepAnimation }) => $stepAnimation} 1.8s linear infinite ${({ $delay }) => $delay};
+`;
+
+// 文本显示组件
+const LoadingText = styled.div`
+  position: relative;
+  padding: 0.5rem 1rem;
+  margin-top: 1.5rem;
+  font-size: 1.875rem;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  color: hsl(var(--primary));
+  text-align: center;
+  background: hsl(var(--accent-foreground) / 0.6);
+  border: 1px solid hsl(var(--accent-foreground) / 0.3);
+  border-radius: 0.5rem;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+  backdrop-filter: blur(16px);
+  transition: all 0.3s;
+
+  @media (prefers-color-scheme: dark) {
+    background: hsl(var(--accent-foreground) / 0.1);
+    border-color: hsl(var(--accent-foreground) / 0.15);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+  }
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    padding: 1px;
+    pointer-events: none;
+    background: linear-gradient(to right, hsl(var(--primary) / 0.3), transparent);
+    border-radius: 0.5rem;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+
+    @media (prefers-color-scheme: dark) {
+      background: linear-gradient(to right, hsl(var(--primary) / 0.4), transparent);
+    }
+  }
+`;
 
 const BallClimbingDot: React.FC<BallClimbingDotProps> = ({
 	width = 42,
@@ -22,151 +179,28 @@ const BallClimbingDot: React.FC<BallClimbingDotProps> = ({
 	const boxWidth = width;
 	const boxHeight = width / ratio;
 	const smallMeasure = width / 3;
-	const dotJumpId = `dotJump-${uuid()}`;
-	const dotStepId = `dotStep-${uuid()}`;
-
-	const keyframesStyle = `
-    @keyframes ${dotJumpId} {
-      0% {
-        transform: scale(1, .7);
-      }
-      20% {
-        transform: scale(.7, 1.2);
-      }
-      40% {
-        transform: scale(1, 1);
-      }
-      50% {
-        bottom: 125%;
-      }
-      46% {
-        transform: scale(1, 1);
-      }
-      80% {
-        transform: scale(.7, 1.2);
-      }
-      90% {
-        transform: scale(.7, 1.2);
-      }
-      100% {
-        transform: scale(1, .7);
-      }
-    }
-    
-    @keyframes ${dotStepId} {
-      0% {
-        top: 0;
-        right: 0;
-        opacity: 0;
-      }
-      50% {
-        opacity: 1;
-      }
-      100% {
-        top: 100%;
-        right: 100%;
-        opacity: 0;
-      }
-    }
-  `;
 
 	if (!loading) return null;
 
 	return (
-		<>
-			<style>{keyframesStyle}</style>
-			<div className="h-full w-full flex flex-col gap-3 items-center justify-center">
-				<div className={cn("react-loading-wrap", center && "flex items-center justify-center", className)}>
-					<div
-						className="relative box-border block font-[0] text-primary"
-						style={{
-							width: `${boxWidth}px`,
-							height: `${boxHeight}px`,
-						}}
-					>
-						{/* 跳跃的球 */}
-						<div
-							className="absolute inline-block float-none border-0"
-							style={{
-								bottom: "32%",
-								left: "18%",
-								width: `${smallMeasure}px`,
-								height: `${smallMeasure}px`,
-								backgroundColor: "currentColor",
-								borderRadius: "100%",
-								transformOrigin: "center bottom",
-								animation: `${dotJumpId} 0.6s ease-in-out infinite`,
-							}}
-						/>
+		<LoadingContainer>
+			<LoadingWrapper $center={center} className={className}>
+				<AnimationBox className="text-primary!" $width={boxWidth} $height={boxHeight}>
+					{/* 跳跃的球 */}
+					<JumpingBall $size={smallMeasure} $jumpAnimation={jumpAnimation} />
 
-						{/* 台阶点 - 第1个 */}
-						<div
-							className="absolute inline-block float-none"
-							style={{
-								top: "0",
-								right: "0",
-								width: `${smallMeasure}px`,
-								height: `${smallMeasure / 7}px`,
-								backgroundColor: "currentColor",
-								borderRadius: "0",
-								border: "0 solid currentColor",
-								transform: "translate(60%, 0)",
-								animationName: dotStepId,
-								animationDuration: "1.8s",
-								animationTimingFunction: "linear",
-								animationIterationCount: "infinite",
-								animationDelay: "0ms",
-							}}
-						/>
+					{/* 台阶点 - 第1个 */}
+					<StepDot $width={smallMeasure} $height={smallMeasure / 7} $stepAnimation={stepAnimation} $delay="0ms" />
 
-						{/* 台阶点 - 第2个 */}
-						<div
-							className="absolute inline-block float-none"
-							style={{
-								top: "0",
-								right: "0",
-								width: `${smallMeasure}px`,
-								height: `${smallMeasure / 7}px`,
-								backgroundColor: "currentColor",
-								borderRadius: "0",
-								border: "0 solid currentColor",
-								transform: "translate(60%, 0)",
-								animationName: dotStepId,
-								animationDuration: "1.8s",
-								animationTimingFunction: "linear",
-								animationIterationCount: "infinite",
-								animationDelay: "-600ms",
-							}}
-						/>
+					{/* 台阶点 - 第2个 */}
+					<StepDot $width={smallMeasure} $height={smallMeasure / 7} $stepAnimation={stepAnimation} $delay="-600ms" />
 
-						{/* 台阶点 - 第3个 */}
-						<div
-							className="absolute inline-block float-none"
-							style={{
-								top: "0",
-								right: "0",
-								width: `${smallMeasure}px`,
-								height: `${smallMeasure / 7}px`,
-								backgroundColor: "currentColor",
-								borderRadius: "0",
-								border: "0 solid currentColor",
-								transform: "translate(60%, 0)",
-								animationName: dotStepId,
-								animationDuration: "1.8s",
-								animationTimingFunction: "linear",
-								animationIterationCount: "infinite",
-								animationDelay: "-1200ms",
-							}}
-						/>
-					</div>
-				</div>
-				{text && (
-					<div className='relative px-4 py-2 mt-6 text-3xl font-semibold tracking-wide text-primary text-center bg-accent-foreground/60 dark:bg-accent-foreground/10 border border-accent-foreground/30 dark:border-accent-foreground/15 rounded-lg shadow-[0_8px_32px_0_rgba(31,38,135,0.2)] dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.4)] backdrop-blur-lg transition-all duration-300 before:absolute before:inset-0 before:p-px before:pointer-events-none before:content-[""] before:bg-gradient-to-r before:from-primary/30 dark:before:from-primary/40 before:to-transparent before:rounded-lg before:[mask:linear-gradient(#fff_0_0)_content-box,linear-gradient(#fff_0_0)] before:[mask-composite:exclude]'>
-						{text}
-					</div>
-				)}
-			</div>
-		</>
+					{/* 台阶点 - 第3个 */}
+					<StepDot $width={smallMeasure} $height={smallMeasure / 7} $stepAnimation={stepAnimation} $delay="-1200ms" />
+				</AnimationBox>
+			</LoadingWrapper>
+			{text && <LoadingText className="text-primary">{text}</LoadingText>}
+		</LoadingContainer>
 	);
 };
 

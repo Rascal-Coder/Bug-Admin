@@ -155,17 +155,17 @@ export const frontendNavConfig: FrontendMenuTree[] = [
 				type: PermissionType.CATALOGUE,
 				children: [
 					{
-						name: "外链",
-						path: "/link/external_link",
-						component: "/pages/sys/others/link/external-link",
-						externalLink: new URL("https://ant.design/index-cn"),
-						type: PermissionType.MENU,
-					},
-					{
 						name: "内嵌",
 						path: "/link/iframe",
 						externalLink: new URL("https://ant.design/index-cn"),
 						component: "/pages/sys/others/link/iframe",
+						type: PermissionType.MENU,
+					},
+					{
+						name: "外链",
+						path: "/link/external_link",
+						component: "/pages/sys/others/link/external-link",
+						externalLink: new URL("https://ant.design/index-cn"),
 						type: PermissionType.MENU,
 					},
 				],
