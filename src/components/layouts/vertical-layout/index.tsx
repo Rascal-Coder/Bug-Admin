@@ -3,7 +3,7 @@ import LocalePicker from "@/components/locale-picker";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { Separator } from "@/ui/separator";
 import { SidebarTrigger } from "@/ui/sidebar";
-import { frontendNavData } from "../nav-data/nav-data-frontend";
+import { navData } from "../nav-data";
 import { AppSidebar } from "../sidebar/app-sidebar";
 import SidebarWrapper from "../sidebar/sidebar-wrapper";
 import AccountDropdown from "../weight/account-dropdown";
@@ -55,7 +55,7 @@ export default function VerticalLayout() {
 
 	return (
 		<SidebarWrapper
-			sidebarSlot={<AppSidebar data={frontendNavData} />}
+			sidebarSlot={<AppSidebar data={navData} />}
 			headerLeftSlot={headerLeftSlot}
 			headerRightSlot={headerRightSlot}
 		/>

@@ -8,7 +8,7 @@ import { useMediaQuery } from "@/hooks/use-media-query";
 import { ScrollArea, ScrollBar } from "@/ui/scroll-area";
 import { Separator } from "@/ui/separator";
 import { SidebarTrigger } from "@/ui/sidebar";
-import { frontendNavData } from "../nav-data/nav-data-frontend";
+import { navData } from "../nav-data";
 import { AppSidebar } from "../sidebar/app-sidebar";
 import SidebarWrapper from "../sidebar/sidebar-wrapper";
 import AccountDropdown from "../weight/account-dropdown";
@@ -26,7 +26,7 @@ export default function MixedLayout() {
 	const isMobile = useMediaQuery(MOBILE_BREAKPOINT);
 
 	const verticalMenuData = useMemo(() => {
-		return frontendNavData.map((section) => ({
+		return navData.map((section) => ({
 			...section,
 			items: section.items.map((item) => ({
 				...item,
@@ -40,7 +40,7 @@ export default function MixedLayout() {
 		const matchedChildren: NavItemDataProps[] = [];
 
 		// 遍历所有导航数据找到匹配的子菜单
-		frontendNavData.forEach((section) => {
+		navData.forEach((section) => {
 			section.items.forEach((item) => {
 				if (!item.children?.length) return;
 
@@ -96,7 +96,7 @@ export default function MixedLayout() {
 		[],
 	);
 
-	const sidebarData = isMobile ? frontendNavData : verticalMenuData;
+	const sidebarData = isMobile ? navData : verticalMenuData;
 
 	return (
 		<SidebarWrapper

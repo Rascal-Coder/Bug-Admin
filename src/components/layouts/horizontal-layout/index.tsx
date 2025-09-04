@@ -11,7 +11,7 @@ import { Button } from "@/ui/button";
 import { ScrollArea, ScrollBar } from "@/ui/scroll-area";
 import { MobileSidebar, SidebarContent, SidebarFooter, SidebarHeader } from "@/ui/sidebar";
 import { cn } from "@/utils";
-import { frontendNavData } from "../nav-data/nav-data-frontend";
+import { navData } from "../nav-data";
 import SidebarWrapper from "../sidebar/sidebar-wrapper";
 import AccountDropdown from "../weight/account-dropdown";
 import FullscreenButton from "../weight/fullscreen-button";
@@ -57,7 +57,7 @@ export default function HorizontalLayout() {
 							<span className="font-semibold text-xl leading-tight">Bug Admin</span>
 						</div>
 						<ScrollArea className="whitespace-nowrap px-2">
-							<NavHorizontal data={frontendNavData} />
+							<NavHorizontal data={navData} />
 							<ScrollBar orientation="horizontal" />
 						</ScrollArea>
 					</>
@@ -85,7 +85,7 @@ export default function HorizontalLayout() {
 						</div>
 					</SidebarHeader>
 					<SidebarContent>
-						<NavVertical data={frontendNavData} />
+						<NavVertical data={navData} />
 					</SidebarContent>
 					<SidebarFooter>
 						<NavUser

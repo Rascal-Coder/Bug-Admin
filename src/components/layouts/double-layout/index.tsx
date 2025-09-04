@@ -4,7 +4,7 @@ import { useMediaQuery } from "@/hooks/use-media-query";
 import { type SettingsType, useSettingActions, useSettings } from "@/store/settingStore";
 import { Separator } from "@/ui/separator";
 import { SidebarTrigger } from "@/ui/sidebar";
-import { frontendNavData } from "../nav-data/nav-data-frontend";
+import { navData } from "../nav-data";
 import { AppSidebar, AppSidebarContainer } from "../sidebar/app-sidebar";
 import SidebarWrapper from "../sidebar/sidebar-wrapper";
 import AccountDropdown from "../weight/account-dropdown";
@@ -19,8 +19,6 @@ import { MainMenu } from "./main-menu";
  * 双列布局组件
  */
 export default function DoubleLayout() {
-	// 将导航数据提取到组件外部或使用memo来稳定引用
-	const navData = useMemo(() => frontendNavData, []);
 	const [selectedGroup, setSelectedGroup] = useState(navData[0]?.name || "");
 	const [isSubMenuVisible, setIsSubMenuVisible] = useState(false);
 	const isMobile = useMediaQuery("(max-width: 768px)");
@@ -119,7 +117,7 @@ export default function DoubleLayout() {
 				/>
 			</div>
 		),
-		[navData, selectedGroup, handleGroupSelect, handleGroupClick],
+		[selectedGroup, handleGroupSelect, handleGroupClick],
 	);
 
 	const floatingSubMenuSlot = useMemo(
@@ -131,7 +129,7 @@ export default function DoubleLayout() {
 				onClose={handleSubMenuClose}
 			/>
 		),
-		[navData, selectedGroup, isSubMenuVisible, handleSubMenuClose],
+		[selectedGroup, isSubMenuVisible, handleSubMenuClose],
 	);
 	const sidebarSlot = useMemo(() => {
 		return (
@@ -150,7 +148,7 @@ export default function DoubleLayout() {
 				)}
 			</>
 		);
-	}, [mainMenuSlot, floatingSubMenuSlot, transition, isMobile, navData]);
+	}, [mainMenuSlot, floatingSubMenuSlot, transition, isMobile]);
 
 	return (
 		<SidebarWrapper

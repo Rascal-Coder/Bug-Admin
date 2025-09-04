@@ -18,7 +18,6 @@ export type NavItemDataProps = {
 	path: string;
 	title: string;
 	icon?: string | React.ReactNode;
-	// info?: React.ReactNode;
 	badge?: string;
 	badgeType?: "dot" | "normal";
 	badgeVariants?: BadgeProps["variant"];

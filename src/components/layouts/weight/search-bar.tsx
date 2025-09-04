@@ -7,7 +7,7 @@ import { Button } from "@/ui/button";
 import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandSeparator } from "@/ui/command";
 import { ScrollArea } from "@/ui/scroll-area";
 import { Text } from "@/ui/typography";
-import { frontendNavData } from "../nav-data/nav-data-frontend";
+import { navData } from "../nav-data";
 
 interface SearchItem {
 	key: string;
@@ -40,7 +40,6 @@ const SearchBar = () => {
 	const { replace } = useRouter();
 	const [open, setOpen] = useBoolean(false);
 	const [searchQuery, setSearchQuery] = useState("");
-	const navData = frontendNavData;
 	// Flatten navigation data into searchable items
 	const flattenedItems = useMemo(() => {
 		const items: SearchItem[] = [];
@@ -64,7 +63,7 @@ const SearchBar = () => {
 
 		flattenItems(navData);
 		return items;
-	}, [navData]);
+	}, []);
 
 	// const searchResult = useMemo(() => {
 	// 	const query = searchQuery.toLowerCase();

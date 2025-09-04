@@ -12,6 +12,10 @@ export type GlobalConfig = {
 	appVersion: string;
 	/** Public path for static assets */
 	publicPath: string;
+	/** Base URL for API endpoints */
+	apiBaseUrl: string;
+	/** Routing mode: frontend routing or backend routing */
+	routerMode: "frontend" | "backend";
 };
 
 /**
@@ -26,4 +30,6 @@ export const GLOBAL_CONFIG: GlobalConfig = {
 	appName: "Bug Admin",
 	appVersion: packageJson.version,
 	publicPath: import.meta.env.VITE_APP_PUBLIC_PATH || "/",
+	apiBaseUrl: import.meta.env.VITE_APP_API_BASE_URL || "/api",
+	routerMode: import.meta.env.VITE_APP_ROUTER_MODE || "frontend",
 };

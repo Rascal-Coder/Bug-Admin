@@ -3,7 +3,7 @@ import * as React from "react";
 import { useCallback, useMemo } from "react";
 import { Link, useMatches } from "react-router";
 import Icon from "@/components/icon/icon";
-import { frontendNavData } from "@/components/layouts/nav-data/nav-data-frontend";
+import { navData } from "@/components/layouts/nav-data";
 import type { NavItemDataProps } from "@/components/nav/types";
 import {
 	BreadcrumbEllipsis,
@@ -37,7 +37,6 @@ interface BreadcrumbItemData {
 
 export function Breadcrumb({ maxItems = 3 }: BreadCrumbProps) {
 	const matches = useMatches();
-	const navData = frontendNavData;
 	const findPathInNavData = useCallback((path: string, items: NavItem[]): NavItem[] => {
 		for (const item of items) {
 			if (item.path === path) {
@@ -81,7 +80,7 @@ export function Breadcrumb({ maxItems = 3 }: BreadCrumbProps) {
 		}
 
 		return results;
-	}, [matches, findPathInNavData, navData]);
+	}, [matches, findPathInNavData]);
 
 	const renderIcon = (icon?: string | React.ReactNode) => {
 		return icon ? typeof icon === "string" ? <Icon icon={icon} size={16} /> : icon : <Icon icon="mdi:menu" size={16} />;

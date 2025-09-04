@@ -23,6 +23,7 @@
 		"@vanilla-extract/css": "^1.17.4",
 		"@vanilla-extract/vite-plugin": "^5.1.1",
 		"antd": "^5.27.1",
+		"axios": "^1.11.0",
 		"class-variance-authority": "^0.7.1",
 		"clsx": "^2.1.1",
 		"cmdk": "^1.1.1",
@@ -33,6 +34,7 @@
 		"motion": "^12.23.12",
 		"nanoid": "^5.1.5",
 		"radix-ui": "^1.4.3",
+		"ramda": "^0.31.3",
 		"react": "^19.1.1",
 		"react-dom": "^19.1.1",
 		"react-helmet-async": "^2.0.5",
@@ -51,6 +53,7 @@
 		"@types/color": "^4.2.0",
 		"@types/js-cookie": "^3.0.6",
 		"@types/lodash": "^4.17.20",
+		"@types/ramda": "^0.31.0",
 		"@types/react": "^19.1.10",
 		"@types/react-dom": "^19.1.7",
 		"@vitejs/plugin-react": "^5.0.0",
@@ -58,10 +61,16 @@
 		"cz-git": "^1.12.0",
 		"czg": "^1.12.0",
 		"lefthook": "^1.12.3",
+		"msw": "^2.11.1",
 		"tailwindcss": "^4.1.11",
 		"typescript": "~5.8.3",
 		"vite": "^6.2.0",
 		"vite-tsconfig-paths": "^5.1.4"
+	},
+	"msw": {
+		"workerDirectory": [
+			"public"
+		]
 	},
 	"engines": {
 		"node": "20.*"
