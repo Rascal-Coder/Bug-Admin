@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import avatar from "@/assets/images/user/avatar.jpg";
 import { Icon } from "@/components/icon";
 import type { NavProps } from "@/components/nav/types";
+import { useMediaQuery } from "@/hooks";
 import { useRouter } from "@/routes/hooks";
 import { useSettings } from "@/store/settingStore";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail, useSidebar } from "@/ui/sidebar";
@@ -9,34 +10,37 @@ import { cn } from "@/utils";
 import { NavUser } from "../weight/nav-user";
 import Siderbar from "./siderbar";
 
-export function AppSidebar({ data }: React.ComponentProps<typeof Sidebar> & { data: NavProps["data"] }) {
-	const { open, isMobile } = useSidebar();
+export function Logo({ isMobile = false, open = true }: { isMobile?: boolean; open?: boolean }) {
 	const router = useRouter();
+	return (
+		<div
+			className={cn(
+				" flex items-center gap-2 text-sm p-3 cursor-pointer rounded-md  hover:bg-accent hover:text-accent-foreground",
+			)}
+			onClick={() => {
+				router.push("/");
+			}}
+		>
+			<div>
+				<Icon icon="local-logo" size={40} />
+			</div>
+			<span
+				className={cn("font-semibold text-xl leading-tight transition-all duration-300 ease-in-out whitespace-nowrap", {
+					"opacity-0": !isMobile && !open,
+				})}
+			>
+				Bug Admin
+			</span>
+		</div>
+	);
+}
+export function AppSidebar({ data }: React.ComponentProps<typeof Sidebar> & { data: NavProps["data"] }) {
+	const { open } = useSidebar();
+	const isMobile = useMediaQuery({ maxWidth: 768 });
 	return (
 		<AppSidebarContainer>
 			<SidebarHeader>
-				<div
-					className={cn(
-						" flex items-center gap-2 text-sm p-3 cursor-pointer rounded-md  hover:bg-accent hover:text-accent-foreground",
-					)}
-					onClick={() => {
-						router.push("/");
-					}}
-				>
-					<div>
-						<Icon icon="local-logo" size={40} />
-					</div>
-					<span
-						className={cn(
-							"font-semibold text-xl leading-tight transition-all duration-300 ease-in-out whitespace-nowrap",
-							{
-								"opacity-0": !isMobile && !open,
-							},
-						)}
-					>
-						Bug Admin
-					</span>
-				</div>
+				<Logo isMobile={isMobile} open={open} />
 			</SidebarHeader>
 			<SidebarContent>
 				<Siderbar open={open} data={data} />
