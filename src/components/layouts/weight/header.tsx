@@ -29,20 +29,13 @@ export function Header({ className, fixed, children, wrapCls, ...props }: Header
 			className={cn(
 				"z-50 h-30 border-b border-dashed flex flex-col justify-between",
 				fixed && "header-fixed peer/header sticky top-0 w-[inherit]",
+				fixed && "after:bg-background/20 after:absolute after:inset-0 after:-z-10 after:backdrop-blur-lg",
 				offset > 10 && fixed ? "shadow" : "shadow-none",
 				className,
 			)}
 			{...props}
 		>
-			<div
-				className={cn(
-					"relative flex h-16 items-center p-4 border-b border-border",
-					offset > 10 &&
-						fixed &&
-						"after:bg-background/20 after:absolute after:inset-0 after:-z-10 after:backdrop-blur-lg",
-					wrapCls,
-				)}
-			>
+			<div className={cn("relative flex h-16 items-center p-4 border-b border-border", offset > 10 && wrapCls)}>
 				{children}
 			</div>
 			<Tabs />
