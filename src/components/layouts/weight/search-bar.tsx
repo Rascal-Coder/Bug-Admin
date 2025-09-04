@@ -2,12 +2,12 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useBoolean } from "react-use";
 import { Icon } from "@/components/icon";
 import { useRouter } from "@/routes/hooks";
+import { navData } from "@/routes/nav-data";
 import { Badge } from "@/ui/badge";
 import { Button } from "@/ui/button";
 import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandSeparator } from "@/ui/command";
 import { ScrollArea } from "@/ui/scroll-area";
 import { Text } from "@/ui/typography";
-import { navData } from "../nav-data";
 
 interface SearchItem {
 	key: string;

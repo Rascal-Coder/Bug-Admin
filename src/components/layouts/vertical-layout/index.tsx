@@ -1,9 +1,9 @@
 import { useMemo } from "react";
 import LocalePicker from "@/components/locale-picker";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import { navData } from "@/routes/nav-data";
 import { Separator } from "@/ui/separator";
 import { SidebarTrigger } from "@/ui/sidebar";
-import { navData } from "../nav-data";
 import { AppSidebar } from "../sidebar/app-sidebar";
 import SidebarWrapper from "../sidebar/sidebar-wrapper";
 import AccountDropdown from "../weight/account-dropdown";

@@ -3,8 +3,8 @@ import * as React from "react";
 import { useCallback, useMemo } from "react";
 import { Link, useMatches } from "react-router";
 import Icon from "@/components/icon/icon";
-import { navData } from "@/components/layouts/nav-data";
 import type { NavItemDataProps } from "@/components/nav/types";
+import { navData } from "@/routes/nav-data";
 import {
 	BreadcrumbEllipsis,
 	BreadcrumbItem,
