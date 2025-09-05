@@ -1,6 +1,8 @@
 import { Book, Github, HelpCircle, LogOut } from "lucide-react";
 import { NavLink } from "react-router";
 import avatar from "@/assets/images/user/avatar.jpg";
+import { useRouter } from "@/routes/hooks";
+import { useUserActions } from "@/store/userStore";
 import { Avatar, AvatarFallback, AvatarImage } from "@/ui/avatar";
 import { Button } from "@/ui/button";
 import {
@@ -10,11 +12,23 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/ui/dropdown-menu";
+import { GLOBAL_CONFIG } from "@/global-config";
 
 /**
  * Account Dropdown
  */
 export default function AccountDropdown() {
+	const { replace } = useRouter();
+	const { clearUserInfoAndToken } = useUserActions();
+	const logout = () => {
+		try {
+			clearUserInfoAndToken();
+		} catch (error) {
+			console.log(error);
+		} finally {
+			replace(GLOBAL_CONFIG.loginRoute);
+		}
+	};
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
@@ -53,7 +67,11 @@ export default function AccountDropdown() {
 					</NavLink>
 				</DropdownMenuItem>
 				<DropdownMenuSeparator />
-				<DropdownMenuItem>
+				<DropdownMenuItem
+					onClick={() => {
+						logout();
+					}}
+				>
 					<LogOut className="mr-2 h-4 w-4" />
 					退出登录
 				</DropdownMenuItem>

@@ -30,7 +30,7 @@ export type GlobalConfig = {
 export const GLOBAL_CONFIG: GlobalConfig = {
 	defaultRoute: import.meta.env.VITE_APP_DEFAULT_ROUTE || "/workbench",
 	appName: "Bug Admin",
-	loginRoute: import.meta.env.VITE_APP_LOGIN_ROUTE || "/auth/login",
+	loginRoute: import.meta.env.VITE_APP_LOGIN_ROUTE || "/auth/sign-in",
 	appVersion: packageJson.version,
 	publicPath: import.meta.env.VITE_APP_PUBLIC_PATH || "/",
 	apiBaseUrl: import.meta.env.VITE_APP_API_BASE_URL || "/api",

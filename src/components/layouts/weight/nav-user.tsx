@@ -1,5 +1,7 @@
 import { Book, ChevronsUpDown, Github, HelpCircle, LogOut } from "lucide-react";
 import { NavLink } from "react-router";
+import { useRouter } from "@/routes/hooks";
+import { useUserActions } from "@/store/userStore";
 import { Avatar, AvatarFallback, AvatarImage } from "@/ui/avatar";
 import {
 	DropdownMenu,
@@ -11,6 +13,7 @@ import {
 	DropdownMenuTrigger,
 } from "@/ui/dropdown-menu";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/ui/sidebar";
+import { GLOBAL_CONFIG } from "@/global-config";
 
 type NavUserProps = {
 	user: {
@@ -22,6 +25,17 @@ type NavUserProps = {
 
 export function NavUser({ user }: NavUserProps) {
 	const { isMobile } = useSidebar();
+	const { replace } = useRouter();
+	const { clearUserInfoAndToken } = useUserActions();
+	const logout = () => {
+		try {
+			clearUserInfoAndToken();
+		} catch (error) {
+			console.log(error);
+		} finally {
+			replace(GLOBAL_CONFIG.loginRoute);
+		}
+	};
 	return (
 		<SidebarMenu>
 			<SidebarMenuItem>
@@ -86,7 +100,11 @@ export function NavUser({ user }: NavUserProps) {
 							</DropdownMenuItem>
 						</DropdownMenuGroup>
 						<DropdownMenuSeparator />
-						<DropdownMenuItem>
+						<DropdownMenuItem
+							onClick={() => {
+								logout();
+							}}
+						>
 							<LogOut className="mr-2 h-4 w-4" />
 							退出登录
 						</DropdownMenuItem>

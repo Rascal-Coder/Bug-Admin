@@ -23,3 +23,7 @@ export const urlJoin = (...parts: string[]) => {
 		.filter(Boolean);
 	return `/${result.join("/")}`;
 };
+
+export function sleep(ms: number = 1000) {
+	return new Promise((resolve) => setTimeout(resolve, ms));
+}
