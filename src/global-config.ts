@@ -6,6 +6,8 @@ import packageJson from "../package.json";
 export type GlobalConfig = {
 	/** Default route path for the application */
 	defaultRoute: string;
+	/** Login route path for the application */
+	loginRoute: string;
 	/** Application name */
 	appName: string;
 	/** Application version number */
@@ -28,6 +30,7 @@ export type GlobalConfig = {
 export const GLOBAL_CONFIG: GlobalConfig = {
 	defaultRoute: import.meta.env.VITE_APP_DEFAULT_ROUTE || "/workbench",
 	appName: "Bug Admin",
+	loginRoute: import.meta.env.VITE_APP_LOGIN_ROUTE || "/auth/login",
 	appVersion: packageJson.version,
 	publicPath: import.meta.env.VITE_APP_PUBLIC_PATH || "/",
 	apiBaseUrl: import.meta.env.VITE_APP_API_BASE_URL || "/api",
