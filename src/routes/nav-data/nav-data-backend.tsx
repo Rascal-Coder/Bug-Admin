@@ -5,4 +5,4 @@ import { convertFlatToTree } from "@/utils/tree";
 
 export const backendNavData: NavProps["data"] = convert(convertFlatToTree(DB_MENU));
 
-console.log("menutree", convertFlatToTree(DB_MENU));
+// console.log("menutree", convertFlatToTree(DB_MENU));

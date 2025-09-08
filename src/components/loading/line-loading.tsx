@@ -1,4 +1,3 @@
-import "./line-loading.css";
 import styled, { keyframes } from "styled-components";
 import { useSettings } from "@/store/settingStore";
 import { commonColors, paletteColors } from "@/theme/tokens/color";

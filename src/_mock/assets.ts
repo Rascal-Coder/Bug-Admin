@@ -206,7 +206,8 @@ export const DB_MENU: BackendMenu[] = [
 		code: "link:external_link",
 		type: MENU,
 		path: "/link/external_link",
-		component: "/pages/sys/others/link/external-link",
+		isExternalLink: true,
+		// component: "/pages/sys/others/link/external-link",
 		externalLink: new URL("https://ant.design/index-cn"),
 	},
 	{
@@ -217,7 +218,8 @@ export const DB_MENU: BackendMenu[] = [
 		type: MENU,
 		path: "/link/iframe",
 		externalLink: new URL("https://ant.design/index-cn"),
-		component: "/pages/sys/others/link/iframe",
+		isIframeLink: true,
+		// component: "/pages/sys/others/link/iframe",
 	},
 ];
 

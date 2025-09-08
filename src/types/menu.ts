@@ -19,6 +19,8 @@ export type MenuMetaInfo = Partial<
 > & {
 	externalLink?: URL;
 	component?: string;
+	isIframeLink?: boolean;
+	isExternalLink?: boolean;
 };
 
 export type BackendMenuTree = BackendMenu & {

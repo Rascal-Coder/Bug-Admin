@@ -4,3 +4,6 @@
 
 mock 初始化
 npx msw init public --save
+
+TODO:
+tabs、国际化

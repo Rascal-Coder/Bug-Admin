@@ -1,8 +1,10 @@
 import { Navigate, type RouteObject } from "react-router";
+import ExternalLink from "@/components/external-link";
+import Iframe from "@/components/iframe";
 import type { NavItemDataProps, NavProps } from "@/components/nav/types";
 import { Component } from "@/routes/sections/dashboard/utils";
 import { PermissionType } from "@/types/enum";
-import type { BackendMenuTree, FrontendMenuTree, MenuMetaInfo } from "@/types/menu";
+import type { BackendMenuTree, FrontendMenuTree } from "@/types/menu";
 
 export type NavItem = Partial<
 	Pick<
@@ -65,10 +67,18 @@ const getRoutePath = (menuPath?: string, parentPath?: string) => {
  * @param metaInfo
  * @returns
  */
-const generateProps = (metaInfo: MenuMetaInfo) => {
+const generateProps = (metaInfo: BackendMenuTree | FrontendMenuTree) => {
 	const props: any = {};
 	if (metaInfo.externalLink) {
 		props.src = metaInfo.externalLink?.toString() || "";
+		// 为外链组件添加标题
+		if (metaInfo.isExternalLink) {
+			props.title = metaInfo.name || "外部链接";
+		}
+		// 为iframe组件添加标题
+		if (metaInfo.isIframeLink) {
+			props.title = metaInfo.name || "内嵌页面";
+		}
 	}
 	return props;
 };
@@ -117,6 +127,18 @@ export const convertToRoute = (
 		if (item.type === PermissionType.MENU) {
 			const props = generateProps(item);
 			if (item.disabled) return;
+			if (item.isIframeLink) {
+				routes.push({
+					path: getRoutePath(item.path, parent?.path),
+					element: <Iframe {...props} />,
+				});
+			}
+			if (item.isExternalLink) {
+				routes.push({
+					path: getRoutePath(item.path, parent?.path),
+					element: <ExternalLink {...props} />,
+				});
+			}
 			routes.push({
 				path: getRoutePath(item.path, parent?.path),
 				element: Component(item.component, props),

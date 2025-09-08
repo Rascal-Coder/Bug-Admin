@@ -13,6 +13,7 @@ interface ImportMetaEnv {
 	readonly VITE_APP_ROUTER_MODE: "frontend" | "backend";
 }
 
+// biome-ignore lint/correctness/noUnusedVariables: false positive
 interface ImportMeta {
 	readonly env: ImportMetaEnv;
 }
