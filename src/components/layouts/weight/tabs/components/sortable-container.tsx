@@ -1,18 +1,18 @@
 import {
+	closestCenter,
 	DndContext,
 	type DragEndEvent,
 	DragOverlay,
 	type DragStartEvent,
+	defaultDropAnimationSideEffects,
 	KeyboardSensor,
 	MeasuringStrategy,
 	PointerSensor,
 	TouchSensor,
-	closestCenter,
-	defaultDropAnimationSideEffects,
 	useSensor,
 	useSensors,
 } from "@dnd-kit/core";
-import { SortableContext, horizontalListSortingStrategy } from "@dnd-kit/sortable";
+import { horizontalListSortingStrategy, SortableContext } from "@dnd-kit/sortable";
 import React from "react";
 
 interface SortableContainerProps {

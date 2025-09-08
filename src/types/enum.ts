@@ -47,4 +47,5 @@ export enum StorageEnum {
 	UserInfo = "userInfo",
 	UserToken = "userToken",
 	Settings = "settings",
+	Tabs = "tabs",
 }

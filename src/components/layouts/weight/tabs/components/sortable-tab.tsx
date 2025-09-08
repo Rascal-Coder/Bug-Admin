@@ -14,10 +14,16 @@ interface Tab {
 	label: string;
 	value: string;
 	pinned: boolean;
+	path: string;
+	icon?: string;
+	component?: string;
 }
 
 interface SortableTabProps {
 	tab: Tab;
+	isActive?: boolean;
+	totalTabs?: number;
+	onTabClick?: (tabValue: string) => void;
 	onCloseTab: (tabValue: string) => void;
 	onTogglePin: (tabValue: string) => void;
 	onCloseOthers: (currentTabValue: string) => void;
@@ -31,6 +37,9 @@ interface SortableTabProps {
 
 export default function SortableTab({
 	tab,
+	isActive = false,
+	totalTabs = 1,
+	onTabClick,
 	onCloseTab,
 	onTogglePin,
 	onCloseOthers,
@@ -56,38 +65,50 @@ export default function SortableTab({
 				<ContextMenuTrigger>
 					<div
 						className={cn(
-							"cursor-pointer border border-border gap-1 h-full flex items-center px-2 py-1 rounded-md text-primary select-none",
+							"cursor-pointer border border-border gap-1 h-full flex items-center px-2 py-1 rounded-md text-primary select-none transition-colors",
+							isActive ? "bg-primary text-primary-foreground" : "hover:bg-accent",
 						)}
 						{...listeners}
+						onClick={() => onTabClick?.(tab.value)}
 					>
 						{/* 渲染icon */}
-						<Icon icon="mdi:menu" size={20} />
+						{tab.icon ? <Icon icon={tab.icon} size={20} /> : <Icon icon="mdi:menu" size={20} />}
 						{tab.label}
-						{!tab.pinned ? (
+						{!tab.pinned && totalTabs > 1 ? (
 							<Icon
 								icon="mdi:close"
-								size={14}
-								className="hover:bg-white dark:hover:bg-accent rounded-md"
+								size={18}
+								className={cn(
+									"p-0.5 rounded transition-colors",
+									isActive
+										? "text-primary-foreground/70! hover:text-primary-foreground! hover:bg-primary-foreground/10!"
+										: "hover:text-foreground! hover:bg-foreground/10!",
+								)}
 								onClick={(e) => {
 									e.stopPropagation();
 									onCloseTab(tab.value);
 								}}
 							/>
-						) : (
+						) : tab.pinned ? (
 							<Icon
 								icon="mdi:pin"
-								size={14}
-								className="hover:bg-white dark:hover:bg-accent rounded-md"
+								size={18}
+								className={cn(
+									"p-0.5 rounded transition-colors",
+									isActive
+										? "text-primary-foreground/70! hover:text-primary-foreground! hover:bg-primary-foreground/10!"
+										: "hover:text-foreground! hover:bg-foreground/10!",
+								)}
 								onClick={(e) => {
 									e.stopPropagation();
 									onTogglePin(tab.value);
 								}}
 							/>
-						)}
+						) : null}
 					</div>
 				</ContextMenuTrigger>
 				<ContextMenuContent className="w-48">
-					<ContextMenuItem onClick={() => onCloseTab(tab.value)}>
+					<ContextMenuItem onClick={() => onCloseTab(tab.value)} disabled={!tab.pinned && totalTabs <= 1}>
 						<div className="flex items-center gap-1">
 							<Icon icon="mdi:close" size={16} />
 							关闭
@@ -133,13 +154,13 @@ export default function SortableTab({
 					</ContextMenuItem>
 
 					<ContextMenuSeparator />
-					<ContextMenuItem onClick={() => onCloseOthers(tab.value)}>
+					<ContextMenuItem onClick={() => onCloseOthers(tab.value)} disabled={totalTabs <= 1}>
 						<div className="flex items-center gap-1">
 							<Icon icon="mdi:close-circle-multiple" size={16} />
 							关闭其它标签页
 						</div>
 					</ContextMenuItem>
-					<ContextMenuItem onClick={() => onCloseAll()}>
+					<ContextMenuItem onClick={() => onCloseAll()} disabled={totalTabs <= 1}>
 						<div className="flex items-center gap-1">
 							<Icon icon="mdi:close-circle-multiple-outline" size={16} />
 							关闭全部标签页

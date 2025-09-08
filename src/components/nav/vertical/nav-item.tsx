@@ -1,5 +1,5 @@
+import DotBadge from "@/components/dot-badge";
 import Icon from "@/components/icon/icon";
-import DotBadge from "@/components/nav/components/dot-badge";
 import { Badge } from "@/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/ui/tooltip";
 import { cn } from "@/utils";
