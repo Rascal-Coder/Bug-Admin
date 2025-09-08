@@ -29,7 +29,7 @@ export function SignInProvider({ children }: PropsWithChildren) {
 		setSignInState(SignInStateEnum.LOGIN);
 	}
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+	// biome-ignore lint/correctness/useExhaustiveDependencies: false positive
 	const value: SignInContextType = useMemo(() => ({ signInState, setSignInState, backToSignIn }), [signInState]);
 
 	return <SignInContext.Provider value={value}>{children}</SignInContext.Provider>;

@@ -1,4 +1,4 @@
-/** biome-ignore-all lint/a11y/noStaticElementInteractions: <explanation> */
+/** biome-ignore-all lint/a11y/noStaticElementInteractions: false positive */
 import { RouterLink } from "@/routes/components/router-link";
 import type { NavItemProps } from "../types";
 

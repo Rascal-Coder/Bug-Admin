@@ -29,7 +29,6 @@ function CenterSignIn() {
 	);
 }
 
-// 背景图片组件的公共样式
 const bgImageClasses = cn(
 	"bg-muted relative h-full overflow-hidden max-lg:hidden",
 	"[&>img]:absolute [&>img]:top-[15%] [&>img]:left-20 [&>img]:h-full [&>img]:w-full [&>img]:object-cover [&>img]:object-top-left [&>img]:select-none",

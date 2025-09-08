@@ -61,7 +61,7 @@ export function AvatarGroup({ children, max, size }: AvatarGroupProps) {
 	return (
 		<div className="flex -space-x-3">
 			{displayAvatars.map((child, idx) => (
-				// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+				// biome-ignore lint/suspicious/noArrayIndexKey: false positive
 				<div key={idx}>{cloneAvatarWithSize(child)}</div>
 			))}
 			{extra > 0 && (
@@ -76,7 +76,7 @@ export function AvatarGroup({ children, max, size }: AvatarGroupProps) {
 					<TooltipContent>
 						<div className="flex gap-1">
 							{extraAvatars.map((child, idx) => (
-								// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+								// biome-ignore lint/suspicious/noArrayIndexKey: false positive
 								<div key={idx}>{cloneAvatarWithSize(child)}</div>
 							))}
 						</div>

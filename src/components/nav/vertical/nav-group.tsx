@@ -1,4 +1,4 @@
-/** biome-ignore-all lint/a11y/noStaticElementInteractions: <explanation> */
+/** biome-ignore-all lint/a11y/noStaticElementInteractions: false positive */
 import { useToggle } from "react-use";
 import { Icon } from "@/components/icon";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/ui/collapsible";
