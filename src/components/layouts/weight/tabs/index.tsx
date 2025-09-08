@@ -1,10 +1,9 @@
-import { useEffect } from "react";
-import { useLocation, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { Icon } from "@/components/icon";
 import { useActiveTab, useTabActions, useTabs } from "@/store/tabStore";
 import { Button } from "@/ui/button";
 import { ScrollArea, ScrollBar } from "@/ui/scroll-area";
-import { getDefaultRoute, getMenuInfoByPath } from "@/utils/menu";
+import { getDefaultRoute } from "@/utils/menu";
 import SortableContainer from "./components/sortable-container";
 import SortableTab from "./components/sortable-tab";
 
@@ -12,7 +11,6 @@ export default function Tabs() {
 	const tabs = useTabs();
 	const activeTab = useActiveTab();
 	const {
-		addTab,
 		removeTab,
 		togglePin,
 		removeOtherTabs,
@@ -23,56 +21,6 @@ export default function Tabs() {
 		setActiveTab,
 	} = useTabActions();
 	const navigate = useNavigate();
-	const location = useLocation();
-
-	// 初始化和同步当前路由和活动tab
-	useEffect(() => {
-		const currentPath = location.pathname;
-
-		// 如果是根路径，重定向到默认路由
-		if (currentPath === "/" || currentPath === "") {
-			const defaultRoute = getDefaultRoute();
-			if (defaultRoute) {
-				navigate(defaultRoute.path, { replace: true });
-			}
-			return;
-		}
-
-		const existingTab = tabs.find((tab) => tab.path === currentPath);
-
-		if (existingTab) {
-			// 如果tab已存在，只需激活它
-			if (activeTab !== existingTab.value) {
-				setActiveTab(existingTab.value);
-			}
-		} else {
-			// 如果tab不存在，尝试创建
-			const menuInfo = getMenuInfoByPath(currentPath);
-
-			if (menuInfo) {
-				// 根据菜单信息创建tab
-				addTab({
-					label: menuInfo.title,
-					value: currentPath,
-					path: currentPath,
-					icon: typeof menuInfo.icon === "string" ? menuInfo.icon : undefined,
-				});
-			} else if (tabs.length === 0) {
-				// 如果没有找到菜单信息且没有其他tab，创建默认tab
-				const defaultRoute = getDefaultRoute();
-				if (defaultRoute) {
-					addTab({
-						label: defaultRoute.title,
-						value: defaultRoute.path,
-						path: defaultRoute.path,
-						icon: typeof defaultRoute.icon === "string" ? defaultRoute.icon : undefined,
-					});
-					// 导航到默认路由
-					navigate(defaultRoute.path, { replace: true });
-				}
-			}
-		}
-	}, [location.pathname, tabs, activeTab, setActiveTab, addTab, navigate]);
 
 	// 处理tab操作
 	const handleCloseTab = (tabValue: string) => {
