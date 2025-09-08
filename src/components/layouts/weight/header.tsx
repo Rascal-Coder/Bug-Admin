@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useSettings } from "@/store/settingStore";
 // import { ScrollArea, ScrollBar } from "@/ui/scroll-area";
 import { cn } from "@/utils";
 import Tabs from "./tabs";
@@ -11,6 +12,7 @@ type HeaderProps = React.HTMLAttributes<HTMLElement> & {
 
 export function Header({ className, fixed, children, wrapCls, ...props }: HeaderProps) {
 	const [offset, setOffset] = useState(0);
+	const { sidebarMode } = useSettings();
 	useEffect(() => {
 		const onScroll = () => {
 			setOffset(document.body.scrollTop || document.documentElement.scrollTop);
@@ -28,8 +30,9 @@ export function Header({ className, fixed, children, wrapCls, ...props }: Header
 			data-slot="bug-admin-header"
 			className={cn(
 				"z-50 h-30 border-b border-dashed flex flex-col justify-between",
-				fixed && "header-fixed peer/header sticky top-0 w-[inherit]",
-				fixed && "after:bg-background/20 after:absolute after:inset-0 after:-z-10 after:backdrop-blur-lg",
+				fixed &&
+					"header-fixed peer/header sticky top-0 w-[inherit] after:bg-background/20 after:absolute after:inset-0 after:-z-10 after:backdrop-blur-lg",
+				fixed && sidebarMode === "inset" && "after:rounded-t-xl",
 				offset > 10 && fixed ? "shadow" : "shadow-none",
 				className,
 			)}
