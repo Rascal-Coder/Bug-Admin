@@ -1,4 +1,5 @@
 import { chain } from "ramda";
+import type { NavProps } from "@/components/nav/types";
 
 /**
  * Flatten an array containing a tree structure
@@ -53,4 +54,42 @@ export function convertFlatToTree<T extends { id: string; parentId: string }>(it
 	}
 
 	return result;
+}
+
+/**
+ * Find the menu group that contains a specific path
+ * @param navData - Navigation data array
+ * @param currentPath - Current route path to search for
+ * @returns The name of the group containing the path, or the first group name as fallback
+ */
+export function findActiveMenuGroup(navData: NavProps["data"], currentPath: string): string {
+	// Helper function to check if a path matches or is a parent of the current path
+	const pathMatches = (itemPath: string, targetPath: string): boolean => {
+		if (!itemPath || !targetPath) return false;
+		// Exact match or targetPath starts with itemPath followed by '/'
+		return targetPath === itemPath || targetPath.startsWith(`${itemPath}/`);
+	};
+
+	// Helper function to search for path in menu items recursively
+	const searchInItems = (items: NavProps["data"][0]["items"]): boolean => {
+		return items.some((item) => {
+			if (pathMatches(item.path, currentPath)) {
+				return true;
+			}
+			if (item.children && item.children.length > 0) {
+				return searchInItems(item.children);
+			}
+			return false;
+		});
+	};
+
+	// Search through all groups
+	for (const group of navData) {
+		if (searchInItems(group.items)) {
+			return group.name || "";
+		}
+	}
+
+	// Fallback to first group if no match found
+	return navData[0]?.name || "";
 }

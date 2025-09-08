@@ -1,10 +1,12 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useLocation } from "react-router";
 import LocalePicker from "@/components/locale-picker";
 import { useUpdateSettings } from "@/hooks";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { navData } from "@/routes/nav-data";
 import { Separator } from "@/ui/separator";
 import { SidebarTrigger } from "@/ui/sidebar";
+import { findActiveMenuGroup } from "@/utils/tree";
 import { AppSidebar, AppSidebarContainer } from "../sidebar/app-sidebar";
 import SidebarWrapper from "../sidebar/sidebar-wrapper";
 import AccountDropdown from "../weight/account-dropdown";
@@ -19,8 +21,12 @@ import { MainMenu } from "./main-menu";
  * 双列布局组件
  */
 export default function DoubleLayout() {
-	const [selectedGroup, setSelectedGroup] = useState(navData[0]?.name || "");
+	const location = useLocation();
+	const prevPathname = useRef(location.pathname);
+	const currentActiveGroup = useMemo(() => findActiveMenuGroup(navData, location.pathname), [location.pathname]);
+	const [selectedGroup, setSelectedGroup] = useState(currentActiveGroup);
 	const [isSubMenuVisible, setIsSubMenuVisible] = useState(false);
+	const [isManualSelection, setIsManualSelection] = useState(false); // 标记是否为手动选择
 	const isMobile = useMediaQuery("(max-width: 768px)");
 	const { updateSettings, settings } = useUpdateSettings();
 	const { transition, sidebarMode } = settings;
@@ -33,12 +39,33 @@ export default function DoubleLayout() {
 		return isSubMenuVisible ? `calc(${mainMenuWidth} + ${subMenuWidth})` : mainMenuWidth;
 	}, [isSubMenuVisible, mainMenuWidth]);
 
+	// 监听路由变化，重置手动选择标记
+	useEffect(() => {
+		const pathChanged = prevPathname.current !== location.pathname;
+		if (pathChanged) {
+			setIsManualSelection(false);
+			prevPathname.current = location.pathname;
+		}
+	}, [location.pathname]);
+
+	// 监听菜单组变化，更新选中状态
+	useEffect(() => {
+		if (!isManualSelection) {
+			setSelectedGroup(currentActiveGroup);
+			const selectedGroupData = navData.find((group) => group.name === currentActiveGroup);
+			const hasMenuItems = selectedGroupData?.items?.length ? selectedGroupData.items.length > 0 : false;
+			setIsSubMenuVisible(hasMenuItems);
+		}
+	}, [currentActiveGroup, isManualSelection]);
+
 	const handleGroupSelect = useCallback((groupName: string) => {
+		setIsManualSelection(true);
 		setSelectedGroup(groupName);
 	}, []);
 
 	const handleGroupClick = useCallback(
 		(groupName: string) => {
+			setIsManualSelection(true);
 			setSelectedGroup(groupName);
 			setIsSubMenuVisible(true);
 			updateSettings({
