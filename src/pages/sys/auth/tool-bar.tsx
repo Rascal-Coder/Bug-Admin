@@ -3,7 +3,8 @@ import { useState } from "react";
 import { Icon } from "@/components/icon";
 import { ThemeSwitch } from "@/components/layouts/weight/themeswitch";
 import LocalePicker from "@/components/locale-picker";
-import { type SettingsType, useSettingActions, useSettings } from "@/store/settingStore";
+import { useUpdateSettings } from "@/hooks";
+import { useSetSignInLayout, useSignInLayout } from "@/store/settingStore";
 import { presetsColors } from "@/theme/tokens/color";
 import type { ThemeColorPresets } from "@/types/enum";
 import { Button } from "@/ui/button";
@@ -12,14 +13,8 @@ import { cn } from "@/utils";
 
 function ColorToggle() {
 	const COLOR_PRESETS = presetsColors;
-	const settings = useSettings();
-	const { setSettings } = useSettingActions();
-	const updateSettings = (partialSettings: Partial<SettingsType>) => {
-		setSettings({
-			...settings,
-			...partialSettings,
-		});
-	};
+
+	const { updateSettings, settings } = useUpdateSettings();
 	const { themeColorPresets } = settings;
 	return (
 		<div className="group relative flex items-center overflow-hidden">
@@ -44,7 +39,9 @@ function ColorToggle() {
 }
 
 function LayoutToggle() {
-	const [layoutMode, setLayoutMode] = useState<"left" | "center" | "right">("left");
+	const setSignInLayout = useSetSignInLayout();
+	const signInLayout = useSignInLayout();
+	// const [layoutMode, setLayoutMode] = useState<"left" | "center" | "right">("left");
 
 	// 定义布局选项数据结构
 	const LAYOUT_OPTIONS = [
@@ -72,20 +69,20 @@ function LayoutToggle() {
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
 				<Button variant="ghost" size="icon">
-					{layoutMode === "left" && <PanelLeft />}
-					{layoutMode === "center" && <InspectionPanel />}
-					{layoutMode === "right" && <PanelRight />}
+					{signInLayout === "left" && <PanelLeft />}
+					{signInLayout === "center" && <InspectionPanel />}
+					{signInLayout === "right" && <PanelRight />}
 				</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent className="w-48">
 				{LAYOUT_OPTIONS.map((option) => {
 					const IconComponent = option.icon;
-					const isSelected = layoutMode === option.key;
+					const isSelected = signInLayout === option.key;
 
 					return (
 						<DropdownMenuItem
 							key={option.key}
-							onClick={() => setLayoutMode(option.key as "left" | "center" | "right")}
+							onClick={() => setSignInLayout(option.key as "left" | "center" | "right")}
 							className="flex items-center gap-3 p-3"
 						>
 							<IconComponent className="h-4 w-4" />

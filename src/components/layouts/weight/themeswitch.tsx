@@ -1,22 +1,12 @@
 import { Check, Moon, Sun } from "lucide-react";
-import { type SettingsType, useSettingActions, useSettings } from "@/store/settingStore";
+import { useUpdateSettings } from "@/hooks";
 import { ThemeMode } from "@/types/enum";
-// import { useEffect } from 'react'
 import { Button } from "@/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/ui/dropdown-menu";
-// import { useTheme } from '@/ui/theme-provider'
 import { cn } from "@/utils";
 
 export function ThemeSwitch() {
-	const { setSettings } = useSettingActions();
-	const settings = useSettings();
-	const updateSettings = (partialSettings: Partial<SettingsType>) => {
-		setSettings({
-			...settings,
-			...partialSettings,
-		});
-	};
-
+	const { updateSettings, settings } = useUpdateSettings();
 	return (
 		<DropdownMenu modal={false}>
 			<DropdownMenuTrigger asChild>

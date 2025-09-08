@@ -1,12 +1,18 @@
+import { useSignInLayout } from "@/store/settingStore";
+import { ToolBar } from "../tool-bar";
 import { SignInProvider } from "./providers/sign-in-provider";
-// import { SignIn } from "./sign-in-1";
-import { SignIn2 } from "./sign-in-2";
+import { UnifiedSignIn } from "./unified-sign-in";
 
-export default function Login() {
+function SignPage() {
+	const signInLayout = useSignInLayout();
 	return (
-		<SignInProvider>
-			<SignIn2 />
-			{/* <SignIn /> */}
-		</SignInProvider>
+		<>
+			<SignInProvider>
+				<UnifiedSignIn layout={signInLayout} />
+			</SignInProvider>
+			<ToolBar></ToolBar>
+		</>
 	);
 }
+// 默认导出简单布局
+export default SignPage;

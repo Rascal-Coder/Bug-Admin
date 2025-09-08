@@ -3,8 +3,7 @@ import Cookies from "js-cookie";
 import { PanelLeftIcon } from "lucide-react";
 import { Slot } from "radix-ui";
 import * as React from "react";
-import { useMediaQuery } from "@/hooks";
-import { type SettingsType, useSettingActions, useSettings } from "@/store/settingStore";
+import { useMediaQuery, useUpdateSettings } from "@/hooks";
 import { Button } from "@/ui/button";
 import { Input } from "@/ui/input";
 import { Separator } from "@/ui/separator";
@@ -266,15 +265,7 @@ export function MobileSidebar({
 
 function SidebarTrigger({ className, onClick, ...props }: React.ComponentProps<typeof Button>) {
 	const { toggleSidebar } = useSidebar();
-	const { setSettings } = useSettingActions();
-	const settings = useSettings();
-	const updateSettings = (partialSettings: Partial<SettingsType>) => {
-		setSettings({
-			...settings,
-			...partialSettings,
-		});
-	};
-
+	const { updateSettings } = useUpdateSettings();
 	return (
 		<Button
 			data-sidebar="trigger"

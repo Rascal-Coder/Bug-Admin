@@ -1,8 +1,8 @@
 import { useCallback, useMemo, useState } from "react";
 import LocalePicker from "@/components/locale-picker";
+import { useUpdateSettings } from "@/hooks";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { navData } from "@/routes/nav-data";
-import { type SettingsType, useSettingActions, useSettings } from "@/store/settingStore";
 import { Separator } from "@/ui/separator";
 import { SidebarTrigger } from "@/ui/sidebar";
 import { AppSidebar, AppSidebarContainer } from "../sidebar/app-sidebar";
@@ -22,7 +22,9 @@ export default function DoubleLayout() {
 	const [selectedGroup, setSelectedGroup] = useState(navData[0]?.name || "");
 	const [isSubMenuVisible, setIsSubMenuVisible] = useState(false);
 	const isMobile = useMediaQuery("(max-width: 768px)");
-	const { sidebarMode } = useSettings();
+	const { updateSettings, settings } = useUpdateSettings();
+	const { transition, sidebarMode } = settings;
+
 	const mainMenuWidth = useMemo(() => {
 		return sidebarMode !== "sidebar" ? "var(--spacing-24)" : "calc(var(--spacing-24) - var(--spacing-4))";
 	}, [sidebarMode]);
@@ -31,18 +33,6 @@ export default function DoubleLayout() {
 		return isSubMenuVisible ? `calc(${mainMenuWidth} + ${subMenuWidth})` : mainMenuWidth;
 	}, [isSubMenuVisible, mainMenuWidth]);
 
-	const { setSettings } = useSettingActions();
-	const settings = useSettings();
-	const { transition } = settings;
-	const updateSettings = useCallback(
-		(partialSettings: Partial<SettingsType>) => {
-			setSettings({
-				...settings,
-				...partialSettings,
-			});
-		},
-		[setSettings, settings],
-	);
 	const handleGroupSelect = useCallback((groupName: string) => {
 		setSelectedGroup(groupName);
 	}, []);

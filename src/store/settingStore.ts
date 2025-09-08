@@ -19,12 +19,16 @@ export type SettingsType = {
 	collapsibleType: "icon" | "offcanvas";
 	transition: boolean;
 };
+
+export type SignInLayout = "center" | "right" | "left";
 type SettingStore = {
 	settings: SettingsType;
+	signInLayout: SignInLayout;
 	// 使用 actions 命名空间来存放所有的 action
 	actions: {
 		setSettings: (settings: SettingsType) => void;
 		clearSettings: () => void;
+		setSignInLayout: (signInLayout: SignInLayout) => void;
 	};
 };
 
@@ -50,7 +54,11 @@ const useSettingStore = create<SettingStore>()(
 	persist(
 		(set) => ({
 			settings: initialSettings,
+			signInLayout: "center",
 			actions: {
+				setSignInLayout: (signInLayout) => {
+					set({ signInLayout });
+				},
 				setSettings: (settings) => {
 					set({ settings });
 				},
@@ -62,10 +70,12 @@ const useSettingStore = create<SettingStore>()(
 		{
 			name: StorageEnum.Settings, // name of the item in the storage (must be unique)
 			storage: createJSONStorage(() => localStorage), // (optional) by default, 'localStorage' is used
-			partialize: (state) => ({ settings: state.settings }),
+			partialize: (state) => ({ settings: state.settings, signInLayout: state.signInLayout }),
 		},
 	),
 );
 
 export const useSettings = () => useSettingStore((state) => state.settings);
 export const useSettingActions = () => useSettingStore((state) => state.actions);
+export const useSignInLayout = () => useSettingStore((state) => state.signInLayout);
+export const useSetSignInLayout = () => useSettingStore((state) => state.actions.setSignInLayout);

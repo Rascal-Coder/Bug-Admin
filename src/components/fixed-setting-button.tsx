@@ -12,8 +12,9 @@ import { IconSidebarInset } from "@/components/svg-comps/icon-sidebar-inset";
 import { IconSidebarSidebar } from "@/components/svg-comps/icon-sidebar-sidebar";
 import { SwitchItem } from "@/components/switch-item";
 import { GLOBAL_CONFIG } from "@/global-config";
+import { useUpdateSettings } from "@/hooks";
 import { usePathname } from "@/routes/hooks/use-pathname";
-import { initialSettings, type SettingsType, useSettingActions, useSettings } from "@/store/settingStore";
+import { initialSettings, type SettingsType, useSettingActions } from "@/store/settingStore";
 import { presetsColors } from "@/theme/tokens/color";
 import { FontFamilyPreset } from "@/theme/tokens/typography";
 import { Button } from "@/ui/button";
@@ -40,12 +41,10 @@ const COLLAPSIBLE_TYPE_OPTIONS: SelectOption[] = [
 
 export function FixedSettingButton() {
 	const pathname = usePathname();
-	// console.log('当前路径:', pathname);
-
 	const sheetContentBgStyle: CSSProperties = {
 		backdropFilter: "blur(20px)",
 	};
-	const settings = useSettings();
+	const { updateSettings, settings } = useUpdateSettings();
 	const {
 		themeColorPresets,
 		fontSize,
@@ -60,12 +59,6 @@ export function FixedSettingButton() {
 		collapsibleType,
 	} = settings;
 	const { setSettings, clearSettings } = useSettingActions();
-	const updateSettings = (partialSettings: Partial<SettingsType>) => {
-		setSettings({
-			...settings,
-			...partialSettings,
-		});
-	};
 
 	// 重置所有设置
 	const handleResetSettings = () => {
