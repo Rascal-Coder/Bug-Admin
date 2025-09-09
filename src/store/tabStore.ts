@@ -40,13 +40,14 @@ const useTabStore = create<TabStore>()(
 					const existingTab = tabs.find((tab) => tab.value === newTab.value);
 
 					if (existingTab) {
-						// 如果tab已存在，只需激活它
 						set({ activeTab: newTab.value });
 					} else {
-						// 添加新tab
 						const tabWithPinned = { ...newTab, pinned: false };
+						const pinnedTabs = tabs.filter((tab) => tab.pinned);
+						const unpinnedTabs = tabs.filter((tab) => !tab.pinned);
+
 						set({
-							tabs: [...tabs, tabWithPinned],
+							tabs: [...pinnedTabs, ...unpinnedTabs, tabWithPinned],
 							activeTab: newTab.value,
 						});
 					}
@@ -58,7 +59,6 @@ const useTabStore = create<TabStore>()(
 
 					let newActiveTab = activeTab;
 					if (activeTab === tabValue && filteredTabs.length > 0) {
-						// 如果关闭的是当前激活的tab，激活相邻的tab
 						const removedIndex = tabs.findIndex((tab) => tab.value === tabValue);
 						const nextIndex = Math.min(removedIndex, filteredTabs.length - 1);
 						newActiveTab = filteredTabs[nextIndex]?.value || "";
@@ -79,20 +79,28 @@ const useTabStore = create<TabStore>()(
 				togglePin: (tabValue) => {
 					const { tabs } = get();
 					const updatedTabs = tabs.map((tab) => (tab.value === tabValue ? { ...tab, pinned: !tab.pinned } : tab));
-					set({ tabs: updatedTabs });
+
+					const sortedTabs = [...updatedTabs].sort((a, b) => {
+						// pin的标签页排在前面
+						if (a.pinned && !b.pinned) return -1;
+						if (!a.pinned && b.pinned) return 1;
+
+						const aIndex = tabs.findIndex((tab) => tab.value === a.value);
+						const bIndex = tabs.findIndex((tab) => tab.value === b.value);
+						return aIndex - bIndex;
+					});
+
+					set({ tabs: sortedTabs });
 				},
 
 				removeOtherTabs: (currentTabValue) => {
 					const { tabs } = get();
-					const currentTab = tabs.find((tab) => tab.value === currentTabValue);
-					const pinnedTabs = tabs.filter((tab) => tab.pinned && tab.value !== currentTabValue);
+					const remainingTabs = tabs.filter((tab) => tab.value === currentTabValue || tab.pinned);
 
-					if (currentTab) {
-						set({
-							tabs: [currentTab, ...pinnedTabs],
-							activeTab: currentTabValue,
-						});
-					}
+					set({
+						tabs: remainingTabs,
+						activeTab: currentTabValue,
+					});
 				},
 
 				removeAllTabs: () => {
@@ -133,8 +141,23 @@ const useTabStore = create<TabStore>()(
 				reorderTabs: (oldIndex, newIndex) => {
 					const { tabs } = get();
 					const newTabs = [...tabs];
-					const [movedTab] = newTabs.splice(oldIndex, 1);
-					newTabs.splice(newIndex, 0, movedTab);
+					const movedTab = newTabs[oldIndex];
+
+					// 计算pin标签页的数量
+					const pinnedCount = tabs.filter((tab) => tab.pinned).length;
+
+					// 限制拖拽范围，确保pin标签页只能在pin区域内拖拽，普通标签页只能在普通区域内拖拽
+					if (movedTab.pinned) {
+						// pin标签页只能在0到pinnedCount-1的范围内拖拽
+						newIndex = Math.max(0, Math.min(newIndex, pinnedCount - 1));
+					} else {
+						// 普通标签页只能在pinnedCount到tabs.length-1的范围内拖拽
+						newIndex = Math.max(pinnedCount, Math.min(newIndex, tabs.length - 1));
+					}
+
+					// 执行拖拽
+					const [draggedTab] = newTabs.splice(oldIndex, 1);
+					newTabs.splice(newIndex, 0, draggedTab);
 					set({ tabs: newTabs });
 				},
 			},

@@ -85,6 +85,11 @@ export default function SortableTab({
 		return otherTabs.some((t) => !t.pinned);
 	};
 
+	// 计算是否有可关闭的标签页（用于关闭全部标签页按钮）
+	const hasCloseableTabsForCloseAll = () => {
+		return allTabs.some((t) => !t.pinned);
+	};
+
 	return (
 		<div ref={setNodeRef} style={style} {...attributes}>
 			<ContextMenu>
@@ -186,7 +191,7 @@ export default function SortableTab({
 							关闭其它标签页
 						</div>
 					</ContextMenuItem>
-					<ContextMenuItem onClick={() => onCloseAll()} disabled={totalTabs <= 1}>
+					<ContextMenuItem onClick={() => onCloseAll()} disabled={!hasCloseableTabsForCloseAll()}>
 						<div className="flex items-center gap-1">
 							<Icon icon="mdi:close-circle-multiple-outline" size={16} />
 							关闭全部标签页

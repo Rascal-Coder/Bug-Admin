@@ -59,8 +59,25 @@ export default function Tabs() {
 	};
 
 	const handleCloseAll = () => {
+		// 获取关闭前的状态
+		const pinnedTabs = tabs.filter((tab) => tab.pinned);
+		const currentTab = tabs.find((tab) => tab.value === activeTab);
+		const isCurrentTabPinned = currentTab?.pinned || false;
+
 		removeAllTabs();
-		navigate("/workbench", { replace: true });
+
+		if (pinnedTabs.length > 0) {
+			if (isCurrentTabPinned) {
+				return;
+			} else {
+				const firstPinnedTab = pinnedTabs[0];
+				if (firstPinnedTab) {
+					navigate(firstPinnedTab.path);
+				}
+			}
+		} else {
+			navigate("/workbench", { replace: true });
+		}
 	};
 
 	const handleTogglePin = (tabValue: string) => {
@@ -68,19 +85,18 @@ export default function Tabs() {
 	};
 
 	const handleRefreshTab = (tabValue: string) => {
-		// 找到对应的tab并重新加载页面
 		const tab = tabs.find((t) => t.value === tabValue);
 		if (tab) {
-			window.location.reload();
+			// window.location.reload();
 		}
 	};
 
 	const handleSetFullscreen = () => {
-		if (document.fullscreenElement) {
-			document.exitFullscreen();
-		} else {
-			document.documentElement.requestFullscreen();
-		}
+		// if (document.fullscreenElement) {
+		// 	document.exitFullscreen();
+		// } else {
+		// 	document.documentElement.requestFullscreen();
+		// }
 	};
 
 	const handleOpenInNewWindow = (tabValue: string) => {
