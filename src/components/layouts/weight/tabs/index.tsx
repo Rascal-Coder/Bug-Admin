@@ -1,4 +1,6 @@
+import { AnimatePresence } from "motion/react";
 import { useNavigate } from "react-router";
+import { MotionContainer } from "@/components/animate";
 import { Icon } from "@/components/icon";
 import { useActiveTab, useTabActions, useTabs } from "@/store/tabStore";
 import { Button } from "@/ui/button";
@@ -177,27 +179,29 @@ export default function Tabs() {
 		<div className="flex-1 px-3 flex items-center justify-between">
 			<ScrollArea className="whitespace-nowrap px-2">
 				<SortableContainer items={tabsWithKeys} onSortEnd={handleSortEnd} renderOverlay={renderOverlay}>
-					<div className="flex items-center gap-2">
-						{tabs.map((tab) => (
-							<SortableTab
-								key={tab.value}
-								tab={tab}
-								isActive={activeTab === tab.value}
-								totalTabs={tabs.length}
-								allTabs={tabs}
-								onTabClick={handleTabClick}
-								onCloseTab={handleCloseTab}
-								onTogglePin={handleTogglePin}
-								onCloseOthers={handleCloseOthers}
-								onCloseAll={handleCloseAll}
-								onRefreshTab={handleRefreshTab}
-								onSetFullscreen={handleSetFullscreen}
-								onOpenInNewWindow={handleOpenInNewWindow}
-								onCloseLeftTabs={handleCloseLeftTabs}
-								onCloseRightTabs={handleCloseRightTabs}
-							/>
-						))}
-					</div>
+					<MotionContainer className="flex items-center gap-2">
+						<AnimatePresence initial={false}>
+							{tabs.map((tab) => (
+								<SortableTab
+									key={tab.value}
+									tab={tab}
+									isActive={activeTab === tab.value}
+									totalTabs={tabs.length}
+									allTabs={tabs}
+									onTabClick={handleTabClick}
+									onCloseTab={handleCloseTab}
+									onTogglePin={handleTogglePin}
+									onCloseOthers={handleCloseOthers}
+									onCloseAll={handleCloseAll}
+									onRefreshTab={handleRefreshTab}
+									onSetFullscreen={handleSetFullscreen}
+									onOpenInNewWindow={handleOpenInNewWindow}
+									onCloseLeftTabs={handleCloseLeftTabs}
+									onCloseRightTabs={handleCloseRightTabs}
+								/>
+							))}
+						</AnimatePresence>
+					</MotionContainer>
 				</SortableContainer>
 				<ScrollBar orientation="horizontal" />
 			</ScrollArea>

@@ -1,5 +1,6 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { m } from "motion/react";
 import { Icon } from "@/components/icon";
 import {
 	ContextMenu,
@@ -91,16 +92,29 @@ export default function SortableTab({
 	};
 
 	return (
-		<div ref={setNodeRef} style={style} {...attributes}>
+		<m.div
+			initial={{ x: -120, opacity: 0 }}
+			animate={{ x: 0, opacity: 1 }}
+			exit={{ x: -10, opacity: 0 }}
+			transition={{
+				type: "spring",
+				stiffness: 300,
+				damping: 30,
+			}}
+			ref={setNodeRef}
+			style={style}
+			{...attributes}
+		>
 			<ContextMenu>
 				<ContextMenuTrigger>
-					<div
+					<m.div
 						className={cn(
 							"cursor-pointer border border-border gap-1 h-full flex items-center px-2 py-1 rounded-md text-primary select-none transition-colors",
 							isActive ? "bg-primary text-primary-foreground" : "hover:bg-accent",
 						)}
 						{...listeners}
 						onClick={() => onTabClick?.(tab.value)}
+						whileTap={{ scale: 0.92 }}
 					>
 						{/* 渲染icon */}
 						{tab.icon ? <Icon icon={tab.icon} size={20} /> : <Icon icon="mdi:menu" size={20} />}
@@ -136,7 +150,7 @@ export default function SortableTab({
 								}}
 							/>
 						) : null}
-					</div>
+					</m.div>
 				</ContextMenuTrigger>
 				<ContextMenuContent className="w-48">
 					<ContextMenuItem onClick={() => onCloseTab(tab.value)} disabled={tab.pinned || totalTabs <= 1}>
@@ -199,6 +213,6 @@ export default function SortableTab({
 					</ContextMenuItem>
 				</ContextMenuContent>
 			</ContextMenu>
-		</div>
+		</m.div>
 	);
 }
