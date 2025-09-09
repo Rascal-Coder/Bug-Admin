@@ -9,21 +9,11 @@ interface TabRouterLinkProps extends Omit<LinkProps, "to"> {
 	ref?: React.Ref<HTMLAnchorElement>;
 }
 
-export const TabRouterLink: React.FC<TabRouterLinkProps> = ({
-	href,
-	label,
-	icon,
-	component,
-	children,
-	onClick,
-	...props
-}) => {
+export const TabRouterLink: React.FC<TabRouterLinkProps> = ({ href, label, icon, component, children, ...props }) => {
 	const { navigateToTab } = useTabNavigation();
 
 	const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
 		e.preventDefault();
-
-		onClick?.(e);
 
 		navigateToTab({
 			label,

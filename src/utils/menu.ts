@@ -41,37 +41,3 @@ export function getMenuInfoByPath(currentPath: string): NavItemDataProps | null 
 
 	return null;
 }
-
-/**
- * 获取默认路由（第一个可访问的菜单项）
- * @returns 默认路由信息或null
- */
-export function getDefaultRoute(): NavItemDataProps | null {
-	function findFirstMenuItem(items: NavItemDataProps[]): NavItemDataProps | null {
-		for (const item of items) {
-			// 如果是菜单项且未禁用，返回它
-			if (!item.disabled && !item.children) {
-				return item;
-			}
-
-			// 如果有子菜单，递归查找
-			if (item.children && item.children.length > 0) {
-				const found = findFirstMenuItem(item.children);
-				if (found) {
-					return found;
-				}
-			}
-		}
-		return null;
-	}
-
-	// 遍历所有导航分组，找到第一个可用的菜单项
-	for (const section of navData) {
-		const found = findFirstMenuItem(section.items);
-		if (found) {
-			return found;
-		}
-	}
-
-	return null;
-}

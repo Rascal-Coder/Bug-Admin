@@ -1,12 +1,14 @@
 import { concat } from "ramda";
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
 import { Outlet, ScrollRestoration, useLocation } from "react-router";
 import { AuthGuard } from "@/components/auth/auth-guard";
 import GlobalLoading from "@/components/loading/global-loading";
 import Page403 from "@/pages/sys/error/Page403";
 import { navData } from "@/routes/nav-data";
 import { useSettings } from "@/store/settingStore";
+import { useTabActions } from "@/store/tabStore";
 import { cn } from "@/utils";
+import { getMenuInfoByPath } from "@/utils/menu";
 import { flattenTrees } from "@/utils/tree";
 
 const allItems = navData.reduce((acc: any[], group) => {
@@ -27,6 +29,19 @@ export function Main() {
 	const { themeStretch, layoutMode } = useSettings();
 	const { pathname } = useLocation();
 	const currentNavAuth = findAuthByPath(pathname);
+	const menuInfo = getMenuInfoByPath(pathname);
+	const { addTab } = useTabActions();
+	useEffect(() => {
+		if (menuInfo) {
+			addTab({
+				label: menuInfo.title,
+				value: menuInfo.path,
+				path: menuInfo.path,
+				icon: typeof menuInfo.icon === "string" ? menuInfo.icon : undefined,
+			});
+		}
+	}, [menuInfo, addTab]);
+
 	return (
 		<AuthGuard checkAny={currentNavAuth} fallback={<Page403 />}>
 			<main

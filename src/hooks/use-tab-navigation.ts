@@ -25,7 +25,6 @@ export function useTabNavigation() {
 				component,
 			});
 
-			// 导航到对应路径
 			navigate(path);
 		},
 		[addTab, navigate],

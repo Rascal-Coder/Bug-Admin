@@ -3,7 +3,6 @@ import { Icon } from "@/components/icon";
 import { useActiveTab, useTabActions, useTabs } from "@/store/tabStore";
 import { Button } from "@/ui/button";
 import { ScrollArea, ScrollBar } from "@/ui/scroll-area";
-import { getDefaultRoute } from "@/utils/menu";
 import SortableContainer from "./components/sortable-container";
 import SortableTab from "./components/sortable-tab";
 
@@ -31,10 +30,11 @@ export default function Tabs() {
 
 		// 如果关闭后没有tab了，导航到默认页面
 		if (remainingTabs.length === 0) {
-			const defaultRoute = getDefaultRoute();
-			if (defaultRoute) {
-				navigate(defaultRoute.path, { replace: true });
-			}
+			navigate("/workbench", { replace: true });
+			// const defaultRoute = getDefaultRoute();
+			// if (defaultRoute) {
+
+			// }
 		} else if (isClosingActiveTab && remainingTabs.length > 0) {
 			// 如果关闭的是当前激活的tab，导航到新的激活tab
 			const closedIndex = tabs.findIndex((tab) => tab.value === tabValue);
@@ -48,16 +48,19 @@ export default function Tabs() {
 
 	const handleCloseOthers = (currentTabValue: string) => {
 		removeOtherTabs(currentTabValue);
+
+		// 如果当前激活的tab不是保留的tab，需要导航到保留的tab
+		if (activeTab !== currentTabValue) {
+			const tab = tabs.find((t) => t.value === currentTabValue);
+			if (tab) {
+				navigate(tab.path);
+			}
+		}
 	};
 
 	const handleCloseAll = () => {
 		removeAllTabs();
-
-		// 导航到默认页面
-		const defaultRoute = getDefaultRoute();
-		if (defaultRoute) {
-			navigate(defaultRoute.path, { replace: true });
-		}
+		navigate("/workbench", { replace: true });
 	};
 
 	const handleTogglePin = (tabValue: string) => {
@@ -88,11 +91,37 @@ export default function Tabs() {
 	};
 
 	const handleCloseLeftTabs = (tabValue: string) => {
+		// 获取当前活动tab是否会被关闭
+		const currentTabIndex = tabs.findIndex((tab) => tab.value === activeTab);
+		const targetTabIndex = tabs.findIndex((tab) => tab.value === tabValue);
+		const activeTabWillBeRemoved = currentTabIndex < targetTabIndex && !tabs[currentTabIndex]?.pinned;
+
 		removeLeftTabs(tabValue);
+
+		// 如果当前活动的tab被关闭了，需要导航到目标tab
+		if (activeTabWillBeRemoved) {
+			const tab = tabs.find((t) => t.value === tabValue);
+			if (tab) {
+				navigate(tab.path);
+			}
+		}
 	};
 
 	const handleCloseRightTabs = (tabValue: string) => {
+		// 获取当前活动tab是否会被关闭
+		const currentTabIndex = tabs.findIndex((tab) => tab.value === activeTab);
+		const targetTabIndex = tabs.findIndex((tab) => tab.value === tabValue);
+		const activeTabWillBeRemoved = currentTabIndex > targetTabIndex && !tabs[currentTabIndex]?.pinned;
+
 		removeRightTabs(tabValue);
+
+		// 如果当前活动的tab被关闭了，需要导航到目标tab
+		if (activeTabWillBeRemoved) {
+			const tab = tabs.find((t) => t.value === tabValue);
+			if (tab) {
+				navigate(tab.path);
+			}
+		}
 	};
 
 	// 处理tab点击
@@ -139,6 +168,7 @@ export default function Tabs() {
 								tab={tab}
 								isActive={activeTab === tab.value}
 								totalTabs={tabs.length}
+								allTabs={tabs}
 								onTabClick={handleTabClick}
 								onCloseTab={handleCloseTab}
 								onTogglePin={handleTogglePin}

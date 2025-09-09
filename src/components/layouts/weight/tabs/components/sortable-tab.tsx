@@ -23,6 +23,7 @@ interface SortableTabProps {
 	tab: Tab;
 	isActive?: boolean;
 	totalTabs?: number;
+	allTabs?: Tab[];
 	onTabClick?: (tabValue: string) => void;
 	onCloseTab: (tabValue: string) => void;
 	onTogglePin: (tabValue: string) => void;
@@ -39,6 +40,7 @@ export default function SortableTab({
 	tab,
 	isActive = false,
 	totalTabs = 1,
+	allTabs = [],
 	onTabClick,
 	onCloseTab,
 	onTogglePin,
@@ -57,6 +59,30 @@ export default function SortableTab({
 		transition,
 		opacity: isDragging ? 0.5 : 1,
 		zIndex: isDragging ? 1000 : 1,
+	};
+
+	// 计算菜单项的可用性
+	const currentTabIndex = allTabs.findIndex((t) => t.value === tab.value);
+
+	// 计算左侧是否有可关闭的标签页
+	const hasCloseableLeftTabs = () => {
+		if (!isActive || currentTabIndex <= 0) return false;
+		const leftTabs = allTabs.slice(0, currentTabIndex);
+		return leftTabs.some((t) => !t.pinned);
+	};
+
+	// 计算右侧是否有可关闭的标签页
+	const hasCloseableRightTabs = () => {
+		if (!isActive || currentTabIndex >= allTabs.length - 1) return false;
+		const rightTabs = allTabs.slice(currentTabIndex + 1);
+		return rightTabs.some((t) => !t.pinned);
+	};
+
+	// 计算是否有其他可关闭的标签页
+	const hasOtherCloseableTabs = () => {
+		if (!isActive) return false;
+		const otherTabs = allTabs.filter((t) => t.value !== tab.value);
+		return otherTabs.some((t) => !t.pinned);
 	};
 
 	return (
@@ -108,7 +134,7 @@ export default function SortableTab({
 					</div>
 				</ContextMenuTrigger>
 				<ContextMenuContent className="w-48">
-					<ContextMenuItem onClick={() => onCloseTab(tab.value)} disabled={!tab.pinned && totalTabs <= 1}>
+					<ContextMenuItem onClick={() => onCloseTab(tab.value)} disabled={tab.pinned || totalTabs <= 1}>
 						<div className="flex items-center gap-1">
 							<Icon icon="mdi:close" size={16} />
 							关闭
@@ -126,7 +152,7 @@ export default function SortableTab({
 							最大化
 						</div>
 					</ContextMenuItem>
-					<ContextMenuItem onClick={() => onRefreshTab(tab.value)}>
+					<ContextMenuItem onClick={() => onRefreshTab(tab.value)} disabled={!isActive}>
 						<div className="flex items-center gap-1">
 							<Icon icon="mdi:refresh" size={16} />
 							重新加载
@@ -139,14 +165,14 @@ export default function SortableTab({
 						</div>
 					</ContextMenuItem>
 					<ContextMenuSeparator />
-					<ContextMenuItem onClick={() => onCloseLeftTabs(tab.value)}>
+					<ContextMenuItem onClick={() => onCloseLeftTabs(tab.value)} disabled={!hasCloseableLeftTabs()}>
 						<div className="flex items-center gap-1">
 							<Icon icon="mdi:arrow-left" size={16} />
 							关闭左侧标签页
 						</div>
 					</ContextMenuItem>
 
-					<ContextMenuItem onClick={() => onCloseRightTabs(tab.value)}>
+					<ContextMenuItem onClick={() => onCloseRightTabs(tab.value)} disabled={!hasCloseableRightTabs()}>
 						<div className="flex items-center gap-1">
 							<Icon icon="mdi:arrow-right" size={16} />
 							关闭右侧标签页
@@ -154,7 +180,7 @@ export default function SortableTab({
 					</ContextMenuItem>
 
 					<ContextMenuSeparator />
-					<ContextMenuItem onClick={() => onCloseOthers(tab.value)} disabled={totalTabs <= 1}>
+					<ContextMenuItem onClick={() => onCloseOthers(tab.value)} disabled={!hasOtherCloseableTabs()}>
 						<div className="flex items-center gap-1">
 							<Icon icon="mdi:close-circle-multiple" size={16} />
 							关闭其它标签页
