@@ -24,11 +24,13 @@ export type SignInLayout = "center" | "right" | "left";
 type SettingStore = {
 	settings: SettingsType;
 	signInLayout: SignInLayout;
+	showMaximize: boolean;
 	// 使用 actions 命名空间来存放所有的 action
 	actions: {
 		setSettings: (settings: SettingsType) => void;
 		clearSettings: () => void;
 		setSignInLayout: (signInLayout: SignInLayout) => void;
+		setShowMaximize: (showMaximize: boolean) => void;
 	};
 };
 
@@ -55,6 +57,7 @@ const useSettingStore = create<SettingStore>()(
 		(set) => ({
 			settings: initialSettings,
 			signInLayout: "center",
+			showMaximize: false,
 			actions: {
 				setSignInLayout: (signInLayout) => {
 					set({ signInLayout });
@@ -65,12 +68,19 @@ const useSettingStore = create<SettingStore>()(
 				clearSettings() {
 					useSettingStore.persist.clearStorage();
 				},
+				setShowMaximize: (showMaximize) => {
+					set({ showMaximize });
+				},
 			},
 		}),
 		{
 			name: StorageEnum.Settings, // name of the item in the storage (must be unique)
 			storage: createJSONStorage(() => localStorage), // (optional) by default, 'localStorage' is used
-			partialize: (state) => ({ settings: state.settings, signInLayout: state.signInLayout }),
+			partialize: (state) => ({
+				settings: state.settings,
+				signInLayout: state.signInLayout,
+				showMaximize: state.showMaximize,
+			}),
 		},
 	),
 );
@@ -79,3 +89,5 @@ export const useSettings = () => useSettingStore((state) => state.settings);
 export const useSettingActions = () => useSettingStore((state) => state.actions);
 export const useSignInLayout = () => useSettingStore((state) => state.signInLayout);
 export const useSetSignInLayout = () => useSettingStore((state) => state.actions.setSignInLayout);
+export const useShowMaximize = () => useSettingStore((state) => state.showMaximize);
+export const useSetShowMaximize = () => useSettingStore((state) => state.actions.setShowMaximize);

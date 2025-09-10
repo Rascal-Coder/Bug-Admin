@@ -1,6 +1,6 @@
 import Cookies from "js-cookie";
 import { useMemo } from "react";
-import { useSettings } from "@/store/settingStore";
+import { useSettings, useShowMaximize } from "@/store/settingStore";
 import { SidebarInset, SidebarProvider } from "@/ui/sidebar";
 import { cn } from "@/utils";
 import { Header } from "../weight/header";
@@ -22,6 +22,8 @@ export default function SidebarWrapper({
 	style,
 }: SidebarWrapperProps) {
 	const { layoutMode } = useSettings();
+	const showMaximize = useShowMaximize();
+
 	const defaultOpen = useMemo(() => {
 		const cookieValue = Cookies.get("sidebar_state");
 		return cookieValue !== "false";
@@ -33,7 +35,7 @@ export default function SidebarWrapper({
 		>
 			{layoutMode !== "horizontal" ? (
 				<>
-					{sidebarSlot}
+					<div className={cn(showMaximize ? "hidden" : "block")}>{sidebarSlot}</div>
 					<SidebarInset
 						className={cn(
 							// If layout is fixed and sidebar is inset,

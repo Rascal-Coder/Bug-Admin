@@ -7,6 +7,7 @@ import { Button } from "@/ui/button";
 import { ScrollArea, ScrollBar } from "@/ui/scroll-area";
 import SortableContainer from "./components/sortable-container";
 import SortableTab from "./components/sortable-tab";
+import { useSetShowMaximize, useShowMaximize } from "@/store/settingStore";
 
 export default function Tabs() {
 	const tabs = useTabs();
@@ -22,7 +23,8 @@ export default function Tabs() {
 		setActiveTab,
 	} = useTabActions();
 	const navigate = useNavigate();
-
+	const showMaximize = useShowMaximize();
+	const setShowMaximize = useSetShowMaximize();
 	// 处理tab操作
 	const handleCloseTab = (tabValue: string) => {
 		const remainingTabs = tabs.filter((tab) => tab.value !== tabValue);
@@ -33,10 +35,6 @@ export default function Tabs() {
 		// 如果关闭后没有tab了，导航到默认页面
 		if (remainingTabs.length === 0) {
 			navigate("/workbench", { replace: true });
-			// const defaultRoute = getDefaultRoute();
-			// if (defaultRoute) {
-
-			// }
 		} else if (isClosingActiveTab && remainingTabs.length > 0) {
 			// 如果关闭的是当前激活的tab，导航到新的激活tab
 			const closedIndex = tabs.findIndex((tab) => tab.value === tabValue);
@@ -94,11 +92,7 @@ export default function Tabs() {
 	};
 
 	const handleSetFullscreen = () => {
-		// if (document.fullscreenElement) {
-		// 	document.exitFullscreen();
-		// } else {
-		// 	document.documentElement.requestFullscreen();
-		// }
+		setShowMaximize(!showMaximize);
 	};
 
 	const handleOpenInNewWindow = (tabValue: string) => {
@@ -219,11 +213,6 @@ export default function Tabs() {
 				<div className="h-full flex items-center justify-center border border-border rounded-md" title="全屏">
 					<Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-accent" onClick={handleSetFullscreen}>
 						<Icon icon="mdi:fullscreen" size={20} />
-					</Button>
-				</div>
-				<div className="h-full flex items-center justify-center border border-border rounded-md" title="更多设置">
-					<Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-accent">
-						<Icon icon="mdi:dots-vertical" size={20} />
 					</Button>
 				</div>
 			</div>
