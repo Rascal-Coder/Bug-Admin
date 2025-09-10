@@ -31,9 +31,7 @@ function App({ children }: { children: React.ReactNode }) {
 			<QueryClientProvider client={new QueryClient()}>
 				<ThemeProvider adapters={[AntdAdapter]}>
 					<Helmet>
-						<title>
-							{menuInfo?.title} - {GLOBAL_CONFIG.appName}
-						</title>
+						<title>{menuInfo?.title ? `${menuInfo?.title} - ${GLOBAL_CONFIG.appName}` : GLOBAL_CONFIG.appName}</title>
 						<link rel="icon" href={Logo} />
 					</Helmet>
 					<RouteLoadingProgress />

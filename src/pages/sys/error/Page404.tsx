@@ -61,6 +61,7 @@ export default function Page404() {
 			title="Oops! Page not found!"
 			desc="The page you’re looking for doesn’t exist or has been moved."
 			svg={svg}
+			helmetTitle="404 - Bug Admin"
 		/>
 	);
 }

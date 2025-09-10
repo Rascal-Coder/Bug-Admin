@@ -105,5 +105,12 @@ export default function Page500() {
 			</defs>
 		</svg>
 	);
-	return <ErrorLayout title="Internal Server Error!" desc="Sorry for the inconvenience." svg={svg} />;
+	return (
+		<ErrorLayout
+			title="Internal Server Error!"
+			desc="Sorry for the inconvenience."
+			svg={svg}
+			helmetTitle="500 - Bug Admin"
+		/>
+	);
 }
