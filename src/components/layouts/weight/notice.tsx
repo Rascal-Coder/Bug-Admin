@@ -1,6 +1,7 @@
 import { faker } from "@faker-js/faker";
 import { Bell } from "lucide-react";
 import { type CSSProperties, useState } from "react";
+import styled, { keyframes } from "styled-components";
 import CyanBlur from "@/assets/images/background/cyan-blur.png";
 import RedBlur from "@/assets/images/background/red-blur.png";
 import { AvatarGroup } from "@/components/avatar-group";
@@ -14,6 +15,43 @@ import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle } from "@/ui/
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/ui/tabs";
 import { Text } from "@/ui/typography";
 
+const BellStyled = styled.div<{
+	$bellAnimation: ReturnType<typeof keyframes>;
+}>`
+		animation: ${({ $bellAnimation }) => $bellAnimation} 1s both;
+		
+		&:hover {
+			svg {
+				animation: ${({ $bellAnimation }) => $bellAnimation} 1s both;
+			}
+		}
+	`;
+const bellAnimation = keyframes`
+	0%,
+  100% {
+    transform-origin: top;
+  }
+
+  15% {
+    transform: rotateZ(10deg);
+  }
+
+  30% {
+    transform: rotateZ(-10deg);
+  }
+
+  45% {
+    transform: rotateZ(5deg);
+  }
+
+  60% {
+    transform: rotateZ(-5deg);
+  }
+
+  75% {
+    transform: rotateZ(2deg);
+  }
+`;
 export default function NoticeButton() {
 	const [drawerOpen, setDrawerOpen] = useState(false);
 	const [count, setCount] = useState(4);
@@ -29,9 +67,11 @@ export default function NoticeButton() {
 	return (
 		<>
 			<div className="relative" onClick={() => setDrawerOpen(true)}>
-				<Button variant="ghost" size="icon" className="rounded-full" onClick={() => setDrawerOpen(true)}>
-					<Bell></Bell>
-				</Button>
+				<BellStyled $bellAnimation={bellAnimation}>
+					<Button variant="ghost" size="icon" className="rounded-full" onClick={() => setDrawerOpen(true)}>
+						<Bell />
+					</Button>
+				</BellStyled>
 				<Badge variant="destructive" shape="circle" className="absolute -right-2 -top-2">
 					{count}
 				</Badge>
@@ -423,7 +463,7 @@ function NoticeTab() {
 								</div>
 								<AvatarGroup max={{ count: 4 }} size="small">
 									{Array.from({ length: notification.attendees }).map((_, i) => (
-										<Avatar key={`attendee-${notification.id}-${i}`}>
+										<Avatar key={`attendee - ${notification.id} -${i} `}>
 											<AvatarImage src={faker.image.avatarGitHub()} />
 										</Avatar>
 									))}
@@ -440,7 +480,7 @@ function NoticeTab() {
 								<Text variant="subTitle2">{notification.fileName}</Text>
 								<Text variant="caption" color="secondary">
 									{notification.fileSize}
-									{notification.editedTime && ` • Edited ${notification.editedTime}`}
+									{notification.editedTime && ` • Edited ${notification.editedTime} `}
 								</Text>
 							</div>
 							<Button variant="outline" size="sm">
@@ -508,7 +548,7 @@ function NoticeTab() {
 									</Text>
 									<div className="flex items-center space-x-2 mt-2">
 										{notification.tags?.map((tag: string) => (
-											<span key={tag} className={`px-2 py-1 rounded-full text-xs ${getTagColor(tag)}`}>
+											<span key={tag} className={`px - 2 py - 1 rounded - full text - xs ${getTagColor(tag)} `}>
 												{tag}
 											</span>
 										))}
@@ -517,7 +557,7 @@ function NoticeTab() {
 								<div className="flex -space-x-2">
 									{Array.from({ length: notification.assignees }).map((_, i) => (
 										<div
-											key={`attendee-${notification.id}-${i}`}
+											key={`attendee - ${notification.id} -${i} `}
 											className="w-6 h-6 rounded-full bg-bg-neutral border-2"
 										/>
 									))}
