@@ -16,16 +16,14 @@ const TabRouterLink: React.FC<TabRouterLinkProps> = ({ href, label, icon, compon
 	const handleClick = useCallback(
 		(e: React.MouseEvent<HTMLAnchorElement>) => {
 			e.preventDefault();
-			console.log("href", href);
-
 			navigateToTab({
-				label,
+				// label,
 				path: href,
-				icon,
-				component,
+				// icon,
+				// component,
 			});
 		},
-		[navigateToTab, href, label, icon, component],
+		[navigateToTab, href],
 	);
 
 	return (

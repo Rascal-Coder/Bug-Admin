@@ -22,6 +22,7 @@ const convertChildren = (children?: BackendMenuTree[] | FrontendMenuTree[]): Nav
 	if (!children?.length) return [];
 
 	return children.map((child) => ({
+		type: child.type,
 		title: child.name,
 		path: child.path || "",
 		icon: child.icon,

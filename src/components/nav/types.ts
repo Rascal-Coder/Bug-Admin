@@ -1,3 +1,5 @@
+import type { PermissionType } from "@/types/enum";
+
 export type NavItemOptionsProps = {
 	depth?: number;
 	hasChild?: boolean;
@@ -15,6 +17,7 @@ export type BadgeProps = {
 };
 
 export type NavItemDataProps = {
+	type?: PermissionType;
 	path: string;
 	title: string;
 	icon?: string | React.ReactNode;

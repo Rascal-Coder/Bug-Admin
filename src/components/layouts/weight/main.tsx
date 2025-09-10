@@ -7,6 +7,7 @@ import Page403 from "@/pages/sys/error/Page403";
 import { navData } from "@/routes/nav-data";
 import { useSettings } from "@/store/settingStore";
 import { useTabActions } from "@/store/tabStore";
+import { PermissionType } from "@/types/enum";
 import { cn } from "@/utils";
 import { getMenuInfoByPath } from "@/utils/menu";
 import { flattenTrees } from "@/utils/tree";
@@ -32,7 +33,7 @@ export function Main() {
 	const menuInfo = getMenuInfoByPath(pathname);
 	const { addTab } = useTabActions();
 	useEffect(() => {
-		if (menuInfo) {
+		if (menuInfo && menuInfo.type === PermissionType.MENU) {
 			addTab({
 				label: menuInfo.title,
 				value: menuInfo.path,
