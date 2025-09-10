@@ -1,5 +1,4 @@
-/** biome-ignore-all lint/a11y/noStaticElementInteractions: false positive */
-import { TabRouterLink } from "@/routes/components/tab-router-link";
+import TabRouterLink from "@/routes/components/tab-router-link";
 import type { NavItemProps } from "../types";
 
 type NavItemRendererProps = {

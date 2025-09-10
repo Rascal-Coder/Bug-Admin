@@ -1,3 +1,4 @@
+import { memo, useCallback } from "react";
 import type { LinkProps } from "react-router";
 import { useTabNavigation } from "@/hooks/use-tab-navigation";
 
@@ -9,19 +10,23 @@ interface TabRouterLinkProps extends Omit<LinkProps, "to"> {
 	ref?: React.Ref<HTMLAnchorElement>;
 }
 
-export const TabRouterLink: React.FC<TabRouterLinkProps> = ({ href, label, icon, component, children, ...props }) => {
+const TabRouterLink: React.FC<TabRouterLinkProps> = ({ href, label, icon, component, children, ...props }) => {
 	const { navigateToTab } = useTabNavigation();
 
-	const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-		e.preventDefault();
+	const handleClick = useCallback(
+		(e: React.MouseEvent<HTMLAnchorElement>) => {
+			e.preventDefault();
+			console.log("href", href);
 
-		navigateToTab({
-			label,
-			path: href,
-			icon,
-			component,
-		});
-	};
+			navigateToTab({
+				label,
+				path: href,
+				icon,
+				component,
+			});
+		},
+		[navigateToTab, href, label, icon, component],
+	);
 
 	return (
 		<a href={href} onClick={handleClick} {...props}>
@@ -29,3 +34,5 @@ export const TabRouterLink: React.FC<TabRouterLinkProps> = ({ href, label, icon,
 		</a>
 	);
 };
+
+export default memo(TabRouterLink);
