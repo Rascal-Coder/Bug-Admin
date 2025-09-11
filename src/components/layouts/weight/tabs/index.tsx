@@ -2,12 +2,12 @@ import { AnimatePresence } from "motion/react";
 import { useNavigate } from "react-router";
 import { MotionContainer } from "@/components/animate";
 import { Icon } from "@/components/icon";
+import { useSetShowMaximize, useShowMaximize } from "@/store/settingStore";
 import { useActiveTab, useTabActions, useTabs } from "@/store/tabStore";
 import { Button } from "@/ui/button";
 import { ScrollArea, ScrollBar } from "@/ui/scroll-area";
 import SortableContainer from "./components/sortable-container";
 import SortableTab from "./components/sortable-tab";
-import { useSetShowMaximize, useShowMaximize } from "@/store/settingStore";
 
 export default function Tabs() {
 	const tabs = useTabs();

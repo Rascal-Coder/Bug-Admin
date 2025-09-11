@@ -40,7 +40,7 @@ interface Props extends MotionProps {
  * - delayIn: 整体进入动画的延迟时间（默认：0.05s）
  * - staggerOut: 子元素退出动画的延迟时间（默认：0.05s）
  */
-export default function MotionContainer({ children, className }: Props) {
+export function MotionContainer({ children, className }: Props) {
 	return (
 		<m.div
 			// 这里指定 initial、animate和exit的属性名后，子组件就不需要再重复指定

@@ -1,26 +1,26 @@
 export type VariantsType = {
 	durationIn?: number;
 	durationOut?: number;
-	easeIn?: [];
-	easeOut?: [];
+	easeIn?: [number, number, number, number];
+	easeOut?: [number, number, number, number];
 	distance?: number;
 };
 
 export type TranHoverType = {
 	duration?: number;
-	ease?: [];
+	ease?: [number, number, number, number];
 };
 export type TranEnterType = {
 	durationIn?: number;
-	easeIn?: [];
+	easeIn?: [number, number, number, number];
 };
 export type TranExitType = {
 	durationOut?: number;
-	easeOut?: [];
+	easeOut?: [number, number, number, number];
 };
 
 export type BackgroundType = {
 	duration?: number;
-	ease?: [];
+	ease?: [number, number, number, number];
 	colors?: string[];
 };

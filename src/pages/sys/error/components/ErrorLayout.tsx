@@ -2,7 +2,7 @@ import { m } from "motion/react";
 import type { ReactNode } from "react";
 import { Helmet } from "react-helmet-async";
 import { NavLink } from "react-router";
-import MotionContainer from "@/components/animate/motion-container";
+import { MotionContainer } from "@/components/animate/motion-container";
 import { varBounce } from "@/components/animate/variants/bounce";
 import { GLOBAL_CONFIG } from "@/global-config";
 import { Button } from "@/ui/button";

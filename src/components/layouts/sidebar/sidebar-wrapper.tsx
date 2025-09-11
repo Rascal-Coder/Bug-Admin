@@ -35,7 +35,7 @@ export default function SidebarWrapper({
 		>
 			{layoutMode !== "horizontal" ? (
 				<>
-					<div className={cn(showMaximize ? "hidden" : "block")}>{sidebarSlot}</div>
+					{showMaximize ? null : sidebarSlot}
 					<SidebarInset
 						className={cn(
 							// If layout is fixed and sidebar is inset,

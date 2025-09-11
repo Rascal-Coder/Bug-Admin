@@ -125,6 +125,12 @@ export const frontendNavConfig: FrontendMenuTree[] = [
 						component: "/pages/components/toast",
 						type: PermissionType.MENU,
 					},
+					{
+						name: "Animate",
+						path: "/components/animate",
+						component: "/pages/components/animate",
+						type: PermissionType.MENU,
+					},
 				],
 			},
 		],

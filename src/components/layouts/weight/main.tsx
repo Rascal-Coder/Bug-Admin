@@ -1,6 +1,8 @@
+// import { AnimatePresence, m } from "motion/react";
 import { concat } from "ramda";
 import { Suspense, useEffect } from "react";
 import { Outlet, ScrollRestoration, useLocation } from "react-router";
+// import { MotionContainer, varFade } from "@/components/animate";
 import { AuthGuard } from "@/components/auth/auth-guard";
 import { LineLoading } from "@/components/loading";
 import Page403 from "@/pages/sys/error/Page403";
@@ -64,6 +66,11 @@ export function Main() {
 			>
 				<Suspense fallback={<LineLoading />}>
 					<Outlet />
+					{/* <MotionContainer>
+						<AnimatePresence>
+						
+						</AnimatePresence>
+					</MotionContainer> */}
 					<ScrollRestoration />
 				</Suspense>
 			</main>
