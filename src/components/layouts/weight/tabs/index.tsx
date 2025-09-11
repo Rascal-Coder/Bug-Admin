@@ -2,11 +2,11 @@ import { AnimatePresence } from "motion/react";
 import { useNavigate } from "react-router";
 import { MotionContainer } from "@/components/animate";
 import { Icon } from "@/components/icon";
+import * as Sortable from "@/components/sortable";
 import { useSetShowMaximize, useShowMaximize } from "@/store/settingStore";
 import { useActiveTab, useTabActions, useTabs } from "@/store/tabStore";
 import { Button } from "@/ui/button";
 import { ScrollArea, ScrollBar } from "@/ui/scroll-area";
-import SortableContainer from "./components/sortable-container";
 import SortableTab from "./components/sortable-tab";
 
 export default function Tabs() {
@@ -145,58 +145,45 @@ export default function Tabs() {
 		}
 	};
 
-	// 处理标签重新排序
-	const handleSortEnd = (oldIndex: number, newIndex: number) => {
-		reorderTabs(oldIndex, newIndex);
-	};
-
-	// 为 dnd-kit 准备数据，需要 key 属性
-	const tabsWithKeys = tabs.map((tab) => ({
-		...tab,
-		key: tab.value,
-	}));
-
-	// 渲染拖拽覆盖层的组件
-	const renderOverlay = (activeId: string | number) => {
-		const activeTabData = tabs.find((tab) => tab.value === activeId);
-		if (!activeTabData) return null;
-
-		return (
-			<div className="cursor-pointer border border-border gap-1 h-full flex items-center px-2 py-1 rounded-md bg-primary/hover text-primary opacity-90 shadow-lg">
-				{activeTabData.icon && <Icon icon={activeTabData.icon} size={20} />}
-				{activeTabData.label}
-				{!activeTabData.pinned ? <Icon icon="mdi:close" size={14} /> : <Icon icon="mdi:pin" size={14} />}
-			</div>
-		);
-	};
 	return (
 		<div className="flex-1 px-3 flex items-center justify-between">
 			<ScrollArea className="whitespace-nowrap px-2">
-				<SortableContainer items={tabsWithKeys} onSortEnd={handleSortEnd} renderOverlay={renderOverlay}>
-					<MotionContainer className="flex items-center gap-2">
-						<AnimatePresence initial={false}>
-							{tabs.map((tab) => (
-								<SortableTab
-									key={tab.value}
-									tab={tab}
-									isActive={activeTab === tab.value}
-									totalTabs={tabs.length}
-									allTabs={tabs}
-									onTabClick={handleTabClick}
-									onCloseTab={handleCloseTab}
-									onTogglePin={handleTogglePin}
-									onCloseOthers={handleCloseOthers}
-									onCloseAll={handleCloseAll}
-									onRefreshTab={handleRefreshTab}
-									onSetFullscreen={handleSetFullscreen}
-									onOpenInNewWindow={handleOpenInNewWindow}
-									onCloseLeftTabs={handleCloseLeftTabs}
-									onCloseRightTabs={handleCloseRightTabs}
-								/>
-							))}
-						</AnimatePresence>
-					</MotionContainer>
-				</SortableContainer>
+				<Sortable.Root
+					getItemValue={(item) => item.value}
+					value={tabs}
+					onMove={(event) => {
+						reorderTabs(event.activeIndex, event.overIndex);
+					}}
+					orientation="mixed"
+				>
+					<Sortable.Content>
+						<MotionContainer className="flex items-center gap-2">
+							<AnimatePresence initial={false} mode="sync">
+								{tabs.map((tab) => (
+									<Sortable.Item key={tab.value} value={tab.value} asHandle>
+										<SortableTab
+											key={tab.value}
+											tab={tab}
+											isActive={activeTab === tab.value}
+											totalTabs={tabs.length}
+											allTabs={tabs}
+											onTabClick={handleTabClick}
+											onCloseTab={handleCloseTab}
+											onTogglePin={handleTogglePin}
+											onCloseOthers={handleCloseOthers}
+											onCloseAll={handleCloseAll}
+											onRefreshTab={handleRefreshTab}
+											onSetFullscreen={handleSetFullscreen}
+											onOpenInNewWindow={handleOpenInNewWindow}
+											onCloseLeftTabs={handleCloseLeftTabs}
+											onCloseRightTabs={handleCloseRightTabs}
+										/>
+									</Sortable.Item>
+								))}
+							</AnimatePresence>
+						</MotionContainer>
+					</Sortable.Content>
+				</Sortable.Root>
 				<ScrollBar orientation="horizontal" />
 			</ScrollArea>
 			<div className="flex items-center gap-1 ml-1">

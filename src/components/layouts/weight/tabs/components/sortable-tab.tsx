@@ -1,6 +1,5 @@
-import { useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
 import { m } from "motion/react";
+import * as React from "react";
 import { Icon } from "@/components/icon";
 import {
 	ContextMenu,
@@ -37,31 +36,25 @@ interface SortableTabProps {
 	onCloseRightTabs: (tabValue: string) => void;
 }
 
-export default function SortableTab({
-	tab,
-	isActive = false,
-	totalTabs = 1,
-	allTabs = [],
-	onTabClick,
-	onCloseTab,
-	onTogglePin,
-	onCloseOthers,
-	onCloseAll,
-	onRefreshTab,
-	onSetFullscreen,
-	onOpenInNewWindow,
-	onCloseLeftTabs,
-	onCloseRightTabs,
-}: SortableTabProps) {
-	const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: tab.value });
-
-	const style = {
-		transform: CSS.Transform.toString(transform),
-		transition,
-		opacity: isDragging ? 0.5 : 1,
-		zIndex: isDragging ? 1000 : 1,
-	};
-
+const SortableTab = React.forwardRef<HTMLDivElement, SortableTabProps>(function SortableTab(
+	{
+		tab,
+		isActive = false,
+		totalTabs = 1,
+		allTabs = [],
+		onTabClick,
+		onCloseTab,
+		onTogglePin,
+		onCloseOthers,
+		onCloseAll,
+		onRefreshTab,
+		onSetFullscreen,
+		onOpenInNewWindow,
+		onCloseLeftTabs,
+		onCloseRightTabs,
+	},
+	ref,
+) {
 	// 计算菜单项的可用性
 	const currentTabIndex = allTabs.findIndex((t) => t.value === tab.value);
 
@@ -101,18 +94,15 @@ export default function SortableTab({
 				stiffness: 300,
 				damping: 30,
 			}}
-			ref={setNodeRef}
-			style={style}
-			{...attributes}
+			ref={ref}
 		>
 			<ContextMenu>
 				<ContextMenuTrigger>
-					<m.div
+					<m.button
 						className={cn(
 							"cursor-pointer border border-border gap-1 h-full flex items-center px-2 py-1 rounded-md text-primary select-none transition-colors",
 							isActive ? "bg-primary text-primary-foreground" : "hover:bg-accent",
 						)}
-						{...listeners}
 						onClick={() => onTabClick?.(tab.value)}
 						whileTap={{ scale: 0.92 }}
 					>
@@ -150,7 +140,7 @@ export default function SortableTab({
 								}}
 							/>
 						) : null}
-					</m.div>
+					</m.button>
 				</ContextMenuTrigger>
 				<ContextMenuContent className="w-48">
 					<ContextMenuItem onClick={() => onCloseTab(tab.value)} disabled={tab.pinned || totalTabs <= 1}>
@@ -215,4 +205,5 @@ export default function SortableTab({
 			</ContextMenu>
 		</m.div>
 	);
-}
+});
+export default SortableTab;
