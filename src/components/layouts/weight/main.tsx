@@ -1,8 +1,8 @@
 import { concat } from "ramda";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { Outlet, ScrollRestoration, useLocation } from "react-router";
 import { AuthGuard } from "@/components/auth/auth-guard";
-// import GlobalLoading from "@/components/loading/global-loading";
+import { LineLoading } from "@/components/loading";
 import Page403 from "@/pages/sys/error/Page403";
 import { navData } from "@/routes/nav-data";
 import { useSettings } from "@/store/settingStore";
@@ -62,11 +62,10 @@ export function Main() {
 					willChange: "max-width",
 				}}
 			>
-				<Outlet />
-				<ScrollRestoration />
-				{/* <Suspense fallback={<GlobalLoading loading center width={80} />}>
-			
-				</Suspense> */}
+				<Suspense fallback={<LineLoading />}>
+					<Outlet />
+					<ScrollRestoration />
+				</Suspense>
 			</main>
 		</AuthGuard>
 	);
