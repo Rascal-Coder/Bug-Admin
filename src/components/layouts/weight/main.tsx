@@ -66,11 +66,6 @@ export function Main() {
 			>
 				<Suspense fallback={<LineLoading />}>
 					<Outlet />
-					{/* <MotionContainer>
-						<AnimatePresence>
-						
-						</AnimatePresence>
-					</MotionContainer> */}
 					<ScrollRestoration />
 				</Suspense>
 			</main>
