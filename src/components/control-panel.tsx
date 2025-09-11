@@ -1,6 +1,7 @@
 import { themeVars } from "@/theme/theme.css";
 import { Card, CardContent } from "@/ui/card";
 import { ScrollArea } from "@/ui/scroll-area";
+import { cn } from "@/utils";
 
 type Props = {
 	variantKey: {
@@ -9,8 +10,9 @@ type Props = {
 	}[];
 	selectedVariant: string;
 	onChangeVarient: (varient: string) => void;
+	className?: string;
 };
-export default function ControlPanel({ variantKey, selectedVariant, onChangeVarient }: Props) {
+export default function ControlPanel({ variantKey, selectedVariant, onChangeVarient, className }: Props) {
 	const selectedStyle = (variantKey: string) => {
 		return variantKey === selectedVariant
 			? {
@@ -22,7 +24,7 @@ export default function ControlPanel({ variantKey, selectedVariant, onChangeVari
 	return (
 		<Card>
 			<CardContent>
-				<ScrollArea className="h-[480px]">
+				<ScrollArea className={cn("h-[480px]", className)}>
 					{variantKey.map((item) => (
 						<div key={item.type}>
 							<div className="text-xs font-medium">{item.type.toUpperCase()}</div>

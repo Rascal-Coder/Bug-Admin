@@ -131,6 +131,12 @@ export const frontendNavConfig: FrontendMenuTree[] = [
 						component: "/pages/components/animate",
 						type: PermissionType.MENU,
 					},
+					{
+						name: "Scroller",
+						path: "/components/scroller",
+						component: "/pages/components/scroller",
+						type: PermissionType.MENU,
+					},
 				],
 			},
 		],

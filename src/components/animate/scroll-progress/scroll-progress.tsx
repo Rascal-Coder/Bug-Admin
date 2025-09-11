@@ -1,6 +1,6 @@
-import { useTheme } from "@/theme/hooks";
 import { type HTMLMotionProps, type MotionValue, m, useSpring } from "motion/react";
 import type { CSSProperties } from "react";
+import { useTheme } from "@/theme/hooks";
 
 /**
  * ScrollProgress 组件属性接口
