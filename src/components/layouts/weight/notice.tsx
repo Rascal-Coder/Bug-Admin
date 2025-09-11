@@ -11,9 +11,25 @@ import { Badge } from "@/ui/badge";
 import { Button } from "@/ui/button";
 import { Input } from "@/ui/input";
 import { ScrollArea } from "@/ui/scroll-area";
-import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle } from "@/ui/sheet";
+import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from "@/ui/sheet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/ui/tabs";
 import { Text } from "@/ui/typography";
+
+// 通知类型按钮配置
+const NOTIFICATION_ACTION_CONFIG = {
+	access: { accept: "Accept", decline: "Decline" },
+	user_request: { accept: "Accept", decline: "Decline" },
+	meeting: { accept: "Accept", decline: "Decline" },
+	upgrade: { accept: "Accept", decline: "Decline" },
+	invitation: { accept: "Accept", decline: "Decline" },
+	edit_request: { accept: "Accept", decline: "Decline" },
+} as const;
+
+// 获取按钮文本的函数
+const getActionButtonText = (type: string, action: "accept" | "decline"): string => {
+	const config = NOTIFICATION_ACTION_CONFIG[type as keyof typeof NOTIFICATION_ACTION_CONFIG];
+	return config?.[action] || (action === "accept" ? "Accept" : "Decline");
+};
 
 const BellStyled = styled.div<{
 	$bellAnimation: ReturnType<typeof keyframes>;
@@ -80,6 +96,7 @@ export default function NoticeButton() {
 				<SheetContent side="right" className="sm:max-w-md p-0 [&>button]:hidden flex flex-col" style={style}>
 					<SheetHeader className="flex flex-row items-center justify-between p-4 h-16 shrink-0">
 						<SheetTitle>Notifications</SheetTitle>
+						<SheetDescription></SheetDescription>
 						<Button
 							variant="ghost"
 							size="icon"
@@ -569,35 +586,9 @@ function NoticeTab() {
 					{/* Actions */}
 					{notification.hasActions && (
 						<div className="mt-3 flex space-x-2">
-							<Button size="sm">
-								{notification.type === "access"
-									? "Accept"
-									: notification.type === "user_request"
-										? "Accept"
-										: notification.type === "meeting"
-											? "Accept"
-											: notification.type === "upgrade"
-												? "Accept"
-												: notification.type === "invitation"
-													? "Accept"
-													: notification.type === "edit_request"
-														? "Accept"
-														: "Accept"}
-							</Button>
+							<Button size="sm">{getActionButtonText(notification.type, "accept")}</Button>
 							<Button variant="outline" size="sm">
-								{notification.type === "access"
-									? "Decline"
-									: notification.type === "user_request"
-										? "Decline"
-										: notification.type === "meeting"
-											? "Decline"
-											: notification.type === "upgrade"
-												? "Decline"
-												: notification.type === "invitation"
-													? "Decline"
-													: notification.type === "edit_request"
-														? "Decline"
-														: "Decline"}
+								{getActionButtonText(notification.type, "decline")}
 							</Button>
 						</div>
 					)}
