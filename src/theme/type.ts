@@ -1,5 +1,3 @@
-import type { ThemeMode } from "#/enum";
-
 export const themeTokens = {
 	colors: {
 		palette: {
@@ -193,7 +191,7 @@ export const themeTokens = {
 };
 
 export type UILibraryAdapterProps = {
-	mode: ThemeMode;
+	mode: "light" | "dark";
 	children: React.ReactNode;
 };
 export type UILibraryAdapter = React.FC<UILibraryAdapterProps>;

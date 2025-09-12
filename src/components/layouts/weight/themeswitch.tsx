@@ -4,9 +4,48 @@ import { ThemeMode } from "@/types/enum";
 import { Button } from "@/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/ui/dropdown-menu";
 import { cn } from "@/utils";
-
 export function ThemeSwitch() {
 	const { updateSettings, settings } = useUpdateSettings();
+	const handleThemeChange = (event: React.MouseEvent<HTMLDivElement>, theme: ThemeMode) => {
+		const isDark = theme === ThemeMode.Dark;
+		const isAppearanceTransition =
+			// @ts-expect-error
+			document.startViewTransition && !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+		if (!isAppearanceTransition || !event) {
+			updateSettings({ themeMode: theme });
+			return;
+		}
+		const transition = document.startViewTransition(async () => {
+			updateSettings({ themeMode: theme });
+		});
+
+		const x = event.clientX;
+		const y = event.clientY;
+		const endRadius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+		transition.ready.then(() => {
+			const clipPath = [`circle(0px at ${x}px ${y}px)`, `circle(${endRadius}px at ${x}px ${y}px)`];
+			const clipPathRes = () => {
+				const res = isDark ? [...clipPath].reverse() : clipPath;
+				console.log("clipPathRes", res);
+				return res;
+			};
+			const pseudoElementRes = () => {
+				const res = isDark ? "::view-transition-old(root)" : "::view-transition-new(root)";
+				console.log("pseudoElementRes", res);
+				return res;
+			};
+			document.documentElement.animate(
+				{
+					clipPath: clipPathRes(),
+				},
+				{
+					duration: 450,
+					easing: "ease-out",
+					pseudoElement: pseudoElementRes(),
+				},
+			);
+		});
+	};
 	return (
 		<DropdownMenu modal={false}>
 			<DropdownMenuTrigger asChild>
@@ -17,14 +56,14 @@ export function ThemeSwitch() {
 				</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent align="end">
-				<DropdownMenuItem onClick={() => updateSettings({ themeMode: ThemeMode.Light })}>
+				<DropdownMenuItem onClick={(event) => handleThemeChange(event, ThemeMode.Light)}>
 					Light <Check size={14} className={cn("ms-auto", settings.themeMode !== ThemeMode.Light && "hidden")} />
 				</DropdownMenuItem>
-				<DropdownMenuItem onClick={() => updateSettings({ themeMode: ThemeMode.Dark })}>
+				<DropdownMenuItem onClick={(event) => handleThemeChange(event, ThemeMode.Dark)}>
 					Dark
 					<Check size={14} className={cn("ms-auto", settings.themeMode !== ThemeMode.Dark && "hidden")} />
 				</DropdownMenuItem>
-				<DropdownMenuItem onClick={() => updateSettings({ themeMode: ThemeMode.System })}>
+				<DropdownMenuItem onClick={(event) => handleThemeChange(event, ThemeMode.System)}>
 					System
 					<Check size={14} className={cn("ms-auto", settings.themeMode !== ThemeMode.System && "hidden")} />
 				</DropdownMenuItem>

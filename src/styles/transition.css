@@ -96,3 +96,25 @@
 .zoom-out {
   animation: zoom-out 0.15s ease-in-out;
 }
+
+
+::view-transition-new(root),
+::view-transition-old(root) {
+  @apply animate-none mix-blend-normal;
+}
+
+::view-transition-old(root) {
+  @apply z-[1];
+}
+
+::view-transition-new(root) {
+  @apply z-[2147483646];
+}
+
+html[data-theme-mode="dark"]::view-transition-old(root) {
+  @apply z-[2147483646];
+}
+
+html[data-theme-mode="dark"]::view-transition-new(root) {
+  @apply z-[1];
+}
