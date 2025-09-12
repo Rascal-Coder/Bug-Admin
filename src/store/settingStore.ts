@@ -18,6 +18,7 @@ export type SettingsType = {
 	themeStretch: boolean;
 	collapsibleType: "icon" | "offcanvas";
 	transition: boolean;
+	layoutAnimation: "fade" | "fade-slide" | "fade-bottom" | "fade-scale" | "zoom-fade" | "zoom-out" | "none";
 };
 
 export type SignInLayout = "center" | "right" | "left";
@@ -47,6 +48,7 @@ export const defaultSettings: SettingsType = {
 	themeStretch: false,
 	collapsibleType: "icon",
 	transition: true,
+	layoutAnimation: "fade",
 };
 
 // 合并默认配置和用户偏好配置

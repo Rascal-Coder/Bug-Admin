@@ -1,8 +1,6 @@
-// import { AnimatePresence, m } from "motion/react";
 import { concat } from "ramda";
 import { Suspense, useEffect } from "react";
 import { Outlet, ScrollRestoration, useLocation } from "react-router";
-// import { MotionContainer, varFade } from "@/components/animate";
 import { AuthGuard } from "@/components/auth/auth-guard";
 import { LineLoading } from "@/components/loading";
 import Page403 from "@/pages/sys/error/Page403";
@@ -29,7 +27,7 @@ function findAuthByPath(path: string): string[] {
 }
 
 export function Main() {
-	const { themeStretch, layoutMode } = useSettings();
+	const { themeStretch, layoutMode, layoutAnimation } = useSettings();
 	const { pathname } = useLocation();
 	const currentNavAuth = findAuthByPath(pathname);
 	const menuInfo = getMenuInfoByPath(pathname);
@@ -48,9 +46,10 @@ export function Main() {
 	return (
 		<AuthGuard checkAny={currentNavAuth} fallback={<Page403 />}>
 			<main
+				key={`${pathname}-${layoutAnimation}`}
 				data-layout="bug-admin-layout"
 				className={cn(
-					"flex-auto w-full flex flex-col",
+					"flex-auto w-full flex flex-col fade",
 					"transition-[max-width] duration-300 ease-in-out",
 					"px-4 sm:px-6 py-4 sm:py-6 md:px-8 mx-auto",
 					{
