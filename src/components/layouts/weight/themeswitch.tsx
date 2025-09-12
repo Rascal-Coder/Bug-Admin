@@ -1,13 +1,14 @@
 import { Check, Moon, Sun } from "lucide-react";
-import { useUpdateSettings } from "@/hooks";
+import { useSystemTheme, useUpdateSettings } from "@/hooks";
 import { ThemeMode } from "@/types/enum";
 import { Button } from "@/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/ui/dropdown-menu";
 import { cn } from "@/utils";
 export function ThemeSwitch() {
 	const { updateSettings, settings } = useUpdateSettings();
+	const systemTheme = useSystemTheme();
 	const handleThemeChange = (event: React.MouseEvent<HTMLDivElement>, theme: ThemeMode) => {
-		const isDark = theme === ThemeMode.Dark;
+		const isDark = theme === ThemeMode.Dark || (theme === ThemeMode.System && systemTheme === ThemeMode.Dark);
 		const isAppearanceTransition =
 			// @ts-expect-error
 			document.startViewTransition && !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -24,24 +25,14 @@ export function ThemeSwitch() {
 		const endRadius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
 		transition.ready.then(() => {
 			const clipPath = [`circle(0px at ${x}px ${y}px)`, `circle(${endRadius}px at ${x}px ${y}px)`];
-			const clipPathRes = () => {
-				const res = isDark ? [...clipPath].reverse() : clipPath;
-				console.log("clipPathRes", res);
-				return res;
-			};
-			const pseudoElementRes = () => {
-				const res = isDark ? "::view-transition-old(root)" : "::view-transition-new(root)";
-				console.log("pseudoElementRes", res);
-				return res;
-			};
 			document.documentElement.animate(
 				{
-					clipPath: clipPathRes(),
+					clipPath: isDark ? [...clipPath].reverse() : clipPath,
 				},
 				{
 					duration: 450,
 					easing: "ease-out",
-					pseudoElement: pseudoElementRes(),
+					pseudoElement: isDark ? "::view-transition-old(root)" : "::view-transition-new(root)",
 				},
 			);
 		});
