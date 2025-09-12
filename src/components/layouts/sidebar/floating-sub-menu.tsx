@@ -1,17 +1,9 @@
 import { X } from "lucide-react";
 import { memo } from "react";
-import type { NavProps } from "@/components/nav/types";
 import { NavList } from "@/components/nav/vertical/nav-list";
 import { Button } from "@/ui/button";
 import { cn } from "@/utils";
-
-interface FloatingSubMenuProps {
-	data: NavProps["data"];
-	selectedGroup: string;
-	isVisible: boolean;
-	onClose: () => void;
-	className?: string;
-}
+import type { FloatingSubMenuProps } from "./types";
 
 export const FloatingSubMenu = memo(function FloatingSubMenu({
 	data,

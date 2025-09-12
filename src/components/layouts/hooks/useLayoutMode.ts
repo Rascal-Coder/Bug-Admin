@@ -3,8 +3,7 @@ import { useSettings } from "@/store/settingStore";
 import { LAYOUT_MODES } from "../constants/layoutConfig";
 
 /**
- * 布局模式相关的hooks
- * 统一管理布局模式相关的逻辑，减少重复的useSettings调用
+ * 布局模式
  */
 export const useLayoutMode = () => {
 	const { layoutMode } = useSettings();

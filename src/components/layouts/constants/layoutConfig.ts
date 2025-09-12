@@ -1,8 +1,3 @@
-/**
- * 布局相关配置常量
- * 统一管理布局相关的配置值，提高可维护性
- */
-
 // 用户信息常量
 export const USER_INFO = {
 	name: "Rascal-Coder",

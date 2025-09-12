@@ -2,9 +2,9 @@ import { memo, useMemo } from "react";
 import { navData } from "@/routes/nav-data";
 import { useLayoutMode } from "../hooks/useLayoutMode";
 import { useSidebarWidth } from "../hooks/useSidebarWidth";
-import { AppSidebar, AppSidebarContainer } from "../sidebar/app-sidebar";
 import { FloatingSubMenu } from "../sidebar/floating-sub-menu";
 import { MainMenu } from "../sidebar/main-menu";
+import { AppSidebar, AppSidebarContainer } from "../sidebar/sidebar-layout";
 
 /**
  * 混合布局侧边栏插槽

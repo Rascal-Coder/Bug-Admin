@@ -3,6 +3,7 @@ import { memo, useEffect, useMemo, useState } from "react";
 import { useLocation } from "react-router";
 import avatar from "@/assets/images/user/avatar.jpg";
 import { Icon } from "@/components/icon";
+import LocalePicker from "@/components/locale-picker";
 import { NavHorizontal } from "@/components/nav/horizontal";
 import type { NavItemDataProps } from "@/components/nav/types";
 import { useMediaQuery } from "@/hooks";
@@ -12,11 +13,16 @@ import { Button } from "@/ui/button";
 import { ScrollArea, ScrollBar } from "@/ui/scroll-area";
 import { Separator } from "@/ui/separator";
 import { MobileSidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarTrigger } from "@/ui/sidebar";
-import { cn } from "@/utils";
 import { BREAKPOINTS, USER_INFO } from "../constants/layoutConfig";
 import { useLayoutMode } from "../hooks/useLayoutMode";
+import { Logo } from "../sidebar/logo";
+import AccountDropdown from "../weight/account-dropdown";
 import { Breadcrumb } from "../weight/breadcrumb";
+import FullscreenButton from "../weight/fullscreen-button";
 import { NavUser } from "../weight/nav-user";
+import NoticeButton from "../weight/notice";
+import SearchBar from "../weight/search-bar";
+import { ThemeSwitch } from "../weight/themeswitch";
 
 /**
  * 水平布局头部左侧插槽
@@ -64,23 +70,7 @@ export const HorizontalHeaderLeftSlot = memo(() => {
 				)}
 				<MobileSidebar openMobile={openMobile} setOpenMobile={setOpenMobile}>
 					<SidebarHeader>
-						<div
-							className={cn(
-								"flex items-center gap-2 text-sm p-3 cursor-pointer rounded-md hover:bg-accent hover:text-accent-foreground",
-							)}
-							onClick={() => router.push("/")}
-						>
-							<div>
-								<Icon icon="local-logo" size={40} />
-							</div>
-							<span
-								className={cn(
-									"font-semibold text-xl leading-tight transition-all duration-300 ease-in-out whitespace-nowrap",
-								)}
-							>
-								Bug Admin
-							</span>
-						</div>
+						<Logo></Logo>
 					</SidebarHeader>
 					<SidebarContent>
 						<NavHorizontal data={navData} />
@@ -172,10 +162,22 @@ export const MixedHeaderLeftSlot = memo(() => {
  */
 export const HeaderLeftSlotRender = memo(() => {
 	const { isHorizontal, isMixed, isVertical, isDouble } = useLayoutMode();
-
 	if (isHorizontal) return <HorizontalHeaderLeftSlot />;
 	if (isMixed) return <MixedHeaderLeftSlot />;
 	if (isVertical || isDouble) return <VerticalHeaderLeftSlot />;
 
 	return null;
+});
+
+export const HeaderRightSlotRender = memo(() => {
+	return (
+		<>
+			<SearchBar />
+			<ThemeSwitch />
+			<LocalePicker />
+			<FullscreenButton />
+			<NoticeButton />
+			<AccountDropdown />
+		</>
+	);
 });

@@ -5,10 +5,6 @@ import { navData } from "@/routes/nav-data";
 import { findActiveMenuGroup } from "@/utils/tree";
 import { BREAKPOINTS, SIDEBAR_MODES, SIDEBAR_WIDTH } from "../constants/layoutConfig";
 
-/**
- * 侧边栏宽度计算hook
- * 优化double布局模式下的侧边栏宽度计算逻辑
- */
 export const useSidebarWidth = () => {
 	const location = useLocation();
 	const prevPathname = useRef(location.pathname);
@@ -78,21 +74,21 @@ export const useSidebarWidth = () => {
 	}, [updateSettings]);
 
 	return {
-		// 状态
+		// states
 		selectedGroup,
 		isSubMenuVisible,
 		isManualSelection,
 		isMobile,
 		transition,
 		sidebarWidth,
-		// 计算值
+		// computed values
 		mainMenuWidth,
 		subMenuWidth,
-		// 事件处理
+		// events handlers
 		handleGroupSelect,
 		handleGroupClick,
 		handleSubMenuClose,
-		// 状态更新
+		// state updaters
 		setSelectedGroup,
 		setIsSubMenuVisible,
 		setIsManualSelection,

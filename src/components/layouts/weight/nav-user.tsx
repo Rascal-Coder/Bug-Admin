@@ -1,5 +1,6 @@
 import { Book, ChevronsUpDown, Github, HelpCircle, LogOut } from "lucide-react";
 import { NavLink } from "react-router";
+import { GLOBAL_CONFIG } from "@/global-config";
 import { useRouter } from "@/routes/hooks";
 import { useUserActions } from "@/store/userStore";
 import { Avatar, AvatarFallback, AvatarImage } from "@/ui/avatar";
@@ -13,7 +14,6 @@ import {
 	DropdownMenuTrigger,
 } from "@/ui/dropdown-menu";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/ui/sidebar";
-import { GLOBAL_CONFIG } from "@/global-config";
 
 type NavUserProps = {
 	user: {
