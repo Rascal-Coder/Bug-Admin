@@ -12,6 +12,11 @@ interface SidebarWrapperProps {
 	headerRightSlot: React.ReactNode;
 	insetClassName?: string;
 	style?: React.CSSProperties;
+	sidebarWidth?: string;
+	// navData?: {
+	// 	name?: string;
+	// 	items: NavItemDataProps[];
+	// }[];
 }
 
 export default function SidebarWrapper({
@@ -20,6 +25,7 @@ export default function SidebarWrapper({
 	headerRightSlot,
 	insetClassName,
 	style,
+	sidebarWidth,
 }: SidebarWrapperProps) {
 	const { layoutMode } = useSettings();
 	const showMaximize = useShowMaximize();
@@ -31,7 +37,12 @@ export default function SidebarWrapper({
 	return (
 		<SidebarProvider
 			defaultOpen={defaultOpen}
-			style={{ "--sidebar-width": "var(--layout-nav-width)", ...style } as React.CSSProperties}
+			style={
+				{
+					"--sidebar-width": sidebarWidth || "var(--layout-nav-width)",
+					...style,
+				} as React.CSSProperties
+			}
 		>
 			{layoutMode !== "horizontal" ? (
 				<>

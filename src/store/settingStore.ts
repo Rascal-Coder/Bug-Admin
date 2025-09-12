@@ -87,6 +87,8 @@ const useSettingStore = create<SettingStore>()(
 
 export const useSettings = () => useSettingStore((state) => state.settings);
 export const useSettingActions = () => useSettingStore((state) => state.actions);
+export const useSetSettings = () => useSettingStore((state) => state.actions.setSettings);
+export const useClearSettings = () => useSettingStore((state) => state.actions.clearSettings);
 export const useSignInLayout = () => useSettingStore((state) => state.signInLayout);
 export const useSetSignInLayout = () => useSettingStore((state) => state.actions.setSignInLayout);
 export const useShowMaximize = () => useSettingStore((state) => state.showMaximize);

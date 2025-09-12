@@ -1,6 +1,6 @@
 import type { ThemeMode } from "#/enum";
 import { ThemeColorPresets } from "#/enum";
-import { useSettingActions, useSettings } from "@/store/settingStore";
+import { useSetSettings, useSettings } from "@/store/settingStore";
 import { generateColorVariants } from "@/utils/theme";
 import { themeVars } from "../theme.css";
 import { baseThemeTokens } from "../tokens/base";
@@ -10,7 +10,7 @@ import { typographyTokens } from "../tokens/typography";
 
 export function useTheme() {
 	const settings = useSettings();
-	const { setSettings } = useSettingActions();
+	const setSettings = useSetSettings();
 
 	let colorTokens = settings.themeMode === "light" ? lightColorTokens : darkColorTokens;
 

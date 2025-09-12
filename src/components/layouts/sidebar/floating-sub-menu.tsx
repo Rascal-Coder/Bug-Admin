@@ -55,9 +55,6 @@ export const FloatingSubMenu = memo(function FloatingSubMenu({
 					>
 						<X className="h-4 w-4" />
 					</Button>
-					{/* {!isPinned && (
-
-					)} */}
 				</div>
 			</div>
 

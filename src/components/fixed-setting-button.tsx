@@ -14,7 +14,8 @@ import { SwitchItem } from "@/components/switch-item";
 import { GLOBAL_CONFIG } from "@/global-config";
 import { useUpdateSettings } from "@/hooks";
 import { usePathname } from "@/routes/hooks/use-pathname";
-import { initialSettings, type SettingsType, useSettingActions } from "@/store/settingStore";
+import type { SettingsType } from "@/store/settingStore";
+import { initialSettings, useClearSettings, useSetSettings } from "@/store/settingStore";
 import { presetsColors } from "@/theme/tokens/color";
 import { FontFamilyPreset } from "@/theme/tokens/typography";
 import { Button } from "@/ui/button";
@@ -58,8 +59,9 @@ export function FixedSettingButton() {
 		themeStretch,
 		collapsibleType,
 	} = settings;
-	const { setSettings, clearSettings } = useSettingActions();
 
+	const setSettings = useSetSettings();
+	const clearSettings = useClearSettings();
 	// 重置所有设置
 	const handleResetSettings = () => {
 		clearSettings();

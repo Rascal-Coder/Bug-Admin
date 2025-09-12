@@ -1,5 +1,5 @@
 import "./theme/theme.css";
-import "./global.css";
+import "./styles/global.css";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router";
 import { worker } from "./_mock";

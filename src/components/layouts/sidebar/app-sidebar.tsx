@@ -7,6 +7,7 @@ import { useRouter } from "@/routes/hooks";
 import { useSettings } from "@/store/settingStore";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail, useSidebar } from "@/ui/sidebar";
 import { cn } from "@/utils";
+import { BREAKPOINTS, USER_INFO } from "../constants/layoutConfig";
 import { NavUser } from "../weight/nav-user";
 import Siderbar from "./siderbar";
 
@@ -36,7 +37,7 @@ export function Logo({ isMobile = false, open = true }: { isMobile?: boolean; op
 }
 export function AppSidebar({ data }: React.ComponentProps<typeof Sidebar> & { data: NavProps["data"] }) {
 	const { open } = useSidebar();
-	const isMobile = useMediaQuery({ maxWidth: 768 });
+	const isMobile = useMediaQuery({ maxWidth: BREAKPOINTS.MOBILE });
 	return (
 		<AppSidebarContainer>
 			<SidebarHeader>
@@ -48,8 +49,8 @@ export function AppSidebar({ data }: React.ComponentProps<typeof Sidebar> & { da
 			<SidebarFooter>
 				<NavUser
 					user={{
-						name: "Rascal-Coder",
-						email: "menoqiqio@gmail.com",
+						name: USER_INFO.name,
+						email: USER_INFO.email,
 						avatar: avatar,
 					}}
 				/>
