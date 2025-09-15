@@ -10,7 +10,7 @@ export default {
 		fontFamily: createTailwinConfg("typography.fontFamily"),
 		extend: {
 			colors: {
-				// slash admin theme tokens
+				// bug admin theme tokens
 				primary: creatColorChannel("colors.palette.primary"),
 				success: creatColorChannel("colors.palette.success"),
 				warning: creatColorChannel("colors.palette.warning"),

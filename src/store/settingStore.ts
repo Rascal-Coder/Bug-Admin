@@ -95,7 +95,7 @@ export const useSignInLayout = () => useSettingStore((state) => state.signInLayo
 export const useSetSignInLayout = () => useSettingStore((state) => state.actions.setSignInLayout);
 export const useShowMaximize = () => useSettingStore((state) => state.showMaximize);
 export const useSetShowMaximize = () => useSettingStore((state) => state.actions.setShowMaximize);
-export const useDarkMode = () => {
-	const settings = useSettingStore((state) => state.settings);
-	return settings?.themeMode === ThemeMode.Dark;
-};
+// export const useDarkMode = () => {
+// 	const settings = useSettingStore((state) => state.settings);
+// 	return settings?.themeMode === ThemeMode.Dark;
+// };

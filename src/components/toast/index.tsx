@@ -59,7 +59,6 @@ export default function Toast() {
 						</div>
 					),
 				}}
-				expand
 			/>
 		</ToasterStyleWrapper>
 	);

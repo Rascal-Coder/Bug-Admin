@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
 import { toast } from "sonner";
 import { z } from "zod";
+import { Icon } from "@/components/icon";
 import { PasswordInput } from "@/components/password-input";
 import { GLOBAL_CONFIG } from "@/global-config";
 import { useSignIn } from "@/store/userStore";
@@ -12,7 +13,6 @@ import { Button } from "@/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/ui/form";
 import { Input } from "@/ui/input";
 import { cn, sleep } from "@/utils";
-import { Icon } from "@/components/icon";
 import { SignInStateEnum, useSignInContext } from "../providers/sign-in-provider";
 
 const formSchema = z.object({
@@ -52,6 +52,7 @@ export function UserAuthForm({ className, redirectTo, ...props }: UserAuthFormPr
 
 				return `Welcome back, ${data.username}!`;
 			},
+			duration: 600,
 			error: "Error",
 		});
 	}
