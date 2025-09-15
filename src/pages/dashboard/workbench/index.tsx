@@ -1,4 +1,5 @@
 import { Icon } from "@/components/icon";
+import NumberTicker from "@/components/number-ticker";
 import { Badge } from "@/ui/badge";
 import { Card, CardAction, CardDescription, CardFooter, CardHeader, CardTitle } from "@/ui/card";
 import { AreaGraph } from "./modules/area-graph";
@@ -16,7 +17,9 @@ export default function Workbench() {
 				<Card className="@container/card">
 					<CardHeader>
 						<CardDescription>Total Revenue</CardDescription>
-						<CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">$1,250.00</CardTitle>
+						<CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
+							<NumberTicker value={1250} prefix="$" />
+						</CardTitle>
 						<CardAction>
 							<Badge variant="outline">
 								<Icon icon="mdi:trending-up" />
@@ -35,7 +38,9 @@ export default function Workbench() {
 				<Card className="@container/card">
 					<CardHeader>
 						<CardDescription>New Customers</CardDescription>
-						<CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">1,234</CardTitle>
+						<CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
+							<NumberTicker value={1234} />
+						</CardTitle>
 						<CardAction>
 							<Badge variant="outline">
 								<Icon icon="mdi:trending-down" />
@@ -54,7 +59,9 @@ export default function Workbench() {
 				<Card className="@container/card">
 					<CardHeader>
 						<CardDescription>Active Accounts</CardDescription>
-						<CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">45,678</CardTitle>
+						<CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
+							<NumberTicker value={45678} />
+						</CardTitle>
 						<CardAction>
 							<Badge variant="outline">
 								<Icon icon="mdi:trending-up" />
@@ -73,7 +80,9 @@ export default function Workbench() {
 				<Card className="@container/card">
 					<CardHeader>
 						<CardDescription>Growth Rate</CardDescription>
-						<CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">4.5%</CardTitle>
+						<CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
+							<NumberTicker value={4.5} decimalPlaces={2} suffix="%" />
+						</CardTitle>
 						<CardAction>
 							<Badge variant="outline">
 								<Icon icon="mdi:trending-up" />

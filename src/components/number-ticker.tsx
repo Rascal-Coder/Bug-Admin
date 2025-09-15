@@ -93,11 +93,7 @@ const NumberTicker = ({
 	}, [motionValue, springValue, endValue, duration, updateTextContent]);
 
 	return (
-		<span
-			className={clsx("inline-block tabular-nums tracking-wider text-white dark:text-dark", className)}
-			ref={ref}
-			{...props}
-		>
+		<span className={clsx("inline-block tabular-nums tracking-wider ", className)} ref={ref} {...props}>
 			{prefix} {startValue} {suffix}
 		</span>
 	);
