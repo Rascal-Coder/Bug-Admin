@@ -1,8 +1,10 @@
+import { useEffect, useState } from "react";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 import { Icon } from "@/components/icon";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/ui/card";
-
 import { type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/ui/chart";
+import { Skeleton } from "@/ui/skeleton";
+import { sleep } from "@/utils";
 
 const chartData = [
 	{ month: "January", desktop: 186, mobile: 80 },
@@ -28,7 +30,15 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function AreaGraph() {
-	return (
+	const [isLoading, setIsLoading] = useState(true);
+	useEffect(() => {
+		sleep(1000).then(() => {
+			setIsLoading(false);
+		});
+	}, []);
+	return isLoading ? (
+		<AreaGraphSkeleton />
+	) : (
 		<Card className="@container/card">
 			<CardHeader>
 				<CardTitle>Area Chart - Stacked</CardTitle>
@@ -78,6 +88,27 @@ export function AreaGraph() {
 					</div>
 				</div>
 			</CardFooter>
+		</Card>
+	);
+}
+
+function AreaGraphSkeleton() {
+	return (
+		<Card>
+			<CardHeader className="flex flex-col items-stretch space-y-0 border-b p-0 sm:flex-row">
+				<div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">
+					<Skeleton className="h-6 w-[180px]" />
+					<Skeleton className="h-4 w-[250px]" />
+				</div>
+			</CardHeader>
+			<CardContent className="px-2 sm:p-6">
+				{/* Area-like shape */}
+				<div className="relative aspect-auto h-[280px] w-full">
+					<div className="from-primary/5 to-primary/20 absolute inset-0 rounded-lg bg-linear-to-t" />
+					<Skeleton className="absolute right-0 bottom-0 left-0 h-[1px]" /> {/* x-axis */}
+					<Skeleton className="absolute top-0 bottom-0 left-0 w-[1px]" /> {/* y-axis */}
+				</div>
+			</CardContent>
 		</Card>
 	);
 }

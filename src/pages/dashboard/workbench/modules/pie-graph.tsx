@@ -1,8 +1,11 @@
 import * as React from "react";
+import { useEffect, useState } from "react";
 import { Label, Pie, PieChart } from "recharts";
 import { Icon } from "@/components/icon";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/ui/card";
 import { type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/ui/chart";
+import { Skeleton } from "@/ui/skeleton";
+import { sleep } from "@/utils";
 
 const chartData = [
 	{ browser: "chrome", visitors: 275, fill: "var(--primary)" },
@@ -42,8 +45,15 @@ export function PieGraph() {
 	const totalVisitors = React.useMemo(() => {
 		return chartData.reduce((acc, curr) => acc + curr.visitors, 0);
 	}, []);
-
-	return (
+	const [isLoading, setIsLoading] = useState(true);
+	useEffect(() => {
+		sleep(1000).then(() => {
+			setIsLoading(false);
+		});
+	}, []);
+	return isLoading ? (
+		<PieGraphSkeleton />
+	) : (
 		<Card className="@container/card">
 			<CardHeader>
 				<CardTitle>Pie Chart - Donut with Text</CardTitle>
@@ -102,6 +112,25 @@ export function PieGraph() {
 				</div>
 				<div className="text-muted-foreground leading-none">Based on data from January - June 2024</div>
 			</CardFooter>
+		</Card>
+	);
+}
+
+function PieGraphSkeleton() {
+	return (
+		<Card>
+			<CardHeader className="flex flex-col items-stretch space-y-0 border-b p-0">
+				<div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">
+					<Skeleton className="h-6 w-[180px]" />
+					<Skeleton className="h-4 w-[250px]" />
+				</div>
+			</CardHeader>
+			<CardContent className="p-6">
+				<div className="flex h-[280px] items-center justify-center">
+					{/* Circular skeleton for pie chart */}
+					<Skeleton className="h-[300px] w-[300px] rounded-full" />
+				</div>
+			</CardContent>
 		</Card>
 	);
 }
