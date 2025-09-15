@@ -187,6 +187,26 @@ export const DB_MENU: BackendMenu[] = [
 
 	// group_others
 	{
+		id: "others_permission",
+		parentId: "group_others",
+		name: "权限",
+		code: "others:permission",
+		icon: "local:ic-disabled",
+		type: MENU,
+		path: "/others/permission",
+		component: "/pages/others/permission",
+	},
+	{
+		id: "others_permission_page_test",
+		parentId: "group_others",
+		name: "权限测试",
+		code: "others:permission:page-test",
+		type: MENU,
+		hidden: true,
+		path: "/others/permission/page-test",
+		component: "/pages/others/permission/page-test",
+	},
+	{
 		id: "disabled",
 		parentId: "group_others",
 		name: "项目禁用",
@@ -225,7 +245,6 @@ export const DB_MENU: BackendMenu[] = [
 		type: MENU,
 		path: "/link/external_link",
 		isExternalLink: true,
-		// component: "/pages/sys/others/link/external-link",
 		externalLink: new URL("https://ant.design/index-cn"),
 	},
 	{
@@ -237,7 +256,6 @@ export const DB_MENU: BackendMenu[] = [
 		path: "/link/iframe",
 		externalLink: new URL("https://ant.design/index-cn"),
 		isIframeLink: true,
-		// component: "/pages/sys/others/link/iframe",
 	},
 ];
 
