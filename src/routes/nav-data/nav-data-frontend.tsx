@@ -15,10 +15,10 @@ export const frontendNavConfig: FrontendMenuTree[] = [
 				type: PermissionType.MENU,
 			},
 			{
-				name: "分析",
+				name: "环境依赖",
 				icon: "local:ic-analysis",
 				path: "/analysis",
-				component: "/pages/dashboard/analysis",
+				component: "/pages/dashboard/environmental-dependence",
 				type: PermissionType.MENU,
 			},
 		],

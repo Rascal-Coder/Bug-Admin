@@ -26,12 +26,12 @@ export const DB_MENU: BackendMenu[] = [
 	{
 		id: "analysis",
 		parentId: "group_dashboard",
-		name: "分析",
+		name: "环境依赖",
 		code: "analysis",
 		icon: "local:ic-analysis",
 		type: MENU,
 		path: "/analysis",
-		component: "/pages/dashboard/analysis",
+		component: "/pages/dashboard/environmental-dependence",
 	},
 
 	// group_pages
