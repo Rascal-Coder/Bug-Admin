@@ -166,6 +166,24 @@ export const DB_MENU: BackendMenu[] = [
 		path: "/components/toast",
 		component: "/pages/components/toast",
 	},
+	{
+		id: "components_animate",
+		parentId: "components",
+		name: "Animate",
+		code: "components:animate",
+		path: "/components/animate",
+		component: "/pages/components/animate",
+		type: MENU,
+	},
+	{
+		id: "components_scroller",
+		parentId: "components",
+		name: "Scroller",
+		code: "components:scroller",
+		path: "/components/scroller",
+		component: "/pages/components/scroller",
+		type: MENU,
+	},
 
 	// group_others
 	{
