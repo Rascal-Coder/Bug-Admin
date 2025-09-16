@@ -40,6 +40,15 @@ const COLLAPSIBLE_TYPE_OPTIONS: SelectOption[] = [
 	{ value: "offcanvas", label: "offcanvas" },
 ];
 
+const LAYOUT_ANIMATION_OPTIONS: SelectOption[] = [
+	{ value: "fade", label: "fade" },
+	{ value: "fade-slide", label: "fade-slide" },
+	{ value: "fade-bottom", label: "fade-bottom" },
+	{ value: "fade-scale", label: "fade-scale" },
+	{ value: "zoom-fade", label: "zoom-fade" },
+	{ value: "zoom-out", label: "zoom-out" },
+];
+
 export function FixedSettingButton() {
 	const pathname = usePathname();
 	const sheetContentBgStyle: CSSProperties = {
@@ -58,6 +67,7 @@ export function FixedSettingButton() {
 		layoutMode,
 		themeStretch,
 		collapsibleType,
+		layoutAnimation,
 	} = settings;
 
 	const setSettings = useSetSettings();
@@ -313,6 +323,15 @@ export function FixedSettingButton() {
 											折叠动画
 										</SelectItem>
 									)}
+									<SelectItem
+										items={LAYOUT_ANIMATION_OPTIONS}
+										value={layoutAnimation}
+										onValueChange={(value) =>
+											updateSettings({ layoutAnimation: value as SettingsType["layoutAnimation"] })
+										}
+									>
+										页面切换动画
+									</SelectItem>
 									<div className="grid grid-cols-2 gap-3">
 										{/* 垂直菜单栏 */}
 										<Tooltip>

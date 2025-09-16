@@ -1,6 +1,8 @@
+// import KeepAlive from "react-activation";
+import KeepAlive, { useKeepAliveRef } from "keepalive-for-react";
 import { concat } from "ramda";
-import { Suspense, useEffect } from "react";
-import { Outlet, ScrollRestoration, useLocation } from "react-router";
+import { Suspense, useEffect, useMemo } from "react";
+import { ScrollRestoration, useLocation, useOutlet } from "react-router";
 import { AuthGuard } from "@/components/auth/auth-guard";
 import { LineLoading } from "@/components/loading";
 import Page403 from "@/pages/sys/error/Page403";
@@ -28,10 +30,11 @@ function findAuthByPath(path: string): string[] {
 
 export function Main() {
 	const { themeStretch, layoutMode, layoutAnimation } = useSettings();
-	const { pathname } = useLocation();
+	const { pathname, search } = useLocation();
 	const currentNavAuth = findAuthByPath(pathname);
 	const menuInfo = getMenuInfoByPath(pathname);
 	const { addTab } = useTabActions();
+	const aliveRef = useKeepAliveRef();
 	useEffect(() => {
 		if (menuInfo && menuInfo.type === PermissionType.MENU) {
 			addTab({
@@ -42,20 +45,23 @@ export function Main() {
 			});
 		}
 	}, [menuInfo, addTab]);
+	const outlet = useOutlet();
+
+	const currentCacheKey = useMemo(() => {
+		return pathname + search;
+	}, [pathname, search]);
 
 	return (
 		<AuthGuard checkAny={currentNavAuth} fallback={<Page403 />}>
 			<main
-				key={`${pathname}-${layoutAnimation}`}
 				data-layout="bug-admin-layout"
 				className={cn(
-					"flex-auto w-full flex flex-col fade",
+					"flex-auto w-full flex flex-col",
 					"transition-[max-width] duration-300 ease-in-out",
 					"px-4 sm:px-6 py-4 sm:py-6 md:px-8 mx-auto",
 					{
 						"max-w-full": themeStretch,
 						"xl:max-w-screen-xl": !themeStretch,
-
 						"h-[calc(100svh-(var(--spacing)*30)))]": layoutMode === "horizontal",
 					},
 				)}
@@ -63,10 +69,12 @@ export function Main() {
 					willChange: "max-width",
 				}}
 			>
-				<Suspense fallback={<LineLoading />}>
-					<Outlet />
-					<ScrollRestoration />
-				</Suspense>
+				<KeepAlive activeCacheKey={currentCacheKey} aliveRef={aliveRef} cacheNodeClassName={layoutAnimation}>
+					<Suspense fallback={<LineLoading />}>
+						{outlet}
+						<ScrollRestoration />
+					</Suspense>
+				</KeepAlive>
 			</main>
 		</AuthGuard>
 	);
