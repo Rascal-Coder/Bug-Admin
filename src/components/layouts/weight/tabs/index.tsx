@@ -27,10 +27,17 @@ export default function Tabs() {
 	const setShowMaximize = useSetShowMaximize();
 	// 处理tab操作
 	const handleCloseTab = (tabValue: string) => {
+		const closingTab = tabs.find((t) => t.value === tabValue);
+		const closingPath = closingTab?.path;
 		const remainingTabs = tabs.filter((tab) => tab.value !== tabValue);
 		const isClosingActiveTab = activeTab === tabValue;
 
 		removeTab(tabValue);
+
+		// 派发销毁缓存（按 path 为 key）
+		if (closingPath) {
+			window.dispatchEvent(new CustomEvent("keepalive-destroy", { detail: { key: closingPath } }));
+		}
 
 		// 如果关闭后没有tab了，导航到默认页面
 		if (remainingTabs.length === 0) {
@@ -47,7 +54,17 @@ export default function Tabs() {
 	};
 
 	const handleCloseOthers = (currentTabValue: string) => {
+		const toClosePaths = tabs
+			.filter((t) => t.value !== currentTabValue && !t.pinned)
+			.map((t) => t.path)
+			.filter(Boolean);
+
 		removeOtherTabs(currentTabValue);
+
+		// 批量销毁被关闭的缓存（保留 pinned 与 current）
+		if (toClosePaths.length > 0) {
+			window.dispatchEvent(new CustomEvent("keepalive-destroy", { detail: { keys: toClosePaths } }));
+		}
 
 		// 如果当前激活的tab不是保留的tab，需要导航到保留的tab
 		if (activeTab !== currentTabValue) {
@@ -65,6 +82,15 @@ export default function Tabs() {
 		const isCurrentTabPinned = currentTab?.pinned || false;
 
 		removeAllTabs();
+
+		// 销毁所有未 pinned 的缓存
+		const toClosePaths = tabs
+			.filter((t) => !t.pinned)
+			.map((t) => t.path)
+			.filter(Boolean);
+		if (toClosePaths.length > 0) {
+			window.dispatchEvent(new CustomEvent("keepalive-destroy", { detail: { keys: toClosePaths } }));
+		}
 
 		if (pinnedTabs.length > 0) {
 			if (isCurrentTabPinned) {
@@ -108,7 +134,17 @@ export default function Tabs() {
 		const targetTabIndex = tabs.findIndex((tab) => tab.value === tabValue);
 		const activeTabWillBeRemoved = currentTabIndex < targetTabIndex && !tabs[currentTabIndex]?.pinned;
 
+		const toClosePaths = tabs
+			.slice(0, targetTabIndex)
+			.filter((t) => !t.pinned)
+			.map((t) => t.path)
+			.filter(Boolean);
+
 		removeLeftTabs(tabValue);
+
+		if (toClosePaths.length > 0) {
+			window.dispatchEvent(new CustomEvent("keepalive-destroy", { detail: { keys: toClosePaths } }));
+		}
 
 		// 如果当前活动的tab被关闭了，需要导航到目标tab
 		if (activeTabWillBeRemoved) {
@@ -125,7 +161,17 @@ export default function Tabs() {
 		const targetTabIndex = tabs.findIndex((tab) => tab.value === tabValue);
 		const activeTabWillBeRemoved = currentTabIndex > targetTabIndex && !tabs[currentTabIndex]?.pinned;
 
+		const toClosePaths = tabs
+			.slice(targetTabIndex + 1)
+			.filter((t) => !t.pinned)
+			.map((t) => t.path)
+			.filter(Boolean);
+
 		removeRightTabs(tabValue);
+
+		if (toClosePaths.length > 0) {
+			window.dispatchEvent(new CustomEvent("keepalive-destroy", { detail: { keys: toClosePaths } }));
+		}
 
 		// 如果当前活动的tab被关闭了，需要导航到目标tab
 		if (activeTabWillBeRemoved) {

@@ -1,5 +1,6 @@
+import type React from "react";
 import { Title } from "@/ui/typography";
 
-export default function MenuLevel() {
-	return <Title as="h2">Menu Level: 2a</Title>;
-}
+const MenuLevel2a: React.FC = () => <Title as="h2">Menu Level: 2a</Title>;
+
+export default MenuLevel2a;

@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from "react";
+import { GLOBAL_CONFIG } from "@/global-config";
 import { useUserToken } from "@/store/userStore";
 import { useRouter } from "../hooks";
-import { GLOBAL_CONFIG } from "@/global-config";
 
 type Props = {
 	children: React.ReactNode;

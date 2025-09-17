@@ -146,6 +146,36 @@ export const frontendNavConfig: FrontendMenuTree[] = [
 		type: PermissionType.GROUP,
 		children: [
 			{
+				name: "权限",
+				icon: "mingcute:safe-lock-fill",
+				type: PermissionType.MENU,
+				path: "/others/permission",
+				component: "/pages/others/permission",
+			},
+			{
+				name: "keep-alive",
+				icon: "mingcute:bookmark-fill",
+				path: "/others/keep-alive",
+				component: "/pages/others/keep-alive",
+				children: [
+					{
+						name: "keep",
+						path: "/others/keep-alive/keep",
+						component: "/pages/others/keep-alive/keep",
+						type: PermissionType.MENU,
+						keepAlive: true,
+					},
+					{
+						name: "no-keep",
+						path: "/others/keep-alive/no-keep",
+						component: "/pages/others/keep-alive/no-keep",
+						type: PermissionType.MENU,
+						keepAlive: false,
+					},
+				],
+				type: PermissionType.CATALOGUE,
+			},
+			{
 				name: "项目禁用",
 				icon: "local:ic-disabled",
 				path: "/disabled",

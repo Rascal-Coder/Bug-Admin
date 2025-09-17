@@ -9,6 +9,7 @@ export interface BackendMenu extends CommonOptions, MenuMetaInfo {
 	code: string;
 	order?: number;
 	type: PermissionType;
+	keepAlive?: boolean;
 }
 
 export type MenuMetaInfo = Partial<

@@ -20,22 +20,24 @@ export type NavItem = Partial<
 
 const convertChildren = (children?: BackendMenuTree[] | FrontendMenuTree[]): NavItemDataProps[] => {
 	if (!children?.length) return [];
-
-	return children.map((child) => ({
-		type: child.type,
-		title: child.name,
-		path: child.path || "",
-		icon: child.icon,
-		caption: child.caption,
-		badge: child.badge,
-		badgeType: child.badgeType,
-		badgeVariants: child.badgeVariants,
-		disabled: child.disabled,
-		externalLink: child.externalLink,
-		auth: child.auth,
-		hidden: child.hidden,
-		children: convertChildren(child.children),
-	}));
+	return children.map((child) => {
+		return {
+			type: child.type,
+			title: child.name,
+			path: child.path || "",
+			icon: child.icon,
+			caption: child.caption,
+			badge: child.badge,
+			badgeType: child.badgeType,
+			badgeVariants: child.badgeVariants,
+			disabled: child.disabled,
+			externalLink: child.externalLink,
+			auth: child.auth,
+			hidden: child.hidden,
+			keepAlive: child.keepAlive,
+			children: convertChildren(child.children),
+		};
+	});
 };
 
 export const convert = (menuTree: BackendMenuTree[] | FrontendMenuTree[]): NavProps["data"] => {

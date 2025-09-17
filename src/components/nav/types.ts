@@ -26,6 +26,7 @@ export type NavItemDataProps = {
 	badgeVariants?: BadgeProps["variant"];
 	caption?: string;
 	auth?: string[];
+	keepAlive?: boolean;
 	children?: NavItemDataProps[];
 } & NavItemStateProps;
 
