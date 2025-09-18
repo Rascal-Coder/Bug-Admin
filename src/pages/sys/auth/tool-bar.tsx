@@ -1,9 +1,9 @@
 import { InspectionPanel, PanelLeft, PanelRight } from "lucide-react";
 import { useState } from "react";
 import { Icon } from "@/components/icon";
-import { ThemeSwitch } from "@/components/layouts/weight/themeswitch";
 import LocalePicker from "@/components/locale-picker";
 import { useUpdateSettings } from "@/hooks";
+import { ThemeSwitch } from "@/layouts/weight/themeswitch";
 import { useSetSignInLayout, useSignInLayout } from "@/store/settingStore";
 import { presetsColors } from "@/theme/tokens/color";
 import type { ThemeColorPresets } from "@/types/enum";
