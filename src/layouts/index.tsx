@@ -1,10 +1,15 @@
 import { useMemo, useState } from "react";
+import { useLocation } from "react-router";
+import { useUpdateEffect } from "react-use";
 import avatar from "@/assets/images/user/avatar.jpg";
 import type { NavItemDataProps } from "@/components/nav/types";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { navData } from "@/routes/nav-data";
 import { useSettings } from "@/store/settingStore";
+import { useTabActions } from "@/store/tabStore";
+import { PermissionType } from "@/types/enum";
 import { cn } from "@/utils";
+import { getMenuInfoByPath } from "@/utils/menu";
 import { HeaderLeftSlotRender, HeaderRightSlotRender, MobileSidebar } from "./components/HeaderSlots";
 import { DoubleSidebarSlot } from "./components/SidebarSlots";
 import { USER_INFO } from "./constants/layoutConfig";
@@ -106,6 +111,36 @@ export default function Layouts() {
 		return _data;
 	}, [layoutMode, verticalMenuData]);
 	const { sidebarWidth } = useSidebarWidth();
+	const { addTab, addCacheKey, clearCacheKeys } = useTabActions();
+	const { pathname } = useLocation();
+	const menuInfo = getMenuInfoByPath(pathname);
+	// 递归初始化缓存键
+	const initializeCacheKeys = (items: NavItemDataProps[]) => {
+		items.forEach((item) => {
+			if (item.keepAlive === true && item.path) {
+				addCacheKey(item.path);
+			}
+			if (item.children && Array.isArray(item.children) && item.children.length > 0) {
+				initializeCacheKeys(item.children);
+			}
+		});
+	};
+	useUpdateEffect(() => {
+		if (menuInfo && menuInfo.type === PermissionType.MENU) {
+			addTab({
+				label: menuInfo.title,
+				value: menuInfo.path,
+				path: menuInfo.path,
+				icon: typeof menuInfo.icon === "string" ? menuInfo.icon : undefined,
+			});
+		}
+		clearCacheKeys();
+		navData.forEach((group) => {
+			if (group.items && Array.isArray(group.items)) {
+				initializeCacheKeys(group.items);
+			}
+		});
+	}, [menuInfo]);
 
 	return (
 		<AdminLayout

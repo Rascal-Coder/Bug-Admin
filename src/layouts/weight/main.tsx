@@ -1,18 +1,15 @@
 import KeepAlive, { useKeepAliveRef } from "keepalive-for-react";
 import { concat } from "ramda";
-import { Suspense, useEffect, useMemo } from "react";
+import { Suspense, useMemo } from "react";
 import { ScrollRestoration, useLocation, useOutlet } from "react-router";
-import { useMount, useUpdateEffect } from "react-use";
+import { useUpdateEffect } from "react-use";
 import { AuthGuard } from "@/components/auth/auth-guard";
 import { LineLoading } from "@/components/loading";
-import type { NavItemDataProps } from "@/components/nav/types";
 import Page403 from "@/pages/sys/error/Page403";
 import { navData } from "@/routes/nav-data";
 import { useSettings } from "@/store/settingStore";
-import useTabStore, { useTabActions } from "@/store/tabStore";
-import { PermissionType } from "@/types/enum";
+import useTabStore from "@/store/tabStore";
 import { cn } from "@/utils";
-import { getMenuInfoByPath } from "@/utils/menu";
 import { flattenTrees } from "@/utils/tree";
 
 const allItems = navData.reduce((acc: any[], group) => {
@@ -31,43 +28,9 @@ function findAuthByPath(path: string): string[] {
 
 export function Main() {
 	const { themeStretch, layoutMode, layoutAnimation } = useSettings();
-	const { addTab, addCacheKey, clearCacheKeys } = useTabActions();
 	const { pathname, search } = useLocation();
 	const currentNavAuth = findAuthByPath(pathname);
 	const outlet = useOutlet();
-
-	const menuInfo = getMenuInfoByPath(pathname);
-	useEffect(() => {
-		if (menuInfo && menuInfo.type === PermissionType.MENU) {
-			addTab({
-				label: menuInfo.title,
-				value: menuInfo.path,
-				path: menuInfo.path,
-				icon: typeof menuInfo.icon === "string" ? menuInfo.icon : undefined,
-			});
-		}
-	}, [menuInfo, addTab]);
-
-	// 递归初始化缓存键
-	const initializeCacheKeys = (items: NavItemDataProps[]) => {
-		items.forEach((item) => {
-			if (item.keepAlive === true && item.path) {
-				addCacheKey(item.path);
-			}
-			if (item.children && Array.isArray(item.children) && item.children.length > 0) {
-				initializeCacheKeys(item.children);
-			}
-		});
-	};
-
-	useMount(() => {
-		clearCacheKeys();
-		navData.forEach((group) => {
-			if (group.items && Array.isArray(group.items)) {
-				initializeCacheKeys(group.items);
-			}
-		});
-	});
 
 	const currentCacheKey = useMemo(() => {
 		return pathname + search;
