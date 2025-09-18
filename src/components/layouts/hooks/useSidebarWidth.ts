@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useLocation } from "react-router";
 import { useMediaQuery, useUpdateSettings } from "@/hooks";
 import { navData } from "@/routes/nav-data";
@@ -13,7 +13,7 @@ export const useSidebarWidth = () => {
 	const [isSubMenuVisible, setIsSubMenuVisible] = useState(false);
 	const [isManualSelection, setIsManualSelection] = useState(false);
 	const isMobile = useMediaQuery(`(max-width: ${BREAKPOINTS.MOBILE}px)`);
-	const { updateSettings, settings } = useUpdateSettings();
+	const { settings } = useUpdateSettings();
 	const { transition, sidebarMode } = settings;
 
 	// 计算主菜单宽度
@@ -26,7 +26,10 @@ export const useSidebarWidth = () => {
 
 	// 计算侧边栏总宽度
 	const sidebarWidth = useMemo(() => {
-		return isSubMenuVisible ? `calc(${mainMenuWidth} + ${subMenuWidth})` : mainMenuWidth;
+		console.log("isSubMenuVisible", isSubMenuVisible);
+		const width = isSubMenuVisible ? `calc(${mainMenuWidth} + ${subMenuWidth})` : mainMenuWidth;
+		console.log("width", width);
+		return width;
 	}, [isSubMenuVisible, mainMenuWidth, subMenuWidth]);
 
 	// 监听路由变化，重置手动选择标记
@@ -49,29 +52,20 @@ export const useSidebarWidth = () => {
 	}, [currentActiveGroup, isManualSelection]);
 
 	// 事件处理函数
-	const handleGroupSelect = useCallback((groupName: string) => {
+	const handleGroupSelect = (groupName: string) => {
 		setIsManualSelection(true);
 		setSelectedGroup(groupName);
-	}, []);
+	};
 
-	const handleGroupClick = useCallback(
-		(groupName: string) => {
-			setIsManualSelection(true);
-			setSelectedGroup(groupName);
-			setIsSubMenuVisible(true);
-			updateSettings({
-				transition: false,
-			});
-		},
-		[updateSettings],
-	);
+	const handleGroupClick = (groupName: string) => {
+		setIsManualSelection(true);
+		setSelectedGroup(groupName);
+		setIsSubMenuVisible(true);
+	};
 
-	const handleSubMenuClose = useCallback(() => {
+	const handleSubMenuClose = () => {
 		setIsSubMenuVisible(false);
-		updateSettings({
-			transition: false,
-		});
-	}, [updateSettings]);
+	};
 
 	return {
 		// states

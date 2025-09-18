@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import avatar from "@/assets/images/user/avatar.jpg";
 import { navData } from "@/routes/nav-data";
 import { useSettings } from "@/store/settingStore";
@@ -18,7 +18,6 @@ export default function AdminLayout({
 	className,
 	isMobile = false,
 	collapsible = "icon",
-	// variant = "sidebar",
 }: {
 	className?: string;
 	isMobile?: boolean;
@@ -40,7 +39,13 @@ export default function AdminLayout({
 	const { collapseSidebar, sidebarMode } = useSettings();
 	const [openMobile, setOpenMobile] = useState(false);
 	const { isHorizontal, isMixed, isDouble } = useLayoutMode();
-	const { sidebarWidth } = useSidebarWidth();
+	const { selectedGroup, isSubMenuVisible, sidebarWidth, handleGroupSelect, handleGroupClick, handleSubMenuClose } =
+		useSidebarWidth();
+	// console.log('');
+	useEffect(() => {
+		console.log("sidebarWidth========", sidebarWidth);
+	}, [sidebarWidth]);
+
 	const verticalMenuData = useMemo(() => {
 		return navData.map((section) => ({
 			...section,
@@ -137,7 +142,13 @@ export default function AdminLayout({
 										</div>
 									</>
 								) : (
-									<DoubleSidebarSlot />
+									<DoubleSidebarSlot
+										selectedGroup={selectedGroup}
+										isSubMenuVisible={isSubMenuVisible}
+										handleGroupSelect={handleGroupSelect}
+										handleGroupClick={handleGroupClick}
+										handleSubMenuClose={handleSubMenuClose}
+									/>
 								)}
 							</div>
 						</div>
