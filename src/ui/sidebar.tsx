@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 import { PanelLeftIcon } from "lucide-react";
 import { Slot } from "radix-ui";
 import * as React from "react";
-import { useMediaQuery, useUpdateSettings } from "@/hooks";
+import { useMediaQuery, useUpdateSettings, useDebounce } from "@/hooks";
 import { Button } from "@/ui/button";
 import { Input } from "@/ui/input";
 import { Separator } from "@/ui/separator";
@@ -11,6 +11,16 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "
 import { Skeleton } from "@/ui/skeleton";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/ui/tooltip";
 import { cn } from "@/utils";
+
+function setCookieValue(value: string) {
+	// This sets the cookie to keep the sidebar state.
+	// document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`;
+	// 使用 js-cookie 设置 cookie 防止xss攻击
+	Cookies.set(SIDEBAR_COOKIE_NAME, value, {
+		path: "/",
+		maxAge: SIDEBAR_COOKIE_MAX_AGE.toString(),
+	});
+}
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
@@ -60,24 +70,34 @@ function SidebarProvider({
 	// We use openProp and setOpenProp for control from outside the component.
 	const [_open, _setOpen] = React.useState(defaultOpen);
 	const open = openProp ?? _open;
+
+	const debouncedSetCookie = useDebounce(setCookieValue, 300);
+
+	// TODO Functional update
 	const setOpen = React.useCallback(
 		(value: boolean | ((value: boolean) => boolean)) => {
-			const openState = typeof value === "function" ? value(open) : value;
-			if (setOpenProp) {
-				setOpenProp(openState);
-			} else {
-				_setOpen(openState);
-			}
+			const updateFn = (currentOpen: boolean) => {
+				const openState = typeof value === "function" ? value(currentOpen) : value;
 
-			// This sets the cookie to keep the sidebar state.
-			// document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`;
-			// 使用 js-cookie 设置 cookie 防止xss攻击
-			Cookies.set(SIDEBAR_COOKIE_NAME, openState.toString(), {
-				path: "/",
-				maxAge: SIDEBAR_COOKIE_MAX_AGE.toString(),
-			});
+				// 只在状态确实变化时才更新cookie
+				if (openState !== currentOpen) {
+					debouncedSetCookie(openState.toString());
+				}
+
+				return openState;
+			};
+
+			if (setOpenProp) {
+				const newState = typeof value === "function" ? value(open) : value;
+				if (newState !== open) {
+					debouncedSetCookie(newState.toString());
+				}
+				setOpenProp(newState);
+			} else {
+				_setOpen(updateFn);
+			}
 		},
-		[setOpenProp, open],
+		[setOpenProp, debouncedSetCookie, open],
 	);
 
 	// Helper to toggle the sidebar.
@@ -192,7 +212,8 @@ function Sidebar({
 				data-slot="sidebar-gap"
 				className={cn(
 					"relative w-(--sidebar-width) bg-transparent",
-					transition ? "transition-[width] duration-200 ease-linear" : "",
+					// 优化：使用transform代替width过渡，性能更好
+					transition ? "transition-transform duration-150 ease-out" : "",
 					"group-data-[collapsible=offcanvas]:w-0",
 					"group-data-[side=right]:rotate-180",
 					variant === "floating" || variant === "inset"
@@ -204,11 +225,12 @@ function Sidebar({
 			<div
 				data-slot="sidebar-container"
 				className={cn(
-					"fixed inset-y-0 z-10 hidden h-svh w-(--sidebar-width)  ease-linear md:flex",
-					transition ? "transition-[left,right,width] duration-200" : "",
+					"fixed inset-y-0 z-10 hidden h-svh w-(--sidebar-width) md:flex",
+					// 优化：只过渡transform，避免同时过渡多个属性
+					transition ? "transition-transform duration-150 ease-out will-change-transform" : "",
 					side === "left"
-						? "left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]"
-						: "right-0 group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]",
+						? "left-0 group-data-[collapsible=offcanvas]:translate-x-[-100%]"
+						: "right-0 group-data-[collapsible=offcanvas]:translate-x-[100%]",
 					// Adjust the padding for floating and inset variants.
 					variant === "floating" || variant === "inset"
 						? "p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4))+2px)]"
@@ -265,7 +287,28 @@ export function MobileSidebar({
 
 function SidebarTrigger({ className, onClick, ...props }: React.ComponentProps<typeof Button>) {
 	const { toggleSidebar } = useSidebar();
-	const { updateSettings } = useUpdateSettings();
+	const { updateSettings, settings } = useUpdateSettings();
+
+	const debouncedHandleClick = useDebounce((event: React.MouseEvent<HTMLButtonElement>) => {
+		onClick?.(event);
+		toggleSidebar();
+
+		// 只在transition为false时才更新
+		if (!settings.transition) {
+			updateSettings({
+				transition: true,
+			});
+		}
+	}, 200);
+
+	// 优化：缓存点击处理函数
+	const handleClick = React.useCallback(
+		(event: React.MouseEvent<HTMLButtonElement>) => {
+			debouncedHandleClick(event);
+		},
+		[debouncedHandleClick],
+	);
+
 	return (
 		<Button
 			data-sidebar="trigger"
@@ -273,13 +316,7 @@ function SidebarTrigger({ className, onClick, ...props }: React.ComponentProps<t
 			variant="ghost"
 			size="icon"
 			className={cn("size-7", className)}
-			onClick={(event) => {
-				onClick?.(event);
-				toggleSidebar();
-				updateSettings({
-					transition: true,
-				});
-			}}
+			onClick={handleClick}
 			{...props}
 		>
 			<PanelLeftIcon />
