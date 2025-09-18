@@ -137,6 +137,12 @@ export const frontendNavConfig: FrontendMenuTree[] = [
 						component: "/pages/components/scroller",
 						type: PermissionType.MENU,
 					},
+					{
+						name: "Dialog",
+						path: "/components/dialog",
+						component: "/pages/components/dialog",
+						type: PermissionType.MENU,
+					},
 				],
 			},
 		],
