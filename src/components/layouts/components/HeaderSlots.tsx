@@ -6,13 +6,15 @@ import { Icon } from "@/components/icon";
 import LocalePicker from "@/components/locale-picker";
 import { NavHorizontal } from "@/components/nav/horizontal";
 import type { NavItemDataProps } from "@/components/nav/types";
-import { useMediaQuery } from "@/hooks";
+import { NavVertical } from "@/components/nav/vertical";
+import { useMediaQuery, useUpdateSettings } from "@/hooks";
 import { useRouter } from "@/routes/hooks";
 import { navData } from "@/routes/nav-data";
 import { Button } from "@/ui/button";
 import { ScrollArea, ScrollBar } from "@/ui/scroll-area";
 import { Separator } from "@/ui/separator";
-import { MobileSidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarTrigger } from "@/ui/sidebar";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/ui/sheet";
+import { cn } from "@/utils";
 import { BREAKPOINTS, USER_INFO } from "../constants/layoutConfig";
 import { useLayoutMode } from "../hooks/useLayoutMode";
 import { Logo } from "../sidebar/logo";
@@ -23,6 +25,101 @@ import { NavUser } from "../weight/nav-user";
 import NoticeButton from "../weight/notice";
 import SearchBar from "../weight/search-bar";
 import { ThemeSwitch } from "../weight/themeswitch";
+
+const SIDEBAR_WIDTH_MOBILE = "18rem";
+
+function SidebarTrigger({ className, onClick, ...props }: React.ComponentProps<typeof Button>) {
+	const { updateSettings, settings } = useUpdateSettings();
+	const isMobile = useMediaQuery({ maxWidth: BREAKPOINTS.MOBILE });
+	return (
+		<Button
+			data-sidebar="trigger"
+			data-slot="sidebar-trigger"
+			variant="ghost"
+			size="icon"
+			className={cn("size-7", className)}
+			onClick={(event) => {
+				onClick?.(event);
+				updateSettings({
+					transition: true,
+					collapseSidebar: !isMobile ? !settings.collapseSidebar : settings.collapseSidebar,
+				});
+			}}
+			{...props}
+		>
+			<PanelLeftIcon />
+			<span className="sr-only">Toggle Sidebar</span>
+		</Button>
+	);
+}
+
+function SidebarHeader({ className, ...props }: React.ComponentProps<"div">) {
+	return (
+		<div
+			data-slot="sidebar-header"
+			data-sidebar="header"
+			className={cn("flex flex-col gap-2 p-2", className)}
+			{...props}
+		/>
+	);
+}
+
+function SidebarFooter({ className, ...props }: React.ComponentProps<"div">) {
+	return (
+		<div
+			data-slot="sidebar-footer"
+			data-sidebar="footer"
+			className={cn("flex flex-col gap-2 p-2", className)}
+			{...props}
+		/>
+	);
+}
+function SidebarContent({ className, ...props }: React.ComponentProps<"div">) {
+	return (
+		<div
+			data-slot="sidebar-content"
+			data-sidebar="content"
+			className={cn(
+				"flex min-h-0 flex-1 flex-col gap-2 overflow-auto group-data-[collapsible=icon]:overflow-hidden",
+				className,
+			)}
+			{...props}
+		/>
+	);
+}
+export function MobileSidebaWrapper({
+	side = "left",
+	children,
+	openMobile,
+	setOpenMobile,
+	...props
+}: React.ComponentProps<"div"> & {
+	side?: "left" | "right";
+	openMobile: boolean;
+	setOpenMobile: (open: boolean) => void;
+}) {
+	return (
+		<Sheet open={openMobile} onOpenChange={setOpenMobile} {...props}>
+			<SheetContent
+				data-slot="mobile-sidebar"
+				data-mobile="true"
+				className="bg-background text-sidebar-foreground w-(--sidebar-width) p-0 [&>button]:hidden"
+				style={
+					{
+						"--sidebar-width": SIDEBAR_WIDTH_MOBILE,
+					} as React.CSSProperties
+				}
+				side={side}
+			>
+				<SheetHeader className="sr-only">
+					<SheetTitle>Sidebar</SheetTitle>
+					<SheetDescription>Displays the mobile sidebar.</SheetDescription>
+				</SheetHeader>
+				<div className="flex h-full w-full flex-col">{children}</div>
+			</SheetContent>
+		</Sheet>
+	);
+}
 
 /**
  * 水平布局头部左侧插槽
@@ -68,23 +165,7 @@ export const HorizontalHeaderLeftSlot = memo(() => {
 						</ScrollArea>
 					</>
 				)}
-				<MobileSidebar openMobile={openMobile} setOpenMobile={setOpenMobile}>
-					<SidebarHeader>
-						<Logo></Logo>
-					</SidebarHeader>
-					<SidebarContent>
-						<NavHorizontal data={navData} />
-					</SidebarContent>
-					<SidebarFooter>
-						<NavUser
-							user={{
-								name: USER_INFO.name,
-								email: USER_INFO.email,
-								avatar: avatar,
-							}}
-						/>
-					</SidebarFooter>
-				</MobileSidebar>
+				<MobileSidebar openMobile={openMobile} setOpenMobile={setOpenMobile} />
 			</>
 		),
 		[isMobile, openMobile, router],
@@ -92,16 +173,43 @@ export const HorizontalHeaderLeftSlot = memo(() => {
 
 	return headerLeftSlot;
 });
+export const MobileSidebar = ({
+	openMobile,
+	setOpenMobile,
+}: {
+	openMobile: boolean;
+	setOpenMobile: (open: boolean) => void;
+}) => {
+	return (
+		<MobileSidebaWrapper openMobile={openMobile} setOpenMobile={setOpenMobile}>
+			<SidebarHeader>
+				<Logo></Logo>
+			</SidebarHeader>
+			<SidebarContent>
+				<NavVertical data={navData} />
+			</SidebarContent>
+			<SidebarFooter>
+				<NavUser
+					user={{
+						name: USER_INFO.name,
+						email: USER_INFO.email,
+						avatar: avatar,
+					}}
+				/>
+			</SidebarFooter>
+		</MobileSidebaWrapper>
+	);
+};
 
 /**
  * 垂直布局头部左侧插槽
  */
-export const VerticalHeaderLeftSlot = memo(() => {
+export const VerticalHeaderLeftSlot = memo(({ onClick }: { onClick: () => void }) => {
 	const isMobile = useMediaQuery("(max-width: 768px)");
 
 	return (
 		<>
-			<SidebarTrigger variant="outline" className="max-md:scale-125" />
+			<SidebarTrigger variant="outline" className="max-md:scale-125" onClick={onClick} />
 			{!isMobile && (
 				<>
 					<Separator orientation="vertical" className="h-6 mx-2" />
@@ -115,7 +223,7 @@ export const VerticalHeaderLeftSlot = memo(() => {
 /**
  * 混合布局头部左侧插槽
  */
-export const MixedHeaderLeftSlot = memo(() => {
+export const MixedHeaderLeftSlot = memo(({ onClick }: { onClick: () => void }) => {
 	const location = useLocation();
 	const isMobile = useMediaQuery({ maxWidth: BREAKPOINTS.MOBILE });
 
@@ -143,7 +251,7 @@ export const MixedHeaderLeftSlot = memo(() => {
 
 	return (
 		<>
-			<SidebarTrigger variant="outline" className="max-md:scale-125" />
+			<SidebarTrigger variant="outline" className="max-md:scale-125" onClick={onClick} />
 			{!isMobile && horizontalMenuData.length > 0 && (
 				<>
 					<Separator orientation="vertical" className="h-6! ml-2!" />
@@ -160,11 +268,11 @@ export const MixedHeaderLeftSlot = memo(() => {
 /**
  * 头部左侧插槽渲染器
  */
-export const HeaderLeftSlotRender = memo(() => {
+export const HeaderLeftSlotRender = memo(({ onClick }: { onClick: () => void }) => {
 	const { isHorizontal, isMixed, isVertical, isDouble } = useLayoutMode();
 	if (isHorizontal) return <HorizontalHeaderLeftSlot />;
-	if (isMixed) return <MixedHeaderLeftSlot />;
-	if (isVertical || isDouble) return <VerticalHeaderLeftSlot />;
+	if (isMixed) return <MixedHeaderLeftSlot onClick={onClick} />;
+	if (isVertical || isDouble) return <VerticalHeaderLeftSlot onClick={onClick} />;
 
 	return null;
 });

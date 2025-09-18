@@ -31,9 +31,9 @@ function findAuthByPath(path: string): string[] {
 
 export function Main() {
 	const { themeStretch, layoutMode, layoutAnimation } = useSettings();
+	const { addTab, addCacheKey, clearCacheKeys } = useTabActions();
 	const { pathname, search } = useLocation();
 	const currentNavAuth = findAuthByPath(pathname);
-	const { addTab, addCacheKey, clearCacheKeys } = useTabActions();
 	const outlet = useOutlet();
 
 	const menuInfo = getMenuInfoByPath(pathname);
