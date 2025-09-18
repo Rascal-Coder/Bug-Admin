@@ -13,7 +13,7 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/ui/dropdown-menu";
-import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/ui/sidebar";
+import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/ui/sidebar";
 
 type NavUserProps = {
 	user: {
@@ -24,7 +24,6 @@ type NavUserProps = {
 };
 
 export function NavUser({ user }: NavUserProps) {
-	const { isMobile } = useSidebar();
 	const { replace } = useRouter();
 	const { clearUserInfoAndToken } = useUserActions();
 	const logout = () => {
@@ -58,7 +57,8 @@ export function NavUser({ user }: NavUserProps) {
 					</DropdownMenuTrigger>
 					<DropdownMenuContent
 						className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
-						side={isMobile ? "bottom" : "right"}
+						// side={isMobile ? "bottom" : "right"}
+						side="right"
 						align="end"
 						sideOffset={4}
 					>

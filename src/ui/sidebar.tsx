@@ -264,7 +264,7 @@ export function MobileSidebar({
 }
 
 function SidebarTrigger({ className, onClick, ...props }: React.ComponentProps<typeof Button>) {
-	const { toggleSidebar } = useSidebar();
+	// const { toggleSidebar } = useSidebar();
 	const { updateSettings } = useUpdateSettings();
 	return (
 		<Button
@@ -275,7 +275,7 @@ function SidebarTrigger({ className, onClick, ...props }: React.ComponentProps<t
 			className={cn("size-7", className)}
 			onClick={(event) => {
 				onClick?.(event);
-				toggleSidebar();
+				// toggleSidebar();
 				updateSettings({
 					transition: true,
 				});
@@ -509,7 +509,7 @@ function SidebarMenuButton({
 	tooltip?: string | React.ComponentProps<typeof TooltipContent>;
 } & VariantProps<typeof sidebarMenuButtonVariants>) {
 	const Comp = asChild ? Slot.Root : "button";
-	const { isMobile, state } = useSidebar();
+	// const { isMobile, state } = useSidebar();
 
 	const button = (
 		<Comp
@@ -531,11 +531,12 @@ function SidebarMenuButton({
 			children: tooltip,
 		};
 	}
+	// hidden={state !== "collapsed" || isMobile}
 
 	return (
 		<Tooltip>
 			<TooltipTrigger asChild>{button}</TooltipTrigger>
-			<TooltipContent side="right" align="center" hidden={state !== "collapsed" || isMobile} {...tooltip} />
+			<TooltipContent side="right" align="center" {...tooltip} />
 		</Tooltip>
 	);
 }

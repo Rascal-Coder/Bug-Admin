@@ -30,6 +30,7 @@ const useDialog = (): DialogContextType => {
 };
 
 type DialogWithContextProps = React.ComponentProps<typeof DialogPrimitive.Root> & {};
+
 function DialogWithContext({ children, open: openProp, onOpenChange: setOpenProp, ...props }: DialogWithContextProps) {
 	const [_open, _setOpen] = React.useState(false);
 	const open = openProp ?? _open;
@@ -58,7 +59,7 @@ function DialogWithContext({ children, open: openProp, onOpenChange: setOpenProp
 	);
 }
 
-function DialogOverlay({ className, ...props }: React.ComponentProps<typeof DialogPrimitive.Overlay> & {}) {
+function DialogOverlay({ className, ...props }: React.ComponentProps<typeof DialogOverlayUi> & {}) {
 	return (
 		<DialogOverlayUi className={cn(className)} asChild {...props}>
 			<m.div
@@ -86,7 +87,7 @@ function DialogContent({
 		<AnimatePresence>
 			{open && (
 				<DialogPortalUi forceMount>
-					<DialogOverlay />
+					<DialogOverlay onClick={() => setOpen(false)} />
 					<DialogPrimitive.Content asChild forceMount {...props}>
 						<m.div
 							key="dialog-content"
