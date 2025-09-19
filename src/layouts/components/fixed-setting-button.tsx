@@ -11,8 +11,6 @@ import { IconSidebarInset } from "@/components/svg-comps/icon-sidebar-inset";
 import { IconSidebarSidebar } from "@/components/svg-comps/icon-sidebar-sidebar";
 import { GLOBAL_CONFIG } from "@/global-config";
 import { useUpdateSettings } from "@/hooks";
-import { SelectItem, type SelectOption } from "@/layouts/select-item";
-import { SwitchItem } from "@/layouts/switch-item";
 import { usePathname } from "@/routes/hooks/use-pathname";
 import type { SettingsType } from "@/store/settingStore";
 import { initialSettings, useClearSettings, useSetSettings } from "@/store/settingStore";
@@ -33,6 +31,8 @@ import { Slider } from "@/ui/slider";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/ui/tooltip";
 import { Text } from "@/ui/typography";
 import { cn } from "@/utils";
+import { SelectItem, type SelectOption } from "./select-item";
+import { SwitchItem } from "./switch-item";
 
 // Constants
 const COLLAPSIBLE_TYPE_OPTIONS: SelectOption[] = [

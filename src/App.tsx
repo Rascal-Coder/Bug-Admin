@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { useLocation } from "react-router";
-import { FixedSettingButton } from "@/layouts/fixed-setting-button";
+import { FixedSettingButton } from "@/layouts/components/fixed-setting-button";
 import Logo from "./assets/icons/logo.svg";
 import { MotionLazy } from "./components/animate/motion-lazy";
 import { RouteLoadingProgress } from "./components/loading/route-loading";

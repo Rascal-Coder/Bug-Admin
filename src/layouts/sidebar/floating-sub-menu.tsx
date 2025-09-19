@@ -1,11 +1,10 @@
 import { X } from "lucide-react";
-import { memo } from "react";
 import { NavList } from "@/components/nav/vertical/nav-list";
 import { Button } from "@/ui/button";
 import { cn } from "@/utils";
 import type { FloatingSubMenuProps } from "./types";
 
-export const FloatingSubMenu = memo(function FloatingSubMenu({
+export const FloatingSubMenu = function FloatingSubMenu({
 	data,
 	selectedGroup,
 	isVisible,
@@ -60,4 +59,4 @@ export const FloatingSubMenu = memo(function FloatingSubMenu({
 			</nav>
 		</div>
 	);
-});
+};

@@ -1,40 +1,30 @@
-import { cn } from "@/utils";
+import clsx from "clsx";
+import { useAdminLayout } from ".";
 import { LAYOUT_MODES } from "./constants/layoutConfig";
 
 const LAYOUT_NAV_WIDTH_ICON = "5.5rem";
 export default function AdminLayout({
-	isMobile = false,
 	collapsible = "icon",
 	Header,
 	Content,
 	MobileSidebar,
 	Sidebar,
-	layoutMode,
-	collapseSidebar,
-	variant = "floating",
-	sidebarWidth,
 }: {
-	isMobile?: boolean;
 	collapsible?: "offcanvas" | "icon";
-	variant?: "sidebar" | "floating" | "inset";
 	Header: React.ReactNode;
 	Content: React.ReactNode;
 	MobileSidebar: React.ReactNode;
-	openMobile: boolean;
-	setOpenMobile: (open: boolean) => void;
 	Sidebar: React.ReactNode;
-	layoutMode: string;
-	collapseSidebar: boolean;
-	sidebarWidth: string;
 }) {
+	const { layoutMode, collapseSidebar, sidebarMode, isMobile } = useAdminLayout();
 	return (
 		<section
 			data-slot="layout-wrapper"
-			className={cn("group/layout-wrapper has-data-[variant=inset]:bg-background flex min-h-svh w-full")}
+			className={clsx("group/layout-wrapper has-data-[variant=inset]:bg-background flex min-h-svh w-full")}
 			style={
 				{
 					"--layout-nav-width-icon": LAYOUT_NAV_WIDTH_ICON,
-					"--layout-nav-width": sidebarWidth,
+					"--layout-nav-width": "240px",
 				} as React.CSSProperties
 			}
 		>
@@ -43,16 +33,16 @@ export default function AdminLayout({
 					className="group peer text-sidebar-foreground hidden md:block"
 					data-state={!collapseSidebar ? "collapsed" : "expanded"}
 					data-collapsible={!collapseSidebar ? collapsible : ""}
-					data-variant={variant}
+					data-variant={sidebarMode}
 					data-slot="sidebar"
 				>
 					<div
 						data-slot="sidebar-gap"
-						className={cn(
+						className={clsx(
 							"relative w-(--layout-nav-width) bg-transparent",
 							"transition-[width] duration-200 ease-linear",
 							"group-data-[collapsible=offcanvas]:w-0",
-							variant === "floating" || variant === "inset"
+							sidebarMode === "floating" || sidebarMode === "inset"
 								? "group-data-[collapsible=icon]:w-[calc(var(--layout-nav-width-icon)+(--spacing(4)))]"
 								: "group-data-[collapsible=icon]:w-(--layout-nav-width-icon)",
 						)}
@@ -60,12 +50,12 @@ export default function AdminLayout({
 
 					<div
 						data-slot="sidebar-container"
-						className={cn(
+						className={clsx(
 							"fixed inset-y-0 z-10 hidden h-svh w-(--layout-nav-width) ease-linear md:flex",
 							"transition-[left,width] duration-200",
 							"left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--layout-nav-width)*-1)]",
 							// Adjust the padding for floating and inset variants.
-							variant === "floating" || variant === "inset"
+							sidebarMode === "floating" || sidebarMode === "inset"
 								? "p-2 group-data-[collapsible=icon]:w-[calc(var(--layout-nav-width-icon)+(--spacing(4))+2px)]"
 								: "group-data-[collapsible=icon]:w-(--layout-nav-width-icon) border-r",
 						)}
@@ -82,7 +72,7 @@ export default function AdminLayout({
 			)}
 			<main
 				data-slot="layout-main"
-				className={cn(
+				className={clsx(
 					"text-black dark:text-white",
 					"bg-background relative flex w-full flex-1 flex-col border-border border-1",
 					"md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:ml-0 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow-lg md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ml-2",

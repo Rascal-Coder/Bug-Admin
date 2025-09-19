@@ -1,4 +1,4 @@
-import { memo, useCallback } from "react";
+import { useCallback } from "react";
 import type { LinkProps } from "react-router";
 import { useTabNavigation } from "@/hooks/use-tab-navigation";
 
@@ -32,5 +32,4 @@ const TabRouterLink: React.FC<TabRouterLinkProps> = ({ href, label, icon, compon
 		</a>
 	);
 };
-
-export default memo(TabRouterLink);
+export default TabRouterLink;

@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { createContext, useContext, useMemo, useState } from "react";
 import { useLocation } from "react-router";
 import { useUpdateEffect } from "react-use";
 import avatar from "@/assets/images/user/avatar.jpg";
@@ -22,10 +22,10 @@ import { Header } from "./weight/header";
 import { Main } from "./weight/main";
 import { NavUser } from "./weight/nav-user";
 
-function GlobalHeader({ setOpenMobile, openMobile }: { setOpenMobile: (open: boolean) => void; openMobile: boolean }) {
+function GlobalHeader() {
 	return (
 		<Header fixed>
-			<HeaderLeftSlotRender onClick={() => setOpenMobile(!openMobile)} />
+			<HeaderLeftSlotRender />
 			<div data-slot="right" className="flex flex-1 justify-end items-center gap-2 sm:gap-3">
 				<HeaderRightSlotRender />
 			</div>
@@ -33,20 +33,7 @@ function GlobalHeader({ setOpenMobile, openMobile }: { setOpenMobile: (open: boo
 	);
 }
 
-function GlobalSidebar({
-	isMobile,
-	collapseSidebar,
-	layoutMode,
-	data,
-}: {
-	isMobile: boolean;
-	collapseSidebar: boolean;
-	layoutMode: "vertical" | "horizontal" | "mixed" | "double";
-	data: {
-		name?: string;
-		items: NavItemDataProps[];
-	}[];
-}) {
+function GlobalSidebar() {
 	const userInfo: UserInfo = useMemo(() => {
 		return {
 			name: USER_INFO.name,
@@ -56,6 +43,19 @@ function GlobalSidebar({
 	}, []);
 	const { selectedGroup, isSubMenuVisible, handleGroupSelect, handleGroupClick, handleSubMenuClose } =
 		useSidebarWidth();
+	const { isMobile, collapseSidebar, layoutMode, data } = useAdminLayout();
+	const navData = useMemo(() => {
+		if (layoutMode === "mixed") {
+			return data.map((section) => ({
+				...section,
+				items: section.items.map((item) => ({
+					...item,
+					children: [],
+				})),
+			}));
+		}
+		return data;
+	}, [layoutMode, data]);
 	return layoutMode !== "double" ? (
 		<>
 			<div data-slot="sidebar-header" data-sidebar="header" className={cn("flex flex-col gap-2 p-2")}>
@@ -66,7 +66,7 @@ function GlobalSidebar({
 				data-sidebar="content"
 				className={cn("flex min-h-0 flex-1 flex-col gap-2 overflow-auto group-data-[collapsible=icon]:overflow-hidden")}
 			>
-				<NavSwitcher open={collapseSidebar} data={data} />
+				<NavSwitcher open={collapseSidebar} data={navData} />
 			</div>
 			<div data-slot="sidebar-footer" data-sidebar="footer" className={cn("flex flex-col gap-2 p-2")}>
 				<NavUser user={userInfo} />
@@ -83,34 +83,11 @@ function GlobalSidebar({
 	);
 }
 
-function GlobalMobileSidebar({
-	openMobile,
-	setOpenMobile,
-}: {
-	openMobile: boolean;
-	setOpenMobile: (open: boolean) => void;
-}) {
-	return <MobileSidebar openMobile={openMobile} setOpenMobile={setOpenMobile} />;
+function GlobalMobileSidebar() {
+	return <MobileSidebar />;
 }
 
 export default function Layouts() {
-	const [openMobile, setOpenMobile] = useState(false);
-	const isMobile = useMediaQuery("(max-width: 768px)");
-	const { collapseSidebar, layoutMode, sidebarMode } = useSettings();
-	const verticalMenuData = useMemo(() => {
-		return navData.map((section) => ({
-			...section,
-			items: section.items.map((item) => ({
-				...item,
-				children: [],
-			})),
-		}));
-	}, []);
-	const data = useMemo(() => {
-		const _data = layoutMode === "mixed" ? verticalMenuData : navData;
-		return _data;
-	}, [layoutMode, verticalMenuData]);
-	const { sidebarWidth } = useSidebarWidth();
 	const { addTab, addCacheKey, clearCacheKeys } = useTabActions();
 	const { pathname } = useLocation();
 	const menuInfo = getMenuInfoByPath(pathname);
@@ -143,25 +120,50 @@ export default function Layouts() {
 	}, [menuInfo]);
 
 	return (
-		<AdminLayout
-			variant={sidebarMode}
-			sidebarWidth={sidebarWidth}
-			isMobile={isMobile}
-			Header={<GlobalHeader setOpenMobile={setOpenMobile} openMobile={openMobile}></GlobalHeader>}
-			Content={<Main></Main>}
-			MobileSidebar={<GlobalMobileSidebar openMobile={openMobile} setOpenMobile={setOpenMobile}></GlobalMobileSidebar>}
-			openMobile={openMobile}
-			setOpenMobile={setOpenMobile}
-			Sidebar={
-				<GlobalSidebar
-					isMobile={isMobile}
-					layoutMode={layoutMode}
-					collapseSidebar={collapseSidebar}
-					data={data}
-				></GlobalSidebar>
-			}
-			layoutMode={layoutMode}
-			collapseSidebar={collapseSidebar}
-		/>
+		<AdminLayoutProvider>
+			<AdminLayout
+				Header={<GlobalHeader></GlobalHeader>}
+				Content={<Main></Main>}
+				MobileSidebar={<GlobalMobileSidebar></GlobalMobileSidebar>}
+				Sidebar={<GlobalSidebar></GlobalSidebar>}
+			/>
+		</AdminLayoutProvider>
 	);
+}
+
+const AdminLayoutContext = createContext<{
+	openMobile: boolean;
+	setOpenMobile: (open: boolean) => void;
+	isMobile: boolean;
+	data: {
+		name?: string;
+		items: NavItemDataProps[];
+	}[];
+	layoutMode: "vertical" | "horizontal" | "mixed" | "double";
+	collapseSidebar: boolean;
+	sidebarMode: "sidebar" | "floating" | "inset";
+} | null>(null);
+
+const AdminLayoutProvider = ({ children }: { children: React.ReactNode }) => {
+	const [openMobile, setOpenMobile] = useState(false);
+	const isMobile = useMediaQuery({ maxWidth: 768 });
+	const data = useMemo(() => {
+		return navData;
+	}, []);
+	const { layoutMode, collapseSidebar, sidebarMode } = useSettings();
+	return (
+		<AdminLayoutContext.Provider
+			value={{ sidebarMode, openMobile, setOpenMobile, isMobile, data, layoutMode, collapseSidebar }}
+		>
+			{children}
+		</AdminLayoutContext.Provider>
+	);
+};
+
+export function useAdminLayout() {
+	const context = useContext(AdminLayoutContext);
+	if (!context) {
+		throw new Error("useAdminLayout must be used within a AdminLayoutProvider");
+	}
+	return context;
 }

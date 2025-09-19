@@ -1,4 +1,3 @@
-import { memo } from "react";
 import { Icon } from "@/components/icon";
 import type { NavProps } from "@/components/nav/types";
 import { Button } from "@/ui/button";
@@ -12,7 +11,7 @@ interface MainMenuProps {
 	className?: string;
 }
 
-export const MainMenu = memo(function MainMenu({
+export const MainMenu = function MainMenu({
 	data,
 	selectedGroup,
 	onGroupSelect,
@@ -48,4 +47,4 @@ export const MainMenu = memo(function MainMenu({
 			))}
 		</nav>
 	);
-});
+};

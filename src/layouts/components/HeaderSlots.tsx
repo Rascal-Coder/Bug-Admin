@@ -1,22 +1,19 @@
 import { PanelLeftIcon } from "lucide-react";
-import { memo, useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useLocation } from "react-router";
 import avatar from "@/assets/images/user/avatar.jpg";
-import { Icon } from "@/components/icon";
 import LocalePicker from "@/components/locale-picker";
 import { NavHorizontal } from "@/components/nav/horizontal";
 import type { NavItemDataProps } from "@/components/nav/types";
 import { NavVertical } from "@/components/nav/vertical";
 import { useMediaQuery, useUpdateSettings } from "@/hooks";
-import { useRouter } from "@/routes/hooks";
-import { navData } from "@/routes/nav-data";
 import { Button } from "@/ui/button";
 import { ScrollArea, ScrollBar } from "@/ui/scroll-area";
 import { Separator } from "@/ui/separator";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/ui/sheet";
 import { cn } from "@/utils";
+import { useAdminLayout } from "..";
 import { BREAKPOINTS, USER_INFO } from "../constants/layoutConfig";
-import { useLayoutMode } from "../hooks/useLayoutMode";
 import { Logo } from "../sidebar/logo";
 import AccountDropdown from "../weight/account-dropdown";
 import { Breadcrumb } from "../weight/breadcrumb";
@@ -28,24 +25,22 @@ import { ThemeSwitch } from "../weight/themeswitch";
 
 const SIDEBAR_WIDTH_MOBILE = "18rem";
 
-function SidebarTrigger({ className, onClick, ...props }: React.ComponentProps<typeof Button>) {
+function SidebarTrigger() {
 	const { updateSettings, settings } = useUpdateSettings();
 	const isMobile = useMediaQuery({ maxWidth: BREAKPOINTS.MOBILE });
 	return (
 		<Button
 			data-sidebar="trigger"
 			data-slot="sidebar-trigger"
-			variant="ghost"
+			variant="outline"
 			size="icon"
-			className={cn("size-7", className)}
-			onClick={(event) => {
-				onClick?.(event);
+			className={cn("size-7")}
+			onClick={() => {
 				updateSettings({
 					transition: true,
 					collapseSidebar: !isMobile ? !settings.collapseSidebar : settings.collapseSidebar,
 				});
 			}}
-			{...props}
 		>
 			<PanelLeftIcon />
 			<span className="sr-only">Toggle Sidebar</span>
@@ -124,69 +119,61 @@ export function MobileSidebaWrapper({
 /**
  * 水平布局头部左侧插槽
  */
-export const HorizontalHeaderLeftSlot = memo(() => {
-	const isMobile = useMediaQuery({ maxWidth: BREAKPOINTS.MOBILE });
-	const [openMobile, setOpenMobile] = useState(false);
-	const router = useRouter();
+export const HorizontalOrMixedHeaderLeft = () => {
+	const { isMobile, layoutMode, data } = useAdminLayout();
+	const { pathname } = useLocation();
+	const horizontalMenuData = useMemo(() => {
+		const currentPath = pathname;
+		const matchedChildren: NavItemDataProps[] = [];
 
-	useEffect(() => {
-		if (!isMobile) {
-			setOpenMobile(false);
+		// 遍历所有导航数据找到匹配的子菜单
+		data.forEach((section) => {
+			section.items.forEach((item) => {
+				if (!item.children?.length) return;
+
+				// 检查当前路径是否匹配父菜单或子菜单
+				const isParentMatch = currentPath.startsWith(item.path);
+				const hasChildMatch = item.children.some((child) => currentPath.startsWith(child.path));
+
+				if (isParentMatch || hasChildMatch) {
+					matchedChildren.push(...item.children);
+				}
+			});
+		});
+
+		return matchedChildren.length > 0 ? [{ name: "水平导航", items: matchedChildren }] : [];
+	}, [pathname, data]);
+
+	const navData = useMemo(() => {
+		if (layoutMode === "horizontal") {
+			return data;
 		}
-	}, [isMobile]);
-
-	const headerLeftSlot = useMemo(
-		() => (
-			<>
-				{isMobile ? (
-					<Button
-						data-sidebar="trigger"
-						data-slot="sidebar-trigger"
-						variant="ghost"
-						size="icon"
-						className="size-7 max-md:scale-125"
-						onClick={() => setOpenMobile(!openMobile)}
-					>
-						<PanelLeftIcon />
-						<span className="sr-only">Toggle Sidebar</span>
-					</Button>
-				) : (
-					<>
-						<div
-							className="min-w-[170px] flex items-center gap-2 text-sm p-3 cursor-pointer rounded-md hover:bg-accent hover:text-accent-foreground"
-							onClick={() => router.push("/")}
-						>
-							<Icon icon="local-logo" size={40} />
-							<span className="font-semibold text-xl leading-tight">Bug Admin</span>
-						</div>
-						<ScrollArea className="whitespace-nowrap px-2">
-							<NavHorizontal data={navData} />
-							<ScrollBar orientation="horizontal" />
-						</ScrollArea>
-					</>
-				)}
-				<MobileSidebar openMobile={openMobile} setOpenMobile={setOpenMobile} />
-			</>
-		),
-		[isMobile, openMobile, router],
+		return horizontalMenuData;
+	}, [layoutMode, horizontalMenuData, data]);
+	return (
+		<>
+			<SidebarTrigger />
+			{!isMobile && data.length > 0 && (
+				<>
+					{layoutMode === "horizontal" && <Logo></Logo>}
+					<ScrollArea className="whitespace-nowrap px-2">
+						<NavHorizontal data={navData} />
+						<ScrollBar orientation="horizontal" />
+					</ScrollArea>
+				</>
+			)}
+		</>
 	);
-
-	return headerLeftSlot;
-});
-export const MobileSidebar = ({
-	openMobile,
-	setOpenMobile,
-}: {
-	openMobile: boolean;
-	setOpenMobile: (open: boolean) => void;
-}) => {
+};
+export const MobileSidebar = () => {
+	const { data, openMobile, setOpenMobile } = useAdminLayout();
 	return (
 		<MobileSidebaWrapper openMobile={openMobile} setOpenMobile={setOpenMobile}>
 			<SidebarHeader>
 				<Logo></Logo>
 			</SidebarHeader>
 			<SidebarContent>
-				<NavVertical data={navData} />
+				<NavVertical data={data} />
 			</SidebarContent>
 			<SidebarFooter>
 				<NavUser
@@ -204,12 +191,11 @@ export const MobileSidebar = ({
 /**
  * 垂直布局头部左侧插槽
  */
-export const VerticalHeaderLeftSlot = memo(({ onClick }: { onClick: () => void }) => {
-	const isMobile = useMediaQuery("(max-width: 768px)");
-
+export const VerticalHeaderLeftSlot = () => {
+	const { isMobile } = useAdminLayout();
 	return (
 		<>
-			<SidebarTrigger variant="outline" className="max-md:scale-125" onClick={onClick} />
+			<SidebarTrigger />
 			{!isMobile && (
 				<>
 					<Separator orientation="vertical" className="h-6 mx-2" />
@@ -218,66 +204,18 @@ export const VerticalHeaderLeftSlot = memo(({ onClick }: { onClick: () => void }
 			)}
 		</>
 	);
-});
-
-/**
- * 混合布局头部左侧插槽
- */
-export const MixedHeaderLeftSlot = memo(({ onClick }: { onClick: () => void }) => {
-	const location = useLocation();
-	const isMobile = useMediaQuery({ maxWidth: BREAKPOINTS.MOBILE });
-
-	const horizontalMenuData = useMemo(() => {
-		const currentPath = location.pathname;
-		const matchedChildren: NavItemDataProps[] = [];
-
-		// 遍历所有导航数据找到匹配的子菜单
-		navData.forEach((section) => {
-			section.items.forEach((item) => {
-				if (!item.children?.length) return;
-
-				// 检查当前路径是否匹配父菜单或子菜单
-				const isParentMatch = currentPath.startsWith(item.path);
-				const hasChildMatch = item.children.some((child) => currentPath.startsWith(child.path));
-
-				if (isParentMatch || hasChildMatch) {
-					matchedChildren.push(...item.children);
-				}
-			});
-		});
-
-		return matchedChildren.length > 0 ? [{ name: "水平导航", items: matchedChildren }] : [];
-	}, [location.pathname]);
-
-	return (
-		<>
-			<SidebarTrigger variant="outline" className="max-md:scale-125" onClick={onClick} />
-			{!isMobile && horizontalMenuData.length > 0 && (
-				<>
-					<Separator orientation="vertical" className="h-6! ml-2!" />
-					<ScrollArea className="whitespace-nowrap px-2">
-						<NavHorizontal data={horizontalMenuData} />
-						<ScrollBar orientation="horizontal" />
-					</ScrollArea>
-				</>
-			)}
-		</>
-	);
-});
+};
 
 /**
  * 头部左侧插槽渲染器
  */
-export const HeaderLeftSlotRender = memo(({ onClick }: { onClick: () => void }) => {
-	const { isHorizontal, isMixed, isVertical, isDouble } = useLayoutMode();
-	if (isHorizontal) return <HorizontalHeaderLeftSlot />;
-	if (isMixed) return <MixedHeaderLeftSlot onClick={onClick} />;
-	if (isVertical || isDouble) return <VerticalHeaderLeftSlot onClick={onClick} />;
+export const HeaderLeftSlotRender = () => {
+	const { layoutMode } = useAdminLayout();
+	if (layoutMode === "horizontal" || layoutMode === "mixed") return <HorizontalOrMixedHeaderLeft />;
+	if (layoutMode === "vertical" || layoutMode === "double") return <VerticalHeaderLeftSlot />;
+};
 
-	return null;
-});
-
-export const HeaderRightSlotRender = memo(() => {
+export const HeaderRightSlotRender = () => {
 	return (
 		<>
 			<SearchBar />
@@ -288,4 +226,4 @@ export const HeaderRightSlotRender = memo(() => {
 			<AccountDropdown />
 		</>
 	);
-});
+};
