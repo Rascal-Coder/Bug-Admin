@@ -1,7 +1,7 @@
 {
 	"name": "bug-admin-vite",
 	"private": true,
-	"version": "0.0.0",
+	"version": "0.0.1-rc",
 	"type": "module",
 	"scripts": {
 		"dev": "vite",
