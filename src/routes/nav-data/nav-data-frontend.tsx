@@ -159,6 +159,13 @@ export const frontendNavConfig: FrontendMenuTree[] = [
 				component: "/pages/others/permission",
 			},
 			{
+				name: "权限测试",
+				type: PermissionType.MENU,
+				hidden: true,
+				path: "/others/permission/page-test",
+				component: "/pages/others/permission/page-test",
+			},
+			{
 				name: "keep-alive",
 				icon: "mingcute:bookmark-fill",
 				path: "/others/keep-alive",

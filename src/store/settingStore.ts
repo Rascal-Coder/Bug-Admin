@@ -19,6 +19,7 @@ export type SettingsType = {
 	collapsibleType: "icon" | "offcanvas";
 	transition: boolean;
 	layoutAnimation: "fade" | "fade-slide" | "fade-bottom" | "fade-scale" | "zoom-fade" | "zoom-out" | "none";
+	collapseSidebar: boolean;
 };
 
 export type SignInLayout = "center" | "right" | "left";
@@ -49,6 +50,7 @@ export const defaultSettings: SettingsType = {
 	collapsibleType: "icon",
 	transition: true,
 	layoutAnimation: "fade",
+	collapseSidebar: false,
 };
 
 // 合并默认配置和用户偏好配置
@@ -95,7 +97,3 @@ export const useSignInLayout = () => useSettingStore((state) => state.signInLayo
 export const useSetSignInLayout = () => useSettingStore((state) => state.actions.setSignInLayout);
 export const useShowMaximize = () => useSettingStore((state) => state.showMaximize);
 export const useSetShowMaximize = () => useSettingStore((state) => state.actions.setShowMaximize);
-// export const useDarkMode = () => {
-// 	const settings = useSettingStore((state) => state.settings);
-// 	return settings?.themeMode === ThemeMode.Dark;
-// };

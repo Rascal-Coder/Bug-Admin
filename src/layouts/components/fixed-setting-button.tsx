@@ -6,8 +6,6 @@ import { useMemo } from "react";
 import { toast } from "sonner";
 import { ThemeColorPresets, ThemeMode } from "#/enum";
 import { Icon } from "@/components/icon";
-import { SelectItem, type SelectOption } from "@/components/layouts/select-item";
-import { SwitchItem } from "@/components/layouts/switch-item";
 import { IconSidebarFloating } from "@/components/svg-comps/icon-sidebar-floating";
 import { IconSidebarInset } from "@/components/svg-comps/icon-sidebar-inset";
 import { IconSidebarSidebar } from "@/components/svg-comps/icon-sidebar-sidebar";
@@ -33,6 +31,8 @@ import { Slider } from "@/ui/slider";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/ui/tooltip";
 import { Text } from "@/ui/typography";
 import { cn } from "@/utils";
+import { SelectItem, type SelectOption } from "./select-item";
+import { SwitchItem } from "./switch-item";
 
 // Constants
 const COLLAPSIBLE_TYPE_OPTIONS: SelectOption[] = [
