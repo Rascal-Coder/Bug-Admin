@@ -54,15 +54,10 @@ export function Main() {
 		<AuthGuard checkAny={currentNavAuth} fallback={<Page403 />}>
 			<main
 				data-layout="bug-admin-layout-main"
-				className={cn(
-					"h-full w-full flex-grow bg-layout",
-					"transition-[max-width] duration-300 ease-in-out",
-					"px-4 py-4 mx-auto",
-					{
-						"max-w-full": themeStretch,
-						"xl:max-w-screen-xl": !themeStretch,
-					},
-				)}
+				className={cn("w-full flex-grow", "transition-[max-width] duration-300 ease-in-out", "px-4 py-4 mx-auto", {
+					"max-w-full": themeStretch,
+					"xl:max-w-screen-xl": !themeStretch,
+				})}
 				style={{
 					willChange: "max-width",
 				}}

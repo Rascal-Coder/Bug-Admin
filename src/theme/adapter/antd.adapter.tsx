@@ -69,7 +69,7 @@ export const AntdAdapter: UILibraryAdapter = ({ mode, children }) => {
 			}}
 		>
 			<StyleProvider hashPriority="high">
-				<App>{children}</App>
+				<App className="h-full">{children}</App>
 			</StyleProvider>
 		</ConfigProvider>
 	);

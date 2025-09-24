@@ -1,13 +1,14 @@
 import classNames from "clsx";
-import React, { memo } from "react";
+import type React from "react";
 import type { FC } from "react";
+import { memo } from "react";
 
 import type { ButtonTabProps } from "../../types";
 
 import ButtonTab from "./ButtonTab";
 import ChromeTab from "./ChromeTab";
-import SvgClose from "./SvgClose";
 import styles from "./index.module.css";
+import SvgClose from "./SvgClose";
 import { ACTIVE_COLOR, createTabCssVars } from "./shared";
 
 type PageTabProps = Omit<ButtonTabProps, "onMouseUp">;

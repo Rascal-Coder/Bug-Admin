@@ -1,19 +1,29 @@
-import { Suspense } from "react";
-import { AdminLayout, LAYOUT_SCROLL_EL_ID } from "@/react-layouts/index";
-
-import "./index.scss";
+// import "./index.scss";
+import { useLayoutEffect } from "react";
+import { useMediaQuery } from "@/hooks";
+import { AdminLayout, LAYOUT_SCROLL_EL_ID } from "@/materials";
+import { navData } from "@/routes/nav-data";
+import { useAppActions } from "@/store/appStore";
+import GlobalFooter from "./global-footer";
+import GlobalSider from "./global-sider";
+import GlobalHeader from "./modules/global-header";
+import GlobalMenu from "./modules/global-menu";
 import { Main } from "./weight/main";
+import Tabs from "./weight/tabs";
 
 const BaseLayout = () => {
+	const isMobile = useMediaQuery({ maxWidth: 768 });
+	const { setIsMobile } = useAppActions();
+
+	useLayoutEffect(() => {
+		setIsMobile(isMobile);
+	}, [isMobile, setIsMobile]);
+
 	return (
 		<AdminLayout
 			fixedFooter={true}
 			fixedTop={true}
-			Footer={
-				<a href="https://github.com/Rascal-Coder/Bug-Admin" rel="noopener noreferrer" target="_blank">
-					Copyright MIT © 2025 Bug-Admin
-				</a>
-			}
+			Footer={<GlobalFooter></GlobalFooter>}
 			footerHeight={48}
 			footerVisible={true}
 			fullContent={false}
@@ -27,21 +37,15 @@ const BaseLayout = () => {
 			siderCollapsedWidth={80}
 			siderVisible={true}
 			siderWidth={240}
-			Tab={<div>111111</div>}
-			tabHeight={80}
+			Tab={<Tabs></Tabs>}
+			tabHeight={44}
 			tabVisible={true}
 			updateSiderCollapse={() => {}}
-			Header={<div>header</div>}
-			Sider={<div>Sider</div>}
+			Header={<GlobalHeader isMobile={false} mode="vertical"></GlobalHeader>}
+			Sider={<GlobalSider isHorizontalMix={false} isVerticalMix={false}></GlobalSider>}
 		>
-			{/* <GlobalContent /> */}
 			<Main></Main>
-			<div>menu</div>
-
-			<Suspense fallback={null}>
-				{/* <ThemeDrawer /> */}
-				<div>theme</div>
-			</Suspense>
+			<GlobalMenu mode="vertical" data={navData}></GlobalMenu>
 		</AdminLayout>
 	);
 };

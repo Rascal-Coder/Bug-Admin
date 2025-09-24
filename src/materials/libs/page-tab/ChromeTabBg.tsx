@@ -1,6 +1,5 @@
 import { memo } from "react";
 
-// eslint-disable-next-line react/display-name
 const ChromeTabBg = memo(() => {
 	return (
 		<svg className="size-full">

@@ -192,7 +192,7 @@ export default function Tabs() {
 	};
 
 	return (
-		<div className="flex-1 px-3 flex items-center justify-between">
+		<div className="h-full px-3 flex items-center justify-between bg-accent/50 border-b border-dashed">
 			<ScrollArea className="whitespace-nowrap px-2">
 				<Sortable.Root
 					getItemValue={(item) => item.value}

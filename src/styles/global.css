@@ -13,6 +13,16 @@
 @config "../../tailwind.config.ts";
 
 
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+html {
+  overflow-x: hidden;
+}
 /* base layer */
 @layer base {
 
@@ -160,6 +170,10 @@
 
   .flex-center {
     @apply flex items-center justify-center;
+  }
+
+  .flex-y-center{
+    @apply flex items-center;
   }
 
   .flex-col-center {
