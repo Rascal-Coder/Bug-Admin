@@ -148,11 +148,6 @@
 
 /* layout */
 :root {
-  /* --layout-nav-width: 240px; */
-  --layout-nav-width-mini: 88px;
-  --layout-nav-height-horizontal: 48px;
-  --layout-header-height: 90px;
-  --layout-multi-tabs-height: 48px;
   --depth: 1;
 }
 

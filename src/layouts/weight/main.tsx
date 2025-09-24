@@ -27,7 +27,7 @@ function findAuthByPath(path: string): string[] {
 }
 
 export function Main() {
-	const { themeStretch, layoutMode, layoutAnimation } = useSettings();
+	const { themeStretch, layoutAnimation } = useSettings();
 	const { pathname, search } = useLocation();
 	const currentNavAuth = findAuthByPath(pathname);
 	const outlet = useOutlet();
@@ -55,13 +55,12 @@ export function Main() {
 			<main
 				data-layout="bug-admin-layout-main"
 				className={cn(
-					"flex-auto w-full flex flex-col",
+					"h-full w-full flex-grow bg-layout",
 					"transition-[max-width] duration-300 ease-in-out",
-					"px-4 sm:px-6 py-4 sm:py-6 md:px-8 mx-auto",
+					"px-4 py-4 mx-auto",
 					{
 						"max-w-full": themeStretch,
 						"xl:max-w-screen-xl": !themeStretch,
-						"h-[calc(100svh-(var(--spacing)*30)))]": layoutMode === "horizontal",
 					},
 				)}
 				style={{

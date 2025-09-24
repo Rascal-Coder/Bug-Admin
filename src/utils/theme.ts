@@ -112,11 +112,6 @@ export const getThemeTokenVariants = (propertyPath: string) => {
 };
 
 /**
- * remove px unit
- * @param value example: "16px"
- * @returns example: 16
- */
-/**
  * remove px unit and convert to number
  * @param value example: "16px", "16.5px", "-16px", "16", 16
  * @returns example: 16, 16.5, -16, 16, 16
@@ -197,3 +192,24 @@ export const generateColorVariants = (baseColor: string) => {
 		darker: colorInstance.darken(0.4).hex(),
 	};
 };
+
+export const addColorAlpha = (baseColor: string, alpha: number) => {
+	return color(baseColor).alpha(alpha).hexa();
+};
+
+export function transformColorWithOpacity(baseColor: string, alpha: number, bgColor = "#ffffff") {
+	const originColor = color(baseColor).alpha(alpha);
+	const bg = color(bgColor);
+
+	function calRgb(or: number, bg: number, al: number) {
+		return bg + (or - bg) * al;
+	}
+
+	const resultRgb = {
+		r: calRgb(originColor.red(), bg.red(), alpha),
+		g: calRgb(originColor.green(), bg.green(), alpha),
+		b: calRgb(originColor.blue(), bg.blue(), alpha),
+	};
+
+	return color(resultRgb).hex(); // 转成不带 alpha 的 hex
+}

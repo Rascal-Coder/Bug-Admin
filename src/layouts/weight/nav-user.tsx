@@ -14,7 +14,8 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/ui/dropdown-menu";
-import { useAdminLayout } from "..";
+
+// import { useAdminLayout } from "..";
 
 type NavUserProps = {
 	user: {
@@ -22,9 +23,11 @@ type NavUserProps = {
 		email: string;
 		avatar: string;
 	};
+	isMobile: boolean;
+	collapseSidebar: boolean;
 };
 
-export function NavUser({ user }: NavUserProps) {
+export function NavUser({ user, collapseSidebar, isMobile }: NavUserProps) {
 	console.log("user", user);
 
 	const { replace } = useRouter();
@@ -38,7 +41,7 @@ export function NavUser({ user }: NavUserProps) {
 			replace(GLOBAL_CONFIG.loginRoute);
 		}
 	};
-	const { isMobile, collapseSidebar } = useAdminLayout();
+	// const { isMobile, collapseSidebar } = useAdminLayout();
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>

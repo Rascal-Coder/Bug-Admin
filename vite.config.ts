@@ -2,8 +2,8 @@ import path from "node:path";
 import tailwindcss from "@tailwindcss/vite";
 import { vanillaExtractPlugin } from "@vanilla-extract/vite-plugin";
 import react from "@vitejs/plugin-react";
+// import { codeInspectorPlugin } from "code-inspector-plugin";
 import { defineConfig, loadEnv } from "vite";
-import { codeInspectorPlugin } from "code-inspector-plugin";
 import tsconfigPaths from "vite-tsconfig-paths";
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
@@ -19,9 +19,9 @@ export default defineConfig(({ mode }) => {
 			}),
 			tsconfigPaths(),
 			tailwindcss(),
-			codeInspectorPlugin({
-				bundler: "vite",
-			}),
+			// codeInspectorPlugin({
+			// 	bundler: "vite",
+			// }),
 		],
 		server: {
 			open: true,
