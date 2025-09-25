@@ -3,8 +3,8 @@ import { useState } from "react";
 import { Icon } from "@/components/icon";
 import LocalePicker from "@/components/locale-picker";
 import { useUpdateSettings } from "@/hooks";
-import { ThemeSwitch } from "@/layouts/weight/themeswitch";
-import { useSetSignInLayout, useSignInLayout } from "@/store/settingStore";
+import ThemeSwitch from "@/layouts/modules/global-header/components/theme-switch.tsx";
+import { useSetSignInLayout, useSettings, useSignInLayout } from "@/store/settingStore";
 import { presetsColors } from "@/theme/tokens/color";
 import type { ThemeColorPresets } from "@/types/enum";
 import { Button } from "@/ui/button";
@@ -14,8 +14,8 @@ import { cn } from "@/utils";
 function ColorToggle() {
 	const COLOR_PRESETS = presetsColors;
 
-	const { updateSettings, settings } = useUpdateSettings();
-	const { themeColorPresets } = settings;
+	const { updateSettings } = useUpdateSettings();
+	const { themeColorPresets } = useSettings();
 	return (
 		<div className="group relative flex items-center overflow-hidden">
 			<div className="flex w-0 overflow-hidden transition-all duration-500 ease-out group-hover:w-55 gap-3 ">

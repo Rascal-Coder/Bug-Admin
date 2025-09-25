@@ -1,12 +1,14 @@
 import { Check, Moon, Sun } from "lucide-react";
 import { useSystemTheme, useUpdateSettings } from "@/hooks";
+import { useSettings } from "@/store/settingStore";
 import { ThemeMode } from "@/types/enum";
 import { Button } from "@/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/ui/dropdown-menu";
 import { cn } from "@/utils";
 
 const ThemeSwitch = () => {
-	const { updateSettings, settings } = useUpdateSettings();
+	const { updateSettings } = useUpdateSettings();
+	const settings = useSettings();
 	const systemTheme = useSystemTheme();
 	const handleThemeChange = (event: React.MouseEvent<HTMLDivElement>, theme: ThemeMode) => {
 		const isDark = theme === ThemeMode.Dark || (theme === ThemeMode.System && systemTheme === ThemeMode.Dark);

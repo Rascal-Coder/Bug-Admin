@@ -13,7 +13,7 @@ import { GLOBAL_CONFIG } from "@/global-config";
 import { useUpdateSettings } from "@/hooks";
 import { usePathname } from "@/routes/hooks/use-pathname";
 import type { SettingsType } from "@/store/settingStore";
-import { initialSettings, useClearSettings, useSetSettings } from "@/store/settingStore";
+import { initialSettings, useClearSettings, useSetSettings, useSettings } from "@/store/settingStore";
 import { presetsColors } from "@/theme/tokens/color";
 import { FontFamilyPreset } from "@/theme/tokens/typography";
 import { Button } from "@/ui/button";
@@ -54,7 +54,8 @@ export function FixedSettingButton() {
 	const sheetContentBgStyle: CSSProperties = {
 		backdropFilter: "blur(20px)",
 	};
-	const { updateSettings, settings } = useUpdateSettings();
+	const { updateSettings } = useUpdateSettings();
+	const settings = useSettings();
 	const {
 		themeColorPresets,
 		fontSize,

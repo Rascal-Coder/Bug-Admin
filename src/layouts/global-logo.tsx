@@ -9,7 +9,7 @@ interface LogoProps {
 	onClick?: () => void;
 }
 
-export function Logo({ isMobile = false, open = true, className, onClick }: LogoProps) {
+export function Logo({ open = true, className, onClick }: LogoProps) {
 	const router = useRouter();
 
 	return (
@@ -24,9 +24,14 @@ export function Logo({ isMobile = false, open = true, className, onClick }: Logo
 				<Icon icon="local-logo" size={40} />
 			</div>
 			<span
-				className={cn("font-semibold text-xl leading-tight transition-all duration-300 ease-in-out whitespace-nowrap", {
-					"opacity-0": !isMobile && !open,
-				})}
+				className={cn(
+					"font-semibold text-xl leading-tight transition-all duration-300 ease-in-out whitespace-nowrap",
+					"transform-gpu", // 启用GPU加速
+					{
+						"opacity-0 max-w-0 scale-x-0 origin-left overflow-hidden": !open,
+						"opacity-100 max-w-48 scale-x-100": open,
+					},
+				)}
 			>
 				Bug Admin
 			</span>

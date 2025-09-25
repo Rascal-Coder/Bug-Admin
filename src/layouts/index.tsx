@@ -1,9 +1,9 @@
-// import "./index.scss";
 import { useLayoutEffect } from "react";
 import { useMediaQuery } from "@/hooks";
 import { AdminLayout, LAYOUT_SCROLL_EL_ID } from "@/materials";
 import { navData } from "@/routes/nav-data";
 import { useAppActions } from "@/store/appStore";
+import { useSettings } from "@/store/settingStore";
 import GlobalFooter from "./global-footer";
 import GlobalSider from "./global-sider";
 import GlobalHeader from "./modules/global-header";
@@ -14,15 +14,15 @@ import Tabs from "./weight/tabs";
 const BaseLayout = () => {
 	const isMobile = useMediaQuery({ maxWidth: 768 });
 	const { setIsMobile } = useAppActions();
-
+	const { collapseSidebar } = useSettings();
 	useLayoutEffect(() => {
 		setIsMobile(isMobile);
 	}, [isMobile, setIsMobile]);
 
 	return (
 		<AdminLayout
-			fixedFooter={true}
-			fixedTop={true}
+			fixedFooter={false}
+			fixedTop={false}
 			Footer={<GlobalFooter></GlobalFooter>}
 			footerHeight={48}
 			footerVisible={true}
@@ -32,8 +32,8 @@ const BaseLayout = () => {
 			mode={"vertical"}
 			rightFooter={false}
 			scrollElId={LAYOUT_SCROLL_EL_ID}
-			scrollMode={"content"}
-			siderCollapse={false}
+			scrollMode="content"
+			siderCollapse={collapseSidebar}
 			siderCollapsedWidth={80}
 			siderVisible={true}
 			siderWidth={240}

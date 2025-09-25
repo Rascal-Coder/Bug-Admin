@@ -19,5 +19,5 @@ export const useUpdateSettings = () => {
 		[setSettings, settings],
 	);
 
-	return { updateSettings, settings };
+	return { updateSettings };
 };

@@ -1,6 +1,7 @@
 import { Book, Github, HelpCircle, LogOut } from "lucide-react";
 import { NavLink } from "react-router";
 import avatar from "@/assets/images/user/avatar.jpg";
+import { GLOBAL_CONFIG } from "@/global-config";
 import { useRouter } from "@/routes/hooks";
 import { useUserActions } from "@/store/userStore";
 import { Avatar, AvatarFallback, AvatarImage } from "@/ui/avatar";
@@ -12,7 +13,6 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/ui/dropdown-menu";
-import { GLOBAL_CONFIG } from "@/global-config";
 
 /**
  * Account Dropdown

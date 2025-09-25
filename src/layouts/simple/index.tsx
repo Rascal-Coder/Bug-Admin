@@ -1,5 +1,5 @@
 import type React from "react";
-import { Logo } from "../sidebar/logo";
+import { Logo } from "../global-logo";
 
 type Props = {
 	children: React.ReactNode;

@@ -1,9 +1,9 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { domMax, LazyMotion } from "motion/react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { useLocation } from "react-router";
 import { FixedSettingButton } from "@/layouts/components/fixed-setting-button";
 import Logo from "./assets/icons/logo.svg";
+import { MotionLazy } from "./components/animate";
 import { RouteLoadingProgress } from "./components/loading/route-loading";
 import Toast from "./components/toast";
 import { GLOBAL_CONFIG } from "./global-config";
@@ -35,8 +35,7 @@ function App({ children }: { children: React.ReactNode }) {
 						<link rel="icon" href={Logo} />
 					</Helmet>
 					<RouteLoadingProgress />
-					{/* <MotionLazy>{children}</MotionLazy> */}
-					<LazyMotion features={domMax}>{children}</LazyMotion>
+					<MotionLazy>{children}</MotionLazy>
 					<FixedSettingButton />
 					<Toast />
 				</ThemeProvider>

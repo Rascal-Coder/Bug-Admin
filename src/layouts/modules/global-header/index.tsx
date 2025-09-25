@@ -3,6 +3,7 @@ import { useFullscreen, useToggle } from "react-use";
 import LocalePicker from "@/components/locale-picker";
 import { Logo } from "@/layouts/global-logo";
 import MenuToggler from "@/layouts/menu-toggler";
+import { useSettings } from "@/store/settingStore";
 import { Separator } from "@/ui/separator";
 import AccountDropdown from "./components/account-dropdown";
 import Breadcrumb from "./components/breadcrumb";
@@ -62,7 +63,6 @@ const HEADER_PROPS_CONFIG: Record<ThemeLayoutMode, HeaderProps> = {
 };
 
 const GlobalHeader: FC<Props> = memo(({ isMobile, mode, reverse }) => {
-	// const [isFullscreen, { toggleFullscreen }] = useFullscreen(document.body);
 	const [show, toggle] = useToggle(false);
 	const ref = useRef(document.body);
 	const isFullscreen = useFullscreen(ref, show, { onClose: () => toggle(false) });
@@ -71,6 +71,7 @@ const GlobalHeader: FC<Props> = memo(({ isMobile, mode, reverse }) => {
 
 	const showToggler = reverse ? true : showMenuToggler;
 
+	const { collapseSidebar } = useSettings();
 	return (
 		<div className="h-full flex-y-center px-3 shadow-md bg-accent/50 border-b">
 			{showLogo && (
@@ -80,7 +81,7 @@ const GlobalHeader: FC<Props> = memo(({ isMobile, mode, reverse }) => {
 			)}
 			<div>{reverse ? true : showMenuToggler}</div>
 
-			{showToggler && <MenuToggler state="expanded" />}
+			{showToggler && <MenuToggler state={collapseSidebar ? "collapsed" : "expanded"} />}
 
 			<Separator orientation="vertical" className="h-6! mx-2"></Separator>
 			<div className="h-full flex-y-center flex-1 overflow-hidden" id={GLOBAL_HEADER_MENU_ID}>

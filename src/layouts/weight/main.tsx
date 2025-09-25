@@ -60,6 +60,7 @@ export function Main() {
 				})}
 				style={{
 					willChange: "max-width",
+					contain: "layout style",
 				}}
 			>
 				<KeepAlive
