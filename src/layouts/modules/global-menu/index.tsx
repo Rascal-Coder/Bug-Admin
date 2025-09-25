@@ -1,6 +1,6 @@
 import { memo } from "react";
 import type { NavProps } from "@/components/nav/types.ts";
-import VerticalModule from "./modules/vertical.tsx";
+import VerticalModule from "./components/vertical-menu";
 
 type ThemeLayoutMode = "horizontal" | "horizontal-mix" | "vertical" | "vertical-mix";
 interface Props {

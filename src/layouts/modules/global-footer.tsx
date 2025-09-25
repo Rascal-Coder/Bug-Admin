@@ -1,6 +1,6 @@
 const GlobalFooter = () => {
 	return (
-		<div className="h-full flex-center bg-accent/50">
+		<div className="h-full flex-center bg-bg-paper">
 			<a href="https://github.com/Rascal-Coder/Bug-Admin" rel="noopener noreferrer" target="_blank">
 				Copyright MIT © 2025 Bug-Admin
 			</a>

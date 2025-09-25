@@ -20,6 +20,7 @@ export type SettingsType = {
 	transition: boolean;
 	layoutAnimation: "fade" | "fade-slide" | "fade-bottom" | "fade-scale" | "zoom-fade" | "zoom-out" | "none";
 	collapseSidebar: boolean;
+	siderVisible: boolean;
 };
 
 export type SignInLayout = "center" | "right" | "left";
@@ -51,6 +52,7 @@ export const defaultSettings: SettingsType = {
 	transition: true,
 	layoutAnimation: "fade",
 	collapseSidebar: false,
+	siderVisible: true,
 };
 
 // 合并默认配置和用户偏好配置

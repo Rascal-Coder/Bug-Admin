@@ -1,9 +1,12 @@
 import { type FC, memo, useRef } from "react";
 import { useFullscreen, useToggle } from "react-use";
+import { Icon } from "@/components/icon";
 import LocalePicker from "@/components/locale-picker";
-import { Logo } from "@/layouts/global-logo";
-import MenuToggler from "@/layouts/menu-toggler";
+import { useUpdateSettings } from "@/hooks";
+import { Logo } from "@/layouts/modules/global-logo";
+import { useAppActions, useIsMobileOpen } from "@/store/appStore";
 import { useSettings } from "@/store/settingStore";
+import { Button } from "@/ui/button";
 import { Separator } from "@/ui/separator";
 import AccountDropdown from "./components/account-dropdown";
 import Breadcrumb from "./components/breadcrumb";
@@ -71,9 +74,21 @@ const GlobalHeader: FC<Props> = memo(({ isMobile, mode, reverse }) => {
 
 	const showToggler = reverse ? true : showMenuToggler;
 
-	const { collapseSidebar } = useSettings();
+	const { siderVisible } = useSettings();
+	const { updateSettings } = useUpdateSettings();
+	const isMobileOpen = useIsMobileOpen();
+	const { setisMobileOpen } = useAppActions();
+	const handleToggle = () => {
+		if (!isMobile) {
+			updateSettings({
+				siderVisible: !siderVisible,
+			});
+		} else {
+			setisMobileOpen(!isMobileOpen);
+		}
+	};
 	return (
-		<div className="h-full flex-y-center px-3 shadow-md bg-accent/50 border-b">
+		<div className="h-full flex-y-center px-3 shadow-md bg-bg-paper border-b">
 			{showLogo && (
 				<div data-slot="header-logo-wrapper" className="h-full p-2">
 					<Logo className="h-full px-2"></Logo>
@@ -81,9 +96,13 @@ const GlobalHeader: FC<Props> = memo(({ isMobile, mode, reverse }) => {
 			)}
 			<div>{reverse ? true : showMenuToggler}</div>
 
-			{showToggler && <MenuToggler state={collapseSidebar ? "collapsed" : "expanded"} />}
+			{showToggler && (
+				<Button size="icon" variant="ghost" onClick={handleToggle}>
+					<Icon icon="line-md:close-to-menu-alt-transition" size={20}></Icon>
+				</Button>
+			)}
 
-			<Separator orientation="vertical" className="h-6! mx-2"></Separator>
+			{!isMobile && <Separator orientation="vertical" className="h-6! mx-2"></Separator>}
 			<div className="h-full flex-y-center flex-1 overflow-hidden" id={GLOBAL_HEADER_MENU_ID}>
 				{!isMobile && !showMenu && <Breadcrumb />}
 			</div>

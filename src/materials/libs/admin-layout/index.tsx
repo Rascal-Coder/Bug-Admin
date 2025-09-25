@@ -40,6 +40,7 @@ const AdminLayout: FC<AdminLayoutProps> = ({
 	tabHeight = 44,
 	tabVisible = true,
 	updateSiderCollapse,
+	mobileSiderOpen,
 }) => {
 	const cssVar = createLayoutCssVars({
 		footerHeight,
@@ -54,7 +55,7 @@ const AdminLayout: FC<AdminLayoutProps> = ({
 	// config visible
 	const showHeader = Boolean(Header) && headerVisible;
 	const showSider = !isMobile && Boolean(Sider) && siderVisible;
-	const showMobileSider = isMobile && Boolean(Sider) && siderVisible;
+	const showMobileSider = isMobile && mobileSiderOpen;
 	const showTab = Boolean(Tab) && tabVisible;
 	const showFooter = Boolean(Footer) && footerVisible;
 
@@ -101,7 +102,7 @@ const AdminLayout: FC<AdminLayoutProps> = ({
 	// display
 	const headerDisplay = !fullContent && fixedHeaderAndTab ? "block" : "none";
 	const siderDisplay = fullContent ? "none" : "block";
-	const mobileSider = siderCollapse ? "none" : "block";
+	// const mobileSider = siderCollapse ? "none" : "block";
 	const footerDisplay = !fullContent && fixedFooter ? "block" : "none";
 
 	return (
@@ -158,8 +159,6 @@ const AdminLayout: FC<AdminLayoutProps> = ({
 						/>
 					</>
 				)}
-
-				{/* Sider */}
 				{showSider && (
 					<aside
 						style={{ display: siderDisplay }}
@@ -184,13 +183,12 @@ const AdminLayout: FC<AdminLayoutProps> = ({
 								siderClass,
 								mobileSiderClass,
 								style["layout-mobile-sider"],
-								siderCollapse ? "overflow-hidden" : style["layout-sider"],
+								mobileSiderOpen ? style["layout-sider"] : "overflow-hidden",
 							])}
 						>
 							{Sider}
 						</aside>
 						<div
-							style={{ display: mobileSider }}
 							className={classNames("absolute left-0 top-0 h-full w-full bg-[rgba(0,0,0,0.2)]", [
 								style["layout-mobile-sider-mask"],
 							])}

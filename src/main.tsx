@@ -36,22 +36,31 @@ if (GLOBAL_CONFIG.routerMode === "backend") {
 	await menuService.getMenuList();
 }
 
-const router = createBrowserRouter(
-	[
-		{
-			Component: () => (
-				<App>
-					<Outlet />
-				</App>
-			),
-			errorElement: <ErrorBoundary />,
-			children: routesSection,
-		},
-	],
-	{
-		basename: GLOBAL_CONFIG.publicPath,
-	},
-);
+function setupApp() {
+	const container = document.getElementById("root");
 
-const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
-root.render(<RouterProvider router={router} />);
+	if (!container) return;
+
+	const root = ReactDOM.createRoot(container);
+
+	const router = createBrowserRouter(
+		[
+			{
+				Component: () => (
+					<App>
+						<Outlet />
+					</App>
+				),
+				errorElement: <ErrorBoundary />,
+				children: routesSection,
+			},
+		],
+		{
+			basename: GLOBAL_CONFIG.publicPath,
+		},
+	);
+
+	root.render(<RouterProvider router={router} />);
+}
+
+setupApp();

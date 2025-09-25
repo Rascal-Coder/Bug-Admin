@@ -35,11 +35,6 @@ export const NavRootItem = (item: NavItemProps) => {
 				</span>
 			}
 
-			{/* Arrow */}
-			{item.hasChild && (
-				<Icon icon="eva:arrow-ios-forward-fill" className="absolute right-1 top-2" style={navItemStyles.arrow} />
-			)}
-
 			{/* Title */}
 			<span style={navItemStyles.title} className="text-center! text-xs! mt-1 inline-block w-full">
 				{item.title}

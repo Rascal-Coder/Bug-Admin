@@ -222,13 +222,16 @@ const Scroller = React.forwardRef<HTMLDivElement, ScrollerProps>((props, forward
 
 	const ScrollerPrimitive = asChild ? SlotPrimitive.Root : "div";
 
+	const mergedCls = React.useMemo(() => {
+		return cn(scrollerVariants({ orientation, hideScrollbar, className }));
+	}, [className, orientation, hideScrollbar]);
 	const ScrollerImpl = (
 		<ScrollerPrimitive
 			data-slot="scroller"
 			{...scrollerProps}
 			ref={composedRef}
 			style={composedStyle}
-			className={cn(scrollerVariants({ orientation, hideScrollbar, className }))}
+			className={mergedCls}
 		/>
 	);
 

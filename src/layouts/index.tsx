@@ -2,25 +2,29 @@ import { useLayoutEffect } from "react";
 import { useMediaQuery } from "@/hooks";
 import { AdminLayout, LAYOUT_SCROLL_EL_ID } from "@/materials";
 import { navData } from "@/routes/nav-data";
-import { useAppActions } from "@/store/appStore";
+import { useAppActions, useIsMobileOpen } from "@/store/appStore";
 import { useSettings } from "@/store/settingStore";
-import GlobalFooter from "./global-footer";
-import GlobalSider from "./global-sider";
+import GlobalContent from "./modules/global-contnet";
+import GlobalFooter from "./modules/global-footer";
 import GlobalHeader from "./modules/global-header";
-import GlobalMenu from "./modules/global-menu";
-import { Main } from "./weight/main";
+import GlobalSider from "./modules/global-sider";
 import Tabs from "./weight/tabs";
 
 const BaseLayout = () => {
 	const isMobile = useMediaQuery({ maxWidth: 768 });
-	const { setIsMobile } = useAppActions();
-	const { collapseSidebar } = useSettings();
+	const { setIsMobile, setisMobileOpen } = useAppActions();
+	const { collapseSidebar, siderVisible } = useSettings();
+	const isMobileOpen = useIsMobileOpen();
 	useLayoutEffect(() => {
 		setIsMobile(isMobile);
-	}, [isMobile, setIsMobile]);
+		if (isMobile) {
+			setisMobileOpen(true);
+		}
+	}, [isMobile, setIsMobile, setisMobileOpen]);
 
 	return (
 		<AdminLayout
+			mobileSiderOpen={isMobileOpen}
 			fixedFooter={false}
 			fixedTop={false}
 			Footer={<GlobalFooter></GlobalFooter>}
@@ -28,24 +32,25 @@ const BaseLayout = () => {
 			footerVisible={true}
 			fullContent={false}
 			headerHeight={56}
-			isMobile={false}
+			isMobile={isMobile}
 			mode={"vertical"}
 			rightFooter={false}
 			scrollElId={LAYOUT_SCROLL_EL_ID}
 			scrollMode="content"
 			siderCollapse={collapseSidebar}
 			siderCollapsedWidth={80}
-			siderVisible={true}
+			siderVisible={siderVisible}
 			siderWidth={240}
 			Tab={<Tabs></Tabs>}
 			tabHeight={44}
 			tabVisible={true}
-			updateSiderCollapse={() => {}}
-			Header={<GlobalHeader isMobile={false} mode="vertical"></GlobalHeader>}
-			Sider={<GlobalSider isHorizontalMix={false} isVerticalMix={false}></GlobalSider>}
+			updateSiderCollapse={() => {
+				setisMobileOpen(false);
+			}}
+			Header={<GlobalHeader isMobile={isMobile} mode="vertical"></GlobalHeader>}
+			Sider={<GlobalSider isHorizontalMix={false} isVerticalMix={false} data={navData}></GlobalSider>}
 		>
-			<Main></Main>
-			<GlobalMenu mode="vertical" data={navData}></GlobalMenu>
+			<GlobalContent></GlobalContent>
 		</AdminLayout>
 	);
 };

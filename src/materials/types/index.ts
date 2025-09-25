@@ -229,6 +229,7 @@ export interface AdminLayoutProps
 	scrollMode?: LayoutScrollMode;
 	/** The class of the scroll wrapper element */
 	scrollWrapperClass?: string;
+	mobileSiderOpen: boolean;
 }
 
 type Kebab<S extends string> = S extends Uncapitalize<S> ? S : `-${Uncapitalize<S>}`;

@@ -1,35 +1,40 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Progress } from "@/ui/progress";
 
 export function RouteLoadingProgress() {
 	const [progress, setProgress] = useState(0);
+	const rafRef = useRef<number | null>(null);
+	const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
 	useEffect(() => {
 		let lastHref = window.location.href;
-		let timer: ReturnType<typeof setTimeout>;
 
 		const handleRouteChange = () => {
+			// 清理上一次的动画
+			if (rafRef.current) cancelAnimationFrame(rafRef.current);
+			if (timeoutRef.current) clearTimeout(timeoutRef.current);
+
 			setProgress(0);
 			let currentProgress = 0;
 
-			const interval = setInterval(() => {
-				currentProgress += 2;
-				setProgress(currentProgress);
-			}, 5);
+			const step = () => {
+				currentProgress += 4;
+				if (currentProgress <= 90) {
+					setProgress(currentProgress);
+					rafRef.current = requestAnimationFrame(step);
+				}
+			};
 
-			timer = setTimeout(() => {
-				clearInterval(interval);
+			rafRef.current = requestAnimationFrame(step);
+
+			timeoutRef.current = setTimeout(() => {
+				if (rafRef.current) cancelAnimationFrame(rafRef.current);
 				setProgress(100);
 				setTimeout(() => setProgress(0), 100);
 			}, 500);
-
-			return () => {
-				clearInterval(interval);
-				clearTimeout(timer);
-			};
 		};
 
-		// 监听 href 变化
+		// 监听 URL 变化
 		const observer = new MutationObserver(() => {
 			const currentHref = window.location.href;
 			if (currentHref !== lastHref) {
@@ -38,23 +43,17 @@ export function RouteLoadingProgress() {
 			}
 		});
 
-		// 观察整个文档的变化
-		observer.observe(document, {
-			subtree: true,
-			childList: true,
-		});
-
-		// 监听 popstate 事件（处理浏览器前进后退）
+		observer.observe(document, { subtree: true, childList: true });
 		window.addEventListener("popstate", handleRouteChange);
 
-		// 初始加载时触发一次
+		// 初始触发
 		handleRouteChange();
 
-		// 清理监听器
 		return () => {
 			observer.disconnect();
 			window.removeEventListener("popstate", handleRouteChange);
-			clearTimeout(timer);
+			if (rafRef.current) cancelAnimationFrame(rafRef.current);
+			if (timeoutRef.current) clearTimeout(timeoutRef.current);
 		};
 	}, []);
 
