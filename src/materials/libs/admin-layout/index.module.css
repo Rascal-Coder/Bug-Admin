@@ -22,8 +22,8 @@
 .layout-sider {
   width: var(--bug-sider-width) !important;
   z-index: var(--bug-sider-z-index);
-  transition: width 0.3s ease-in-out;
-  /* will-change: width; */
+  transition: width 0.15s ease-out, transform 0.15s ease-out;
+  will-change: width, transform;
 }
 
 .layout-mobile-sider {
@@ -37,7 +37,7 @@
 .layout-sider_collapsed {
   width: var(--bug-sider-collapsed-width);
   z-index: var(--bug-sider-z-index);
-  transition: width 0.3s ease-in-out;
+  transition: width 0.15s ease-out, transform 0.15s ease-out;
 }
 
 .layout-footer,
@@ -51,12 +51,13 @@
 
 .left-gap {
   padding-left: var(--bug-sider-width);
-  transition: padding-left 0.3s ease-in-out;
+  transition: padding-left 0.15s ease-out;
+  will-change: padding-left;
 }
 
 .left-gap_collapsed {
   padding-left: var(--bug-sider-collapsed-width);
-  transition: padding-left 0.3s ease-in-out;  
+  transition: padding-left 0.15s ease-out;
 }
 
 .sider-padding-top {

@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { memo } from "react";
 import { Icon } from "@/components/icon";
 import { Select, SelectContent, SelectItem as SelectItemPrimitive, SelectTrigger, SelectValue } from "@/ui/select";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/ui/tooltip";
@@ -23,7 +24,7 @@ interface SelectItemProps {
 	side?: (typeof SIDE_OPTIONS)[number];
 }
 
-export function SelectItem({
+export const SelectItem = memo(function SelectItem({
 	disabled = false,
 	items,
 	placeholder = "",
@@ -73,4 +74,4 @@ export function SelectItem({
 			</Select>
 		</div>
 	);
-}
+});

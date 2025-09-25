@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { isEqual } from "lodash";
 import { XIcon } from "lucide-react";
 import type { CSSProperties } from "react";
-import { useMemo } from "react";
+import { memo, useCallback, useMemo } from "react";
 import { toast } from "sonner";
 import { ThemeColorPresets, ThemeMode } from "#/enum";
 import { Icon } from "@/components/icon";
@@ -49,11 +49,15 @@ const LAYOUT_ANIMATION_OPTIONS: SelectOption[] = [
 	{ value: "zoom-out", label: "zoom-out" },
 ];
 
-export function FixedSettingButton() {
+export const FixedSettingButton = memo(function FixedSettingButton() {
 	const pathname = usePathname();
-	const sheetContentBgStyle: CSSProperties = {
-		backdropFilter: "blur(20px)",
-	};
+	const sheetContentBgStyle: CSSProperties = useMemo(
+		() => ({
+			backdropFilter: "blur(20px)",
+		}),
+		[],
+	);
+
 	const { updateSettings } = useUpdateSettings();
 	const settings = useSettings();
 	const {
@@ -73,11 +77,12 @@ export function FixedSettingButton() {
 
 	const setSettings = useSetSettings();
 	const clearSettings = useClearSettings();
-	// 重置所有设置
-	const handleResetSettings = () => {
+
+	// 重置所有设置 - memoize to prevent recreation
+	const handleResetSettings = useCallback(() => {
 		clearSettings();
 		setSettings(initialSettings);
-	};
+	}, [clearSettings, setSettings]);
 
 	// Computed values
 	const shouldShowCollapsibleTypeSelect = useMemo(
@@ -105,8 +110,8 @@ export function FixedSettingButton() {
 		return Object.keys(changedSettings).length > 0;
 	}, [changedSettings]);
 
-	// 复制配置到剪贴板
-	const handleCopyConfig = async () => {
+	// 复制配置到剪贴板 - memoize to prevent recreation
+	const handleCopyConfig = useCallback(async () => {
 		const configString = ` ${JSON.stringify(changedSettings, null, 2)}`;
 
 		await navigator.clipboard.writeText(configString);
@@ -114,7 +119,7 @@ export function FixedSettingButton() {
 			description: "复制成功，请在 \`src/preferences.ts\` 内进行覆盖",
 			position: "top-center",
 		});
-	};
+	}, [changedSettings]);
 
 	return (
 		<>
@@ -497,4 +502,4 @@ export function FixedSettingButton() {
 			)}
 		</>
 	);
-}
+});

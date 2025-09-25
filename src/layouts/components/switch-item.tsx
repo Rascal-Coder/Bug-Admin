@@ -1,4 +1,4 @@
-import { type ReactNode, useState } from "react";
+import { memo, type ReactNode, useCallback, useState } from "react";
 import { Icon } from "@/components/icon";
 import { Switch } from "@/ui/switch";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/ui/tooltip";
@@ -17,7 +17,7 @@ interface SwitchItemProps {
 	side?: (typeof SIDE_OPTIONS)[number];
 }
 
-export function SwitchItem({
+export const SwitchItem = memo(function SwitchItem({
 	disabled = false,
 	tip = "",
 	checked: controlledChecked,
@@ -32,7 +32,7 @@ export function SwitchItem({
 
 	const checked = controlledChecked !== undefined ? controlledChecked : internalChecked;
 
-	const handleClick = () => {
+	const handleClick = useCallback(() => {
 		if (disabled) return;
 
 		const newChecked = !checked;
@@ -42,11 +42,11 @@ export function SwitchItem({
 		} else {
 			setInternalChecked(newChecked);
 		}
-	};
+	}, [disabled, checked, controlledChecked, onCheckedChange]);
 
-	const handleSwitchClick = (e: React.MouseEvent) => {
+	const handleSwitchClick = useCallback((e: React.MouseEvent) => {
 		e.stopPropagation();
-	};
+	}, []);
 
 	return (
 		<div
@@ -86,4 +86,4 @@ export function SwitchItem({
 			/>
 		</div>
 	);
-}
+});

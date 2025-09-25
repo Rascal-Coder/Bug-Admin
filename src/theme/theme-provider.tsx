@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { HtmlDataAttribute, ThemeColorPresets, ThemeMode } from "#/enum";
 import { useSystemTheme } from "@/hooks/use-media-query";
 import { useSettings } from "@/store/settingStore";
@@ -17,78 +17,62 @@ export function ThemeProvider({ children, adapters = [] }: ThemeProviderProps) {
 
 	const actualThemeMode = (themeMode === ThemeMode.System ? systemTheme : themeMode) as "light" | "dark";
 
-	// Update HTML class to support Tailwind dark mode
+	// Memoize adapters to avoid recreating on every render
+	const wrappedWithAdapters = useMemo(() => {
+		return adapters.reduce(
+			(children, Adapter) => (
+				<Adapter key={Adapter.name} mode={actualThemeMode}>
+					{children}
+				</Adapter>
+			),
+			children,
+		);
+	}, [adapters, actualThemeMode, children]);
+
+	// Combine all DOM updates into a single effect to reduce reflows
 	useEffect(() => {
 		const root = window.document.documentElement;
-		root.setAttribute(HtmlDataAttribute.ThemeMode, actualThemeMode);
-	}, [actualThemeMode]);
-
-	// Update gray mode and color weak mode
-	useEffect(() => {
-		const root = window.document.documentElement;
-
-		// Gray mode
-		if (grayMode) {
-			root.classList.add("grayscale-mode");
-		} else {
-			root.classList.remove("grayscale-mode");
-		}
-
-		// Color weak mode (using invert-mode as a placeholder, can be customized)
-		if (colorWeakMode) {
-			root.classList.add("color-weak-mode");
-		} else {
-			root.classList.remove("color-weak-mode");
-		}
-	}, [grayMode, colorWeakMode]);
-
-	// Dynamically update theme color related CSS variables
-	useEffect(() => {
-		const root = window.document.documentElement;
-		root.setAttribute(HtmlDataAttribute.ColorPalette, themeColorPresets);
-
-		// Handle custom color
-		if (themeColorPresets === ThemeColorPresets.Custom && customPrimaryColor) {
-			const customColors = generateColorVariants(customPrimaryColor);
-
-			const colorChannels = addColorChannels(customColors);
-
-			// Set CSS variables for custom primary color
-			Object.entries(colorChannels).forEach(([key, value]) => {
-				if (key.endsWith("Channel")) {
-					root.style.setProperty(`--colors-palette-primary-${key}`, value);
-				} else {
-					root.style.setProperty(`--colors-palette-primary-${key}`, value);
-				}
-			});
-		} else {
-			// Clear custom CSS variables when switching back to preset colors
-			const colorKeys = ["lighter", "light", "default", "dark", "darker"];
-			colorKeys.forEach((key) => {
-				root.style.removeProperty(`--colors-palette-primary-${key}`);
-				root.style.removeProperty(`--colors-palette-primary-${key}Channel`);
-			});
-		}
-	}, [themeColorPresets, customPrimaryColor]);
-
-	// Update font size and font family
-	useEffect(() => {
-		const root = window.document.documentElement;
-		root.style.fontSize = `${fontSize}px`;
-
 		const body = window.document.body;
-		body.style.fontFamily = fontFamily;
-	}, [fontFamily, fontSize]);
 
-	// Wrap children with adapters
-	const wrappedWithAdapters = adapters.reduce(
-		(children, Adapter) => (
-			<Adapter key={Adapter.name} mode={actualThemeMode}>
-				{children}
-			</Adapter>
-		),
-		children,
-	);
+		// Batch DOM updates to minimize reflows
+		requestAnimationFrame(() => {
+			// Update theme mode
+			root.setAttribute(HtmlDataAttribute.ThemeMode, actualThemeMode);
+
+			// Update gray mode and color weak mode
+			root.classList.toggle("grayscale-mode", grayMode);
+			root.classList.toggle("color-weak-mode", colorWeakMode);
+
+			// Update color palette
+			root.setAttribute(HtmlDataAttribute.ColorPalette, themeColorPresets);
+
+			// Handle custom color
+			if (themeColorPresets === ThemeColorPresets.Custom && customPrimaryColor) {
+				const customColors = generateColorVariants(customPrimaryColor);
+				const colorChannels = addColorChannels(customColors);
+
+				// Set CSS variables for custom primary color
+				Object.entries(colorChannels).forEach(([key, value]) => {
+					if (key.endsWith("Channel")) {
+						root.style.setProperty(`--colors-palette-primary-${key}`, value);
+					} else {
+						root.style.setProperty(`--colors-palette-primary-${key}`, value);
+					}
+				});
+			} else {
+				// Clear custom CSS variables when switching back to preset colors
+				const colorKeys = ["lighter", "light", "default", "dark", "darker"];
+				colorKeys.forEach((key) => {
+					root.style.removeProperty(`--colors-palette-primary-${key}`);
+					root.style.removeProperty(`--colors-palette-primary-${key}Channel`);
+				});
+			}
+
+			// Update font size and font family
+			root.style.fontSize = `${fontSize}px`;
+			body.style.fontFamily = fontFamily;
+		});
+	}, [actualThemeMode, grayMode, colorWeakMode, themeColorPresets, customPrimaryColor, fontFamily, fontSize]);
 
 	return wrappedWithAdapters;
 }
