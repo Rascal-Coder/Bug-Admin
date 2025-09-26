@@ -1,6 +1,6 @@
 import KeepAlive, { useKeepAliveRef } from "keepalive-for-react";
 import { concat } from "ramda";
-import { memo, Suspense, useCallback, useMemo } from "react";
+import { memo, Suspense, useCallback, useEffect, useMemo } from "react";
 import { ScrollRestoration, useLocation, useOutlet } from "react-router";
 import { useUpdateEffect } from "react-use";
 import { AuthGuard } from "@/components/auth/auth-guard";
@@ -55,7 +55,9 @@ const GlobalContent = memo(() => {
 	const currentMenuItem = useMemo(() => {
 		return getMenuInfoByPath(pathname);
 	}, [pathname]);
-	useUpdateEffect(() => {
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: false
+	useEffect(() => {
 		if (currentMenuItem?.type === PermissionType.MENU) {
 			tabActions.addTab({
 				label: currentMenuItem.title,
@@ -63,6 +65,8 @@ const GlobalContent = memo(() => {
 				path: pathname,
 				icon: currentMenuItem.icon,
 			});
+			// 添加缓存键以确保页面组件被正确缓存
+			tabActions.addCacheKey(currentCacheKey);
 		}
 	}, [pathname]);
 
