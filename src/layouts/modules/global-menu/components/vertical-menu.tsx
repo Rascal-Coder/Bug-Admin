@@ -43,14 +43,15 @@ const VerticalMenu: FC<Props> = ({ data, navClassName }) => {
 
 	const [menuItemStates, setMenuItemStates] = useState<Map<string, boolean>>(new Map());
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: false
 	useEffect(() => {
 		if (accordionMode && !menuGroup && data) {
 			const activeGroupId = findActiveGroup(data, location.pathname);
-			if (activeGroupId && openGroupId === null) {
+			if (activeGroupId && activeGroupId !== openGroupId) {
 				setOpenGroupId(activeGroupId);
 			}
 		}
-	}, [accordionMode, menuGroup, data, location.pathname, openGroupId]);
+	}, [accordionMode, menuGroup, location.pathname]);
 
 	const handleGroupToggle = (groupId: string, isOpen: boolean) => {
 		if (accordionMode && !menuGroup) {

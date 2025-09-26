@@ -310,12 +310,14 @@ export const FixedSettingButton = memo(function FixedSettingButton() {
 									<SwitchItem checked={menuGroup} onCheckedChange={(checked) => updateSettings({ menuGroup: checked })}>
 										菜单分组
 									</SwitchItem>
-									<SwitchItem
-										checked={accordionMode}
-										onCheckedChange={(checked) => updateSettings({ accordionMode: checked })}
-									>
-										菜单手风琴模式
-									</SwitchItem>
+									{!menuGroup && (
+										<SwitchItem
+											checked={accordionMode}
+											onCheckedChange={(checked) => updateSettings({ accordionMode: checked })}
+										>
+											菜单手风琴模式
+										</SwitchItem>
+									)}
 									<SelectItem
 										items={LAYOUT_ANIMATION_OPTIONS}
 										value={layoutAnimation}
