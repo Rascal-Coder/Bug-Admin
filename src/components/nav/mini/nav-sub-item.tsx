@@ -15,11 +15,7 @@ export const NavSubItem = (item: NavItemProps) => {
 			{
 				<span style={navItemStyles.icon} className="mr-2 items-center justify-center">
 					{icon ? (
-						typeof icon === "string" ? (
-							<Icon className={navItemClasses.icon} icon={icon} size={24} />
-						) : (
-							icon
-						)
+						<Icon className={navItemClasses.icon} icon={icon} size={20} />
 					) : (
 						<Icon icon="mdi:menu" size={24} className={navItemClasses.icon} />
 					)}

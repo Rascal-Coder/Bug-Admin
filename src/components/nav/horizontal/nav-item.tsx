@@ -16,11 +16,7 @@ export function NavItem(item: NavItemProps) {
 			{
 				<span style={navItemStyles.icon} className="mr-2 items-center justify-center">
 					{icon ? (
-						typeof icon === "string" ? (
-							<Icon className={navItemClasses.icon} icon={icon} size={20} />
-						) : (
-							icon
-						)
+						<Icon className={navItemClasses.icon} icon={icon} size={20} />
 					) : (
 						<Icon icon="mdi:menu" size={20} className={navItemClasses.icon} />
 					)}

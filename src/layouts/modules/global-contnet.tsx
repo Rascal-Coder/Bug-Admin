@@ -9,7 +9,9 @@ import Page403 from "@/pages/sys/error/Page403";
 import { navData } from "@/routes/nav-data";
 import { useSettings } from "@/store/settingStore";
 import useTabStore from "@/store/tabStore";
+import { PermissionType } from "@/types/enum";
 import { cn } from "@/utils";
+import { getMenuInfoByPath } from "@/utils/menu";
 import { flattenTrees } from "@/utils/tree";
 
 const allItems = navData.reduce((acc: any[], group) => {
@@ -40,7 +42,7 @@ const GlobalContent = memo(() => {
 		return pathname + search;
 	}, [pathname, search]);
 
-	const { cacheKeys, removeTabKeys } = useTabStore();
+	const { cacheKeys, removeTabKeys, actions: tabActions } = useTabStore();
 	const aliveRef = useKeepAliveRef();
 
 	const handleDestroyTabs = useCallback(() => {
@@ -49,6 +51,20 @@ const GlobalContent = memo(() => {
 			aliveRef.current?.destroy(key);
 		});
 	}, [aliveRef, removeTabKeys]);
+
+	const currentMenuItem = useMemo(() => {
+		return getMenuInfoByPath(pathname);
+	}, [pathname]);
+	useUpdateEffect(() => {
+		if (currentMenuItem?.type === PermissionType.MENU) {
+			tabActions.addTab({
+				label: currentMenuItem.title,
+				value: currentCacheKey,
+				path: pathname,
+				icon: currentMenuItem.icon,
+			});
+		}
+	}, [pathname]);
 
 	useUpdateEffect(() => {
 		handleDestroyTabs();
@@ -59,28 +75,25 @@ const GlobalContent = memo(() => {
 			aliveRef.current?.refresh();
 		});
 	}, [layoutAnimation]);
+
 	return (
 		<AuthGuard checkAny={currentNavAuth} fallback={<Page403 />}>
-			<main
+			<div
 				data-layout="bug-admin-layout-main"
-				className={cn(
-					"w-full flex-grow bg-bg-neutral",
-					"px-4 py-4 ",
-					"transition-[max-width] duration-300 ease-in-out mx-auto",
-					{
-						"max-w-full": themeStretch,
-						"xl:max-w-screen-xl": !themeStretch,
-					},
-				)}
+				className={cn("w-full flex-grow bg-bg-neutral", "px-4 py-4 mx-auto", {
+					"max-w-full": themeStretch,
+					"xl:max-w-screen-xl": !themeStretch,
+				})}
 				style={{
-					willChange: "max-width",
-					contain: "layout style",
+					willChange: "transform",
+					contain: "layout style paint",
+					transition: "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
 				}}
 			>
 				<KeepAlive
 					activeCacheKey={currentCacheKey}
 					aliveRef={aliveRef}
-					cacheNodeClassName={layoutAnimation}
+					cacheNodeClassName={layoutAnimation === "none" ? undefined : layoutAnimation}
 					include={cacheKeys}
 				>
 					<Suspense fallback={<LineLoading />}>
@@ -88,7 +101,7 @@ const GlobalContent = memo(() => {
 						<ScrollRestoration />
 					</Suspense>
 				</KeepAlive>
-			</main>
+			</div>
 		</AuthGuard>
 	);
 });
