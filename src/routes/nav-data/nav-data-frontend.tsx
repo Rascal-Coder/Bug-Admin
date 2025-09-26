@@ -6,6 +6,7 @@ export const frontendNavConfig: FrontendMenuTree[] = [
 	{
 		name: "仪表盘",
 		type: PermissionType.GROUP,
+		icon: "local:ic-workbench",
 		children: [
 			{
 				name: "工作台",
@@ -26,6 +27,7 @@ export const frontendNavConfig: FrontendMenuTree[] = [
 	{
 		name: "页面",
 		type: PermissionType.GROUP,
+		icon: "local:ic-menulevel",
 		children: [
 			{
 				name: "多级菜单",
@@ -105,6 +107,7 @@ export const frontendNavConfig: FrontendMenuTree[] = [
 	{
 		name: "UI",
 		type: PermissionType.GROUP,
+		icon: "solar:widget-5-bold-duotone",
 		children: [
 			{
 				name: "组件",
@@ -150,6 +153,7 @@ export const frontendNavConfig: FrontendMenuTree[] = [
 	{
 		name: "其他",
 		type: PermissionType.GROUP,
+		icon: "mingcute:safe-lock-fill",
 		children: [
 			{
 				name: "权限",

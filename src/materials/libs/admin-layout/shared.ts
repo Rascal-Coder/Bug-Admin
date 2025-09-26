@@ -4,7 +4,7 @@ import type { AdminLayoutProps, LayoutCssVars, LayoutCssVarsProps } from "../../
 export const LAYOUT_SCROLL_EL_ID = "__SCROLL_EL_ID__";
 
 /** The max z-index of the layout */
-export const LAYOUT_MAX_Z_INDEX = 60;
+export const LAYOUT_MAX_Z_INDEX = 20;
 
 /**
  * Create layout css vars by css vars props

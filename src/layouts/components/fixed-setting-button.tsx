@@ -34,12 +34,6 @@ import { cn } from "@/utils";
 import { SelectItem, type SelectOption } from "./select-item";
 import { SwitchItem } from "./switch-item";
 
-// Constants
-const COLLAPSIBLE_TYPE_OPTIONS: SelectOption[] = [
-	{ value: "icon", label: "icon" },
-	{ value: "offcanvas", label: "offcanvas" },
-];
-
 const LAYOUT_ANIMATION_OPTIONS: SelectOption[] = [
 	{ value: "fade", label: "fade" },
 	{ value: "fade-slide", label: "fade-slide" },
@@ -71,8 +65,9 @@ export const FixedSettingButton = memo(function FixedSettingButton() {
 		sidebarMode,
 		layoutMode,
 		themeStretch,
-		collapsibleType,
 		layoutAnimation,
+		menuGroup,
+		accordionMode,
 	} = settings;
 
 	const setSettings = useSetSettings();
@@ -83,12 +78,6 @@ export const FixedSettingButton = memo(function FixedSettingButton() {
 		clearSettings();
 		setSettings(initialSettings);
 	}, [clearSettings, setSettings]);
-
-	// Computed values
-	const shouldShowCollapsibleTypeSelect = useMemo(
-		() => layoutMode !== "horizontal" && layoutMode !== "double",
-		[layoutMode],
-	);
 
 	// 计算发生改变的配置
 	const changedSettings = useMemo(() => {
@@ -112,6 +101,7 @@ export const FixedSettingButton = memo(function FixedSettingButton() {
 
 	// 复制配置到剪贴板 - memoize to prevent recreation
 	const handleCopyConfig = useCallback(async () => {
+		// TODO: 后续需要使用hook替换掉这个复制剪贴板功能
 		const configString = ` ${JSON.stringify(changedSettings, null, 2)}`;
 
 		await navigator.clipboard.writeText(configString);
@@ -317,18 +307,15 @@ export const FixedSettingButton = memo(function FixedSettingButton() {
 									>
 										拉伸
 									</SwitchItem>
-									{shouldShowCollapsibleTypeSelect && (
-										<SelectItem
-											items={COLLAPSIBLE_TYPE_OPTIONS}
-											value={collapsibleType}
-											onValueChange={(value) =>
-												updateSettings({ collapsibleType: value as SettingsType["collapsibleType"] })
-											}
-											tipContent="选择侧边栏折叠时的显示方式"
-										>
-											折叠动画
-										</SelectItem>
-									)}
+									<SwitchItem checked={menuGroup} onCheckedChange={(checked) => updateSettings({ menuGroup: checked })}>
+										菜单分组
+									</SwitchItem>
+									<SwitchItem
+										checked={accordionMode}
+										onCheckedChange={(checked) => updateSettings({ accordionMode: checked })}
+									>
+										菜单手风琴模式
+									</SwitchItem>
 									<SelectItem
 										items={LAYOUT_ANIMATION_OPTIONS}
 										value={layoutAnimation}

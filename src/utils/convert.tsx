@@ -44,6 +44,7 @@ export const convert = (menuTree: BackendMenuTree[] | FrontendMenuTree[]): NavPr
 	return menuTree.map((item) => ({
 		name: item.name,
 		items: convertChildren(item.children),
+		icon: item.icon,
 	}));
 };
 
@@ -76,11 +77,11 @@ const generateProps = (metaInfo: BackendMenuTree | FrontendMenuTree) => {
 		props.src = metaInfo.externalLink?.toString() || "";
 		// 为外链组件添加标题
 		if (metaInfo.isExternalLink) {
-			props.title = metaInfo.name || "外部链接";
+			props.title = metaInfo.name;
 		}
 		// 为iframe组件添加标题
 		if (metaInfo.isIframeLink) {
-			props.title = metaInfo.name || "内嵌页面";
+			props.title = metaInfo.name;
 		}
 	}
 	return props;

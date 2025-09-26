@@ -29,7 +29,7 @@ export const NavItemRenderer: React.FC<NavItemRendererProps> = ({ item, classNam
 
 	// Default: internal link with tab integration
 	return (
-		<TabRouterLink href={path} className={className} label={title} icon={typeof icon === "string" ? icon : undefined}>
+		<TabRouterLink href={path} className={className} label={title} icon={icon}>
 			{children}
 		</TabRouterLink>
 	);

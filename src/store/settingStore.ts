@@ -16,11 +16,12 @@ export type SettingsType = {
 	sidebarMode: "inset" | "floating" | "sidebar";
 	layoutMode: "vertical" | "horizontal" | "mixed" | "double";
 	themeStretch: boolean;
-	collapsibleType: "icon" | "offcanvas";
 	transition: boolean;
 	layoutAnimation: "fade" | "fade-slide" | "fade-bottom" | "fade-scale" | "zoom-fade" | "zoom-out" | "none";
 	collapseSidebar: boolean;
 	siderVisible: boolean;
+	menuGroup: boolean;
+	accordionMode: boolean;
 };
 
 export type SignInLayout = "center" | "right" | "left";
@@ -48,11 +49,12 @@ export const defaultSettings: SettingsType = {
 	sidebarMode: "inset",
 	layoutMode: "vertical",
 	themeStretch: false,
-	collapsibleType: "icon",
 	transition: true,
 	layoutAnimation: "fade",
 	collapseSidebar: false,
 	siderVisible: true,
+	menuGroup: true,
+	accordionMode: false,
 };
 
 // 合并默认配置和用户偏好配置

@@ -20,7 +20,7 @@ export type NavItemDataProps = {
 	type?: PermissionType;
 	path: string;
 	title: string;
-	icon?: string | React.ReactNode;
+	icon?: string;
 	badge?: string;
 	badgeType?: "dot" | "normal";
 	badgeVariants?: BadgeProps["variant"];
@@ -58,6 +58,7 @@ export type NavProps = React.ComponentProps<"nav"> &
 	Omit<NavListProps, "data" | "depth"> & {
 		data: {
 			name?: string;
+			icon?: string;
 			items: NavItemDataProps[];
 		}[];
 	};

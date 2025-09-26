@@ -102,7 +102,6 @@ const AdminLayout: FC<AdminLayoutProps> = ({
 	// display
 	const headerDisplay = !fullContent && fixedHeaderAndTab ? "block" : "none";
 	const siderDisplay = fullContent ? "none" : "block";
-	// const mobileSider = siderCollapse ? "none" : "block";
 	const footerDisplay = !fullContent && fixedFooter ? "block" : "none";
 
 	return (
