@@ -58,20 +58,12 @@ const VerticalMenu: FC<Props> = ({ data, navClassName }) => {
 		}
 	};
 
-	const generateMenuPath = (titles: string[]): string => {
-		return titles.join(".");
-	};
-
-	const setMenuItemState = (path: string, isOpen: boolean) => {
+	const handleMenuStateChange = (path: string, isOpen: boolean) => {
 		setMenuItemStates((prev) => {
 			const newMap = new Map(prev);
 			newMap.set(path, isOpen);
 			return newMap;
 		});
-	};
-
-	const getMenuItemState = (path: string): boolean | undefined => {
-		return menuItemStates.get(path);
 	};
 
 	return (
@@ -86,9 +78,8 @@ const VerticalMenu: FC<Props> = ({ data, navClassName }) => {
 					accordion={accordionMode}
 					openGroupId={accordionMode && !menuGroup ? openGroupId : undefined}
 					onGroupToggle={accordionMode && !menuGroup ? handleGroupToggle : undefined}
-					generateMenuPath={generateMenuPath}
-					setMenuItemState={setMenuItemState}
-					getMenuItemState={getMenuItemState}
+					menuStates={menuItemStates}
+					onMenuStateChange={handleMenuStateChange}
 				/>
 			)}
 		</>

@@ -3,6 +3,15 @@ import { cn } from "@/utils";
 import type { NavProps } from "../types";
 import { NavGroup } from "./nav-group";
 
+interface NavVerticalExtendedProps {
+	// 手风琴模式
+	accordion?: boolean;
+	openGroupId?: string | null;
+	onGroupToggle?: (groupId: string, isOpen: boolean) => void;
+	menuStates?: Map<string, boolean>;
+	onMenuStateChange?: (path: string, isOpen: boolean) => void;
+}
+
 export function NavVertical({
 	data,
 	className,
@@ -10,19 +19,13 @@ export function NavVertical({
 	accordion = false,
 	openGroupId,
 	onGroupToggle,
-	generateMenuPath,
-	setMenuItemState,
-	getMenuItemState,
+	menuStates,
+	onMenuStateChange,
 	...props
-}: NavProps & {
-	menuGroup: boolean;
-	accordion?: boolean;
-	openGroupId?: string | null;
-	onGroupToggle?: (groupId: string, isOpen: boolean) => void;
-	generateMenuPath?: (titles: string[]) => string;
-	setMenuItemState?: (path: string, isOpen: boolean) => void;
-	getMenuItemState?: (path: string) => boolean | undefined;
-}) {
+}: NavProps &
+	NavVerticalExtendedProps & {
+		menuGroup: boolean;
+	}) {
 	const [localOpenGroupId, setLocalOpenGroupId] = useState<string | null>(null);
 
 	const currentOpenGroupId = openGroupId !== undefined ? openGroupId : localOpenGroupId;
@@ -46,15 +49,13 @@ export function NavVertical({
 					name={group.name}
 					items={group.items}
 					menuGroup={menuGroup}
-					// 手风琴模式
-					accordion={accordion}
+					accordion={accordion && !menuGroup ? accordion : undefined}
 					isOpen={accordion && !menuGroup ? currentOpenGroupId === (group.name || index.toString()) : undefined}
 					onToggle={
 						accordion && !menuGroup ? (isOpen) => handleGroupToggle(group.name || index.toString(), isOpen) : undefined
 					}
-					generateMenuPath={generateMenuPath}
-					setMenuItemState={setMenuItemState}
-					getMenuItemState={getMenuItemState}
+					menuStates={menuStates}
+					onMenuStateChange={onMenuStateChange}
 					menuPath={[]}
 				/>
 			))}

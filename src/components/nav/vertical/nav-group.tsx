@@ -2,29 +2,32 @@ import { useMemo } from "react";
 import type { NavGroupProps } from "../types";
 import { NavList } from "./nav-list";
 
+interface NavGroupExtendedProps {
+	// 手风琴模式
+	accordion?: boolean;
+	isOpen?: boolean;
+	onToggle?: (isOpen: boolean) => void;
+	menuStates?: Map<string, boolean>;
+	onMenuStateChange?: (path: string, isOpen: boolean) => void;
+	menuPath?: string[];
+}
+
 export function NavGroup({
 	name,
 	items,
 	groupIcon,
 	menuGroup,
-	accordion = false,
+	accordion,
 	isOpen,
 	onToggle,
-	generateMenuPath,
-	setMenuItemState,
-	getMenuItemState,
+	menuStates,
+	onMenuStateChange,
 	menuPath = [],
-}: NavGroupProps & {
-	groupIcon: string | undefined;
-	menuGroup: boolean;
-	accordion?: boolean;
-	isOpen?: boolean;
-	onToggle?: (isOpen: boolean) => void;
-	generateMenuPath?: (titles: string[]) => string;
-	setMenuItemState?: (path: string, isOpen: boolean) => void;
-	getMenuItemState?: (path: string) => boolean | undefined;
-	menuPath?: string[];
-}) {
+}: NavGroupProps &
+	NavGroupExtendedProps & {
+		groupIcon: string | undefined;
+		menuGroup: boolean;
+	}) {
 	const groupData = useMemo(
 		() => ({
 			title: name || "",
@@ -44,9 +47,8 @@ export function NavGroup({
 				accordion={accordion}
 				isOpen={isOpen}
 				onToggle={onToggle}
-				generateMenuPath={generateMenuPath}
-				setMenuItemState={setMenuItemState}
-				getMenuItemState={getMenuItemState}
+				menuStates={menuStates}
+				onMenuStateChange={onMenuStateChange}
 				menuPath={menuPath}
 			/>
 		);
@@ -61,9 +63,8 @@ export function NavGroup({
 						key={item.title || index}
 						data={item}
 						depth={1}
-						generateMenuPath={generateMenuPath}
-						setMenuItemState={setMenuItemState}
-						getMenuItemState={getMenuItemState}
+						menuStates={menuStates}
+						onMenuStateChange={onMenuStateChange}
 						menuPath={name ? [...menuPath, name] : menuPath}
 					/>
 				))}

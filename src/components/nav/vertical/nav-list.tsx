@@ -17,34 +17,33 @@ function hasActiveChild(items: NavItemDataProps[], pathname: string): boolean {
 	});
 }
 
-export function NavList({
-	data,
-	depth = 1,
-	accordion = false,
-	isOpen,
-	onToggle,
-	generateMenuPath,
-	setMenuItemState,
-	getMenuItemState,
-	menuPath = [],
-}: NavListProps & {
+interface NavListExtendedProps {
 	accordion?: boolean;
 	isOpen?: boolean;
 	onToggle?: (isOpen: boolean) => void;
-	generateMenuPath?: (titles: string[]) => string;
-	setMenuItemState?: (path: string, isOpen: boolean) => void;
-	getMenuItemState?: (path: string) => boolean | undefined;
+
+	menuStates?: Map<string, boolean>;
+	onMenuStateChange?: (path: string, isOpen: boolean) => void;
 	menuPath?: string[];
-}) {
+}
+
+export function NavList({
+	data,
+	depth = 1,
+	accordion,
+	isOpen,
+	onToggle,
+	menuStates,
+	onMenuStateChange,
+	menuPath = [],
+}: NavListProps & NavListExtendedProps) {
 	const location = useLocation();
 
 	// 判断是否为活跃状态
 	const isActive = (() => {
-		// 如果有路径且路径匹配，则为活跃状态
 		if (data.path && location.pathname.includes(data.path)) {
 			return true;
 		}
-		// 如果没有路径但有子项（group 情况），检查子项是否有匹配的路径
 		if (!data.path && data.children && data.children.length > 0) {
 			return hasActiveChild(data.children, location.pathname);
 		}
@@ -54,36 +53,37 @@ export function NavList({
 	const [localOpen, setLocalOpen] = useState(isActive);
 	const hasChild = data.children && data.children.length > 0;
 
+	// 计算当前菜单路径
 	const currentMenuPath = [...menuPath, data.title];
-	const menuPathString = generateMenuPath ? generateMenuPath(currentMenuPath) : "";
+	const menuPathString = currentMenuPath.join(".");
 
-	const globalOpen = getMenuItemState ? getMenuItemState(menuPathString) : undefined;
+	const useAccordion = accordion && isOpen !== undefined && onToggle !== undefined;
+	const useGlobalState = !useAccordion && menuStates && onMenuStateChange && depth > 1; // 只有子项使用全局状态
 
-	const useExternalState = accordion && isOpen !== undefined && onToggle !== undefined;
-	const useGlobalState = !useExternalState && generateMenuPath && setMenuItemState && getMenuItemState;
+	const open = useAccordion
+		? isOpen
+		: useGlobalState && menuStates?.has(menuPathString)
+			? menuStates.get(menuPathString)!
+			: localOpen;
 
-	const open = useExternalState ? isOpen : useGlobalState && globalOpen !== undefined ? globalOpen : localOpen;
+	const handleToggle = (newOpen: boolean) => {
+		if (useAccordion) {
+			onToggle!(newOpen);
+		} else if (useGlobalState) {
+			onMenuStateChange!(menuPathString, newOpen);
+		} else {
+			setLocalOpen(newOpen);
+		}
+	};
 
 	const handleClick = () => {
 		if (hasChild) {
-			if (useExternalState && onToggle) {
-				onToggle(!open);
-			} else if (useGlobalState && setMenuItemState) {
-				setMenuItemState(menuPathString, !open);
-			} else {
-				setLocalOpen(!localOpen);
-			}
+			handleToggle(!open);
 		}
 	};
 
 	const handleOpenChange = (newOpen: boolean) => {
-		if (useExternalState && onToggle) {
-			onToggle(newOpen);
-		} else if (useGlobalState && setMenuItemState) {
-			setMenuItemState(menuPathString, newOpen);
-		} else {
-			setLocalOpen(newOpen);
-		}
+		handleToggle(newOpen);
 	};
 
 	if (data.hidden) {
@@ -94,7 +94,6 @@ export function NavList({
 		<Collapsible open={open} onOpenChange={handleOpenChange} data-nav-type="list">
 			<CollapsibleTrigger className="w-full">
 				<NavItem
-					// data
 					title={data.title}
 					path={data.path}
 					icon={data.icon}
@@ -103,14 +102,11 @@ export function NavList({
 					badgeVariants={data.badgeVariants}
 					caption={data.caption}
 					auth={data.auth}
-					// state
 					open={open}
 					active={isActive}
 					disabled={data.disabled}
-					// options
 					hasChild={hasChild}
 					depth={depth}
-					// event
 					onClick={handleClick}
 				/>
 			</CollapsibleTrigger>
@@ -122,9 +118,8 @@ export function NavList({
 								key={`${child.title}-${child.path || index}`}
 								data={child}
 								depth={depth + 1}
-								generateMenuPath={generateMenuPath}
-								setMenuItemState={setMenuItemState}
-								getMenuItemState={getMenuItemState}
+								menuStates={menuStates}
+								onMenuStateChange={onMenuStateChange}
 								menuPath={currentMenuPath}
 							/>
 						))}
