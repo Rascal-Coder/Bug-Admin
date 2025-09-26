@@ -41,6 +41,7 @@ const LAYOUT_ANIMATION_OPTIONS: SelectOption[] = [
 	{ value: "fade-scale", label: "fade-scale" },
 	{ value: "zoom-fade", label: "zoom-fade" },
 	{ value: "zoom-out", label: "zoom-out" },
+	{ value: "none", label: "none" },
 ];
 
 export const FixedSettingButton = memo(function FixedSettingButton() {
@@ -307,10 +308,15 @@ export const FixedSettingButton = memo(function FixedSettingButton() {
 									>
 										拉伸
 									</SwitchItem>
-									<SwitchItem checked={menuGroup} onCheckedChange={(checked) => updateSettings({ menuGroup: checked })}>
-										菜单分组
-									</SwitchItem>
-									{!menuGroup && (
+									{layoutMode.includes("vertical") && (
+										<SwitchItem
+											checked={menuGroup}
+											onCheckedChange={(checked) => updateSettings({ menuGroup: checked })}
+										>
+											菜单分组
+										</SwitchItem>
+									)}
+									{!menuGroup && layoutMode.includes("vertical") && (
 										<SwitchItem
 											checked={accordionMode}
 											onCheckedChange={(checked) => updateSettings({ accordionMode: checked })}
@@ -360,10 +366,10 @@ export const FixedSettingButton = memo(function FixedSettingButton() {
 											<TooltipTrigger asChild>
 												{/* 双列菜单栏 */}
 												<div
-													onClick={() => updateSettings({ layoutMode: "double" })}
+													onClick={() => updateSettings({ layoutMode: "vertical-mix" })}
 													className={clsx(
 														"card-box flex h-20 cursor-pointer outline-box p-1.5",
-														layoutMode === "double" && "outline-box-active",
+														layoutMode === "vertical-mix" && "outline-box-active",
 													)}
 												>
 													<div className="flex w-full h-full gap-1.5">
@@ -414,10 +420,10 @@ export const FixedSettingButton = memo(function FixedSettingButton() {
 											<TooltipTrigger asChild>
 												{/* 混合菜单栏 */}
 												<div
-													onClick={() => updateSettings({ layoutMode: "mixed" })}
+													onClick={() => updateSettings({ layoutMode: "horizontal-mix" })}
 													className={clsx(
 														"card-box flex h-20 cursor-pointer outline-box p-1.5",
-														layoutMode === "mixed" && "outline-box-active",
+														layoutMode === "horizontal-mix" && "outline-box-active",
 													)}
 												>
 													<div className="flex w-full h-full flex-col gap-1.5">

@@ -14,7 +14,7 @@ export type SettingsType = {
 	grayMode: boolean;
 	colorWeakMode: boolean;
 	sidebarMode: "inset" | "floating" | "sidebar";
-	layoutMode: "vertical" | "horizontal" | "mixed" | "double";
+	layoutMode: "horizontal" | "horizontal-mix" | "vertical" | "vertical-mix";
 	themeStretch: boolean;
 	transition: boolean;
 	layoutAnimation: "fade" | "fade-slide" | "fade-bottom" | "fade-scale" | "zoom-fade" | "zoom-out" | "none";

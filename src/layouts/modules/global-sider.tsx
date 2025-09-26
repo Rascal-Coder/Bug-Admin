@@ -8,16 +8,16 @@ import { cn } from "@/utils";
 import { Logo } from "./global-logo";
 import GlobalMenu from "./global-menu";
 export const GLOBAL_SIDER_MENU_ID = "__GLOBAL_SIDER_MENU__";
+type ThemeLayoutMode = "horizontal" | "horizontal-mix" | "vertical" | "vertical-mix";
 
 interface Props {
 	headerHeight?: number;
 	inverted?: boolean;
-	isHorizontalMix?: boolean;
-	isVerticalMix?: boolean;
-	siderCollapse?: boolean;
+	// siderCollapse?: boolean;
 	data: NavProps["data"];
+	mode: ThemeLayoutMode;
 }
-const GlobalSider: FC<Props> = memo(({ data }) => {
+const GlobalSider: FC<Props> = memo(({ data, mode }) => {
 	const [showLogo] = useState(true);
 	const { collapseSidebar } = useSettings();
 	const isMobile = useIsMobile();
@@ -29,7 +29,7 @@ const GlobalSider: FC<Props> = memo(({ data }) => {
 				</div>
 			)}
 			<Scroller className={showLogo ? "flex-1 overflow-x-hidden" : "h-full overflow-x-hidden"}>
-				<GlobalMenu mode="vertical" data={data}></GlobalMenu>
+				<GlobalMenu mode={mode} data={data}></GlobalMenu>
 			</Scroller>
 			<div className={cn("p-2 flex items-center ", !collapseSidebar ? "justify-end" : "justify-center")}>
 				{!isMobile && <MenuToggler state={collapseSidebar ? "collapsed" : "expanded"} />}

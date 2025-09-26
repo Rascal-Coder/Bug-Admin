@@ -2,6 +2,7 @@ import { type FC, memo, useRef } from "react";
 import { useFullscreen, useToggle } from "react-use";
 import { Icon } from "@/components/icon";
 import LocalePicker from "@/components/locale-picker";
+// import { NavHorizontal } from "@/components/nav/horizontal";
 import { useUpdateSettings } from "@/hooks";
 import { Logo } from "@/layouts/modules/global-logo";
 import { useAppActions, useIsMobileOpen } from "@/store/appStore";
@@ -15,7 +16,7 @@ import NoticeButton from "./components/notice";
 import SearchBar from "./components/search-bar";
 import ThemeSwitch from "./components/theme-switch";
 
-const GLOBAL_HEADER_MENU_ID = "__GLOBAL_HEADER_MENU__";
+export const GLOBAL_HEADER_MENU_ID = "__GLOBAL_HEADER_MENU__";
 
 /**
  * The layout mode
@@ -102,7 +103,7 @@ const GlobalHeader: FC<Props> = memo(({ isMobile, mode, reverse }) => {
 				</Button>
 			)}
 
-			{!isMobile && <Separator orientation="vertical" className="h-6! mx-2"></Separator>}
+			{!isMobile && mode.includes("vertical") && <Separator orientation="vertical" className="h-6! mx-2"></Separator>}
 			<div className="h-full flex-y-center flex-1 overflow-hidden" id={GLOBAL_HEADER_MENU_ID}>
 				{!isMobile && !showMenu && <Breadcrumb />}
 			</div>
