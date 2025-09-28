@@ -41,6 +41,7 @@ const AdminLayout: FC<AdminLayoutProps> = ({
 	tabVisible = true,
 	updateSiderCollapse,
 	mobileSiderOpen,
+	MobileSider,
 }) => {
 	const cssVar = createLayoutCssVars({
 		footerHeight,
@@ -185,7 +186,7 @@ const AdminLayout: FC<AdminLayoutProps> = ({
 								mobileSiderOpen ? style["layout-sider"] : "overflow-hidden",
 							])}
 						>
-							{Sider}
+							{MobileSider}
 						</aside>
 						<div
 							className={classNames("absolute left-0 top-0 h-full w-full bg-[rgba(0,0,0,0.2)]", [

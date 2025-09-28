@@ -18,10 +18,7 @@ const BaseLayout = () => {
 	const isMobileOpen = useIsMobileOpen();
 	useLayoutEffect(() => {
 		setIsMobile(isMobile);
-		if (isMobile) {
-			setisMobileOpen(true);
-		}
-	}, [isMobile, setIsMobile, setisMobileOpen]);
+	}, [isMobile, setIsMobile]);
 
 	const mode = useMemo(() => {
 		if (layoutMode.includes("horizontal")) {
@@ -33,6 +30,12 @@ const BaseLayout = () => {
 	const showSider = useMemo(() => {
 		return !isMobile && siderVisible && mode.includes("vertical");
 	}, [isMobile, siderVisible, mode]);
+
+	const horizontalMixData = useMemo(() => {
+		console.log("navData", navData);
+
+		return navData;
+	}, []);
 	return (
 		<AdminLayout
 			mobileSiderOpen={isMobileOpen}
@@ -60,8 +63,10 @@ const BaseLayout = () => {
 			}}
 			Header={<GlobalHeader isMobile={isMobile} mode={layoutMode}></GlobalHeader>}
 			Sider={<GlobalSider mode={layoutMode} data={navData}></GlobalSider>}
+			MobileSider={<GlobalSider mode="vertical" data={navData}></GlobalSider>}
 		>
 			{layoutMode === "horizontal" && <Horizontal data={navData} />}
+			{layoutMode === "horizontal-mix" && <Horizontal data={horizontalMixData} />}
 			<GlobalContent></GlobalContent>
 		</AdminLayout>
 	);

@@ -36,7 +36,7 @@ const HighlightText = ({ text, query }: { text: string; query: string }) => {
 	);
 };
 
-const SearchBar = () => {
+const SearchBar = ({ showKbd = true }: { showKbd?: boolean }) => {
 	const { replace } = useRouter();
 	const [open, setOpen] = useBoolean(false);
 	const [searchQuery, setSearchQuery] = useState("");
@@ -95,10 +95,12 @@ const SearchBar = () => {
 			<Button variant="ghost" className="bg-action-selected px-2 rounded-lg" size="sm" onClick={() => setOpen(true)}>
 				<div className="flex items-center justify-center gap-4">
 					<Icon icon="local:ic-search" size="20" />
-					<kbd className="flex items-center justify-center rounded-md bg-primary/80 text-common-white px-1.5 py-0.5 text-sm font-semibold">
-						<Icon icon="qlementine-icons:key-cmd-16" />
-						<span>K</span>
-					</kbd>
+					{showKbd && (
+						<kbd className="flex items-center justify-center rounded-md bg-primary/80 text-common-white px-1.5 py-0.5 text-sm font-semibold">
+							<Icon icon="qlementine-icons:key-cmd-16" />
+							<span>K</span>
+						</kbd>
+					)}
 				</div>
 			</Button>
 

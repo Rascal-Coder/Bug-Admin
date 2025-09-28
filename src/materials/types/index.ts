@@ -162,6 +162,8 @@ export type Slots = {
 	Header?: React.ReactNode;
 	/** Sider */
 	Sider?: React.ReactNode;
+	/** Mobile Sider */
+	MobileSider?: React.ReactNode;
 	/** Tab */
 	Tab?: React.ReactNode;
 };

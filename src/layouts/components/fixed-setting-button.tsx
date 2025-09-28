@@ -308,14 +308,9 @@ export const FixedSettingButton = memo(function FixedSettingButton() {
 									>
 										拉伸
 									</SwitchItem>
-									{layoutMode.includes("vertical") && (
-										<SwitchItem
-											checked={menuGroup}
-											onCheckedChange={(checked) => updateSettings({ menuGroup: checked })}
-										>
-											菜单分组
-										</SwitchItem>
-									)}
+									<SwitchItem checked={menuGroup} onCheckedChange={(checked) => updateSettings({ menuGroup: checked })}>
+										菜单分组
+									</SwitchItem>
 									{!menuGroup && layoutMode.includes("vertical") && (
 										<SwitchItem
 											checked={accordionMode}

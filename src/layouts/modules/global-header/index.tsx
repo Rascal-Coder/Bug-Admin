@@ -9,6 +9,7 @@ import { useAppActions, useIsMobileOpen } from "@/store/appStore";
 import { useSettings } from "@/store/settingStore";
 import { Button } from "@/ui/button";
 import { Separator } from "@/ui/separator";
+import { cn } from "@/utils";
 import AccountDropdown from "./components/account-dropdown";
 import Breadcrumb from "./components/breadcrumb";
 import FullScreen from "./components/fullscreen";
@@ -52,7 +53,7 @@ const HEADER_PROPS_CONFIG: Record<ThemeLayoutMode, HeaderProps> = {
 	"horizontal-mix": {
 		showLogo: true,
 		showMenu: true,
-		showMenuToggler: false,
+		showMenuToggler: true,
 	},
 	vertical: {
 		showLogo: false,
@@ -90,9 +91,9 @@ const GlobalHeader: FC<Props> = memo(({ isMobile, mode, reverse }) => {
 	};
 	return (
 		<div className="h-full flex-y-center px-3 shadow-md bg-bg-paper border-b">
-			{showLogo && (
+			{showLogo && !isMobile && (
 				<div data-slot="header-logo-wrapper" className="h-full p-2">
-					<Logo className="h-full px-2"></Logo>
+					<Logo open={!isMobile} className="h-full px-2"></Logo>
 				</div>
 			)}
 			<div>{reverse ? true : showMenuToggler}</div>
@@ -102,14 +103,20 @@ const GlobalHeader: FC<Props> = memo(({ isMobile, mode, reverse }) => {
 					<Icon icon="line-md:close-to-menu-alt-transition" size={20}></Icon>
 				</Button>
 			)}
-
+			{isMobile && !showMenuToggler && (
+				<Button size="icon" variant="ghost" onClick={handleToggle}>
+					<Icon icon="line-md:close-to-menu-alt-transition" size={20}></Icon>
+				</Button>
+			)}
 			{!isMobile && mode.includes("vertical") && <Separator orientation="vertical" className="h-6! mx-2"></Separator>}
-			<div className="h-full flex-y-center flex-1 overflow-hidden" id={GLOBAL_HEADER_MENU_ID}>
-				{!isMobile && !showMenu && <Breadcrumb />}
-			</div>
+			{!isMobile && (
+				<div className="h-full flex-y-center flex-1 overflow-hidden" id={GLOBAL_HEADER_MENU_ID}>
+					{!isMobile && !showMenu && <Breadcrumb />}
+				</div>
+			)}
 
-			<div className="h-full flex-y-center justify-end gap-3">
-				<SearchBar />
+			<div className={cn("h-full flex-y-center justify-end gap-3", isMobile && "flex-1")}>
+				<SearchBar showKbd={!isMobile} />
 				<ThemeSwitch />
 				<LocalePicker></LocalePicker>
 				{!isMobile && (

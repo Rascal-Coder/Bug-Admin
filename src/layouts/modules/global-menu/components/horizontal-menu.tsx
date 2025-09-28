@@ -7,7 +7,7 @@ import { GLOBAL_HEADER_MENU_ID } from "../../global-header";
 
 const HorizontalMenu = ({ data }: { data: NavProps["data"] }) => {
 	return (
-		<Scroller hideScrollbar orientation="horizontal" className="whitespace-nowrap px-2 bg-background">
+		<Scroller orientation="horizontal" className="whitespace-nowrap px-2 bg-background">
 			<NavHorizontal data={data} />
 		</Scroller>
 	);
