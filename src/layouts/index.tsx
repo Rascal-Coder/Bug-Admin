@@ -28,14 +28,11 @@ const BaseLayout = () => {
 	}, [layoutMode]);
 
 	const showSider = useMemo(() => {
-		return !isMobile && siderVisible && mode.includes("vertical");
-	}, [isMobile, siderVisible, mode]);
+		console.log("siderVisible", siderVisible);
 
-	const horizontalMixData = useMemo(() => {
-		console.log("navData", navData);
+		return !isMobile && siderVisible && layoutMode !== "horizontal";
+	}, [isMobile, siderVisible, layoutMode]);
 
-		return navData;
-	}, []);
 	return (
 		<AdminLayout
 			mobileSiderOpen={isMobileOpen}
@@ -65,8 +62,8 @@ const BaseLayout = () => {
 			Sider={<GlobalSider mode={layoutMode} data={navData}></GlobalSider>}
 			MobileSider={<GlobalSider mode="vertical" data={navData}></GlobalSider>}
 		>
-			{layoutMode === "horizontal" && <Horizontal data={navData} />}
-			{layoutMode === "horizontal-mix" && <Horizontal data={horizontalMixData} />}
+			{layoutMode === "horizontal" && <Horizontal data={navData} mode="0" />}
+			{layoutMode === "horizontal-mix" && <Horizontal data={navData} mode="1" />}
 			<GlobalContent></GlobalContent>
 		</AdminLayout>
 	);

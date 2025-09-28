@@ -12,6 +12,7 @@ interface Props {
 
 const GlobalMenu = memo(({ mode, data }: Props) => {
 	if (mode === "vertical") return <VerticalModule data={data} />;
+	if (mode === "horizontal-mix") return <div>horizontal-mix</div>;
 });
 
 export default GlobalMenu;

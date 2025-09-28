@@ -56,6 +56,8 @@ const AdminLayout: FC<AdminLayoutProps> = ({
 	// config visible
 	const showHeader = Boolean(Header) && headerVisible;
 	const showSider = !isMobile && Boolean(Sider) && siderVisible;
+	console.log("showSider", showSider);
+
 	const showMobileSider = isMobile && mobileSiderOpen;
 	const showTab = Boolean(Tab) && tabVisible;
 	const showFooter = Boolean(Footer) && footerVisible;

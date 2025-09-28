@@ -3,6 +3,7 @@ import type { LinkProps } from "react-router";
 import { useTabNavigation } from "@/hooks/use-tab-navigation";
 
 interface TabRouterLinkProps extends Omit<LinkProps, "to"> {
+	onClick?: () => void;
 	href: string;
 	label: string;
 	icon?: string;
@@ -15,12 +16,10 @@ const TabRouterLink: React.FC<TabRouterLinkProps> = ({ href, label, icon, compon
 
 	const handleClick = useCallback(
 		(e: React.MouseEvent<HTMLAnchorElement>) => {
+			if (!href) return;
 			e.preventDefault();
 			navigateToTab({
-				// label,
 				path: href,
-				// icon,
-				// component,
 			});
 		},
 		[navigateToTab, href],
